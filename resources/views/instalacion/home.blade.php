@@ -23,22 +23,22 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <td>{{ $instalacion->nombre }}</td>
-                                    <td><a href="/edit/nombre" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/admin/edit/nombre" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Logo</th>
                                     <td></td>
-                                    <td><a href="/edit/logo" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/admin/edit/logo" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Dirección</th>
                                     <td>{{ $instalacion->direccion }}</td>
-                                    <td><a href="/edit/direccion" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/admin/edit/direccion" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Teléfono</th>
                                     <td>{{ $instalacion->tlfno }}</td>
-                                    <td><a href="/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/admin/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>

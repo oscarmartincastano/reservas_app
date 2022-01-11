@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['prefix' =>'admin', 'middleware' => 'auth'], function() {
     Route::get('/', 'InstalacionController@index');
 
     Route::get('/edit/{tipo}', 'InstalacionController@edit_info');
@@ -40,6 +40,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('configuracion', 'InstalacionController@configuracion');
 });
+
+
+Route::get('/', 'UserController@pista');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

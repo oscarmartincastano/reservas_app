@@ -13,25 +13,25 @@
         <!-- BEGIN SIDEBAR MENU ITEMS-->
         <ul class="menu-items">
             <li class="m-t-10 {{ request()->is('/') ? 'active' : '' }}">
-                <a href="/" class="detailed">
+                <a href="/admin/" class="detailed">
                     <span class="title">Inicio</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="home"></i></span>
             </li>
             <li class="{{ request()->is('pistas*') ? 'active' : '' }}">
-                <a href="/pistas" class="detailed">
+                <a href="/admin/pistas" class="detailed">
                     <span class="title">Pistas</span>
                 </a>
                 <span class="icon-thumbnail"><i class="material-icons sports_tennis">&#xea32;</i></span>
             </li>
             <li class="{{ request()->is('users*') ? 'active' : '' }}">
-                <a href="/users" class="detailed">
+                <a href="/admin/users" class="detailed">
                     <span class="title">Usuarios</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
             </li>
             <li class="{{ request()->is('configuracion*') ? 'active' : '' }}">
-                <a href="/configuracion" class="detailed">
+                <a href="/admin/configuracion" class="detailed">
                     <span class="title">Configuracion</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="settings"></i></span>

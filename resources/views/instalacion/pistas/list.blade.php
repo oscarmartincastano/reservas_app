@@ -28,7 +28,7 @@
                         <div class="card-title">Listado de pistas</div>
                     </div>
                     <div class="card-body">
-                        <a href="/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
+                        <a href="/admin/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
                         <table class="table table-condensed table-hover">
                             <thead>
                                 <tr>
@@ -75,7 +75,7 @@
                                                                 @default
                                                             @endswitch
                                                         @endforeach
-                                                        <strong>{{ ucfirst($horario['dias'][0]) }} a {{ $horario['dias'][count($horario['dias']) - 1] }}</strong></div>
+                                                        <strong>@if (count($horario['dias']) > 1) {{ ucfirst($horario['dias'][0]) }} a {{ $horario['dias'][count($horario['dias']) - 1] }} @else {{ ucfirst($horario['dias'][0]) }} @endif</strong></div>
                                                     @else
                                                         @foreach ($horario['dias'] as $index => $dia)
                                                             @switch($dia)
@@ -115,7 +115,7 @@
                                                     @endforeach
                                             @endforeach
                                         </td>
-                                        <td><a href="/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td><a href="/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

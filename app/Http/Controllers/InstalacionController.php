@@ -27,7 +27,7 @@ class InstalacionController extends Controller
         $instalacion = auth()->user()->instalacion[0];
         
         Instalacion::find($instalacion->id)->update($data);
-        return redirect('/');
+        return redirect('/admin/');
     }
 
     public function pistas() {
@@ -49,7 +49,7 @@ class InstalacionController extends Controller
 
         Pista::create($data);
 
-        return redirect('/pistas');
+        return redirect('/admin/pistas');
     }
 
     public function edit_pista_view(Request $request) {
@@ -66,7 +66,7 @@ class InstalacionController extends Controller
 
         Pista::where('id', $request->id)->update($data);
         
-        return redirect('/pistas');
+        return redirect('/admin/pistas');
     }
 
     public function configuracion(Request $request) {

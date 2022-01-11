@@ -22,4 +22,15 @@ class Pista extends Model
         'atenlacion_reserva',
         'tiempo_limite_reserva',
     ];
+
+    protected $appends = ['horario_deserialized'];
+
+    public function getHorarioDeserializedAttribute() {
+        return $this->horarioDeserializado();
+    }
+
+    public function horarioDeserializado() {
+        $horario = unserialize($this->horario);
+        return $horario;
+    }
 }
