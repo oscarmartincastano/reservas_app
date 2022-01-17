@@ -45,6 +45,29 @@ class InstalacionController extends Controller
 
         $data = $request->all();
         $data['id_instalacion'] = $instalacion->id;
+
+        $horario = $request->horario;
+        foreach ($horario as $indexhor => $item) {
+            foreach ($item['intervalo'] as $indexinterval => $intervalo) {
+                $a = new \DateTime($intervalo['hfin']);
+                $b = new \DateTime($intervalo['hinicio']);
+                $interval = $a->diff($b);
+                $diff_minutes = $interval->format("%h") * 60;
+                $diff_minutes += $interval->format("%i");
+                $numero_veces = $diff_minutes/$intervalo['secuencia'];
+
+                if (!is_int($diff_minutes/$intervalo['secuencia'])) {
+                    $hora = new \DateTime($intervalo['hinicio']);
+                    for ($i=0; $i < floor($numero_veces); $i++) { 
+                        $hora->modify("+{$intervalo['secuencia']} minutes");
+                    }
+                    
+                    $horario[$indexhor]['intervalo'][$indexinterval]['hfin'] = $hora->format('H:i');
+                }
+
+            }
+        }
+        
         $data['horario'] = serialize($request->horario);
 
         Pista::create($data);
@@ -62,8 +85,30 @@ class InstalacionController extends Controller
 
         $data = $request->all();
         array_shift($data);
-        $data['horario'] = serialize($request->horario);
 
+        $horario = $request->horario;
+        foreach ($horario as $indexhor => $item) {
+            foreach ($item['intervalo'] as $indexinterval => $intervalo) {
+                $a = new \DateTime($intervalo['hfin']);
+                $b = new \DateTime($intervalo['hinicio']);
+                $interval = $a->diff($b);
+                $diff_minutes = $interval->format("%h") * 60;
+                $diff_minutes += $interval->format("%i");
+                $numero_veces = $diff_minutes/$intervalo['secuencia'];
+
+                if (!is_int($diff_minutes/$intervalo['secuencia'])) {
+                    $hora = new \DateTime($intervalo['hinicio']);
+                    for ($i=0; $i < floor($numero_veces); $i++) { 
+                        $hora->modify("+{$intervalo['secuencia']} minutes");
+                    }
+                    
+                    $horario[$indexhor]['intervalo'][$indexinterval]['hfin'] = $hora->format('H:i');
+                }
+
+            }
+        }
+        $data['horario'] = serialize($horario);
+        /* return $data; */
         Pista::where('id', $request->id)->update($data);
         
         return redirect('/admin/pistas');

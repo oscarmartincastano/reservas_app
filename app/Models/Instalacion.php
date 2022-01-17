@@ -19,6 +19,8 @@ class Instalacion extends Model
         'tlfno',
     ];
 
+    protected $appends = ['deportes'];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'users_instalaciones', 'id_instalacion', 'id_user');
@@ -27,5 +29,17 @@ class Instalacion extends Model
     public function pistas()
     {
         return $this->hasMany(Pista::class, 'id_instalacion');
+    }
+
+    public function getDeportesAttribute() {
+        return $this->deportes();
+    }
+
+    public function deportes() {
+        $deportes = [];
+        foreach ($this->pistas as $pista) {
+            array_push($deportes, $pista->tipo);
+        }
+        return array_unique($deportes);
     }
 }

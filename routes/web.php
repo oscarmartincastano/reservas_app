@@ -41,9 +41,16 @@ Route::group(['prefix' =>'admin', 'middleware' => 'auth'], function() {
     Route::get('configuracion', 'InstalacionController@configuracion');
 });
 
+Route::group(['prefix' =>'{deporte}'], function() {
+    Route::get('/', 'UserController@pistas');
+    Route::group(['prefix' =>'{id_pista}'], function() {
+        Route::get('/', 'UserController@pistas');
+        Route::get('/{timestamp}', 'UserController@reserva');
+        Route::post('/{timestamp}/reserva', 'UserController@reserva');
+    });
+});
 
-Route::get('/', 'UserController@pista');
-
+Route::get('/', 'UserController@index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

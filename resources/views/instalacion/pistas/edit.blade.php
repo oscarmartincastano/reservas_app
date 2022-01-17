@@ -69,8 +69,8 @@
                                                             <div>
                                                                 <label class="mb-0">Secuencia:</label>
                                                                 <select class="form-control" name="horario[{{ $index }}][intervalo][{{ $intindice }}][secuencia]" id="">
-                                                                    @for ($i = 1; $i < 24; $i++)
-                                                                        <option value="{{ $i * 5 }}" @if($intervalo['secuencia'] == $i * 5) selected @endif>{{ $i * 5 }}</option>
+                                                                    @for ($i = 1; $i < 9; $i++)
+                                                                        <option value="{{ $i * 15 }}" @if($intervalo['secuencia'] == $i * 15) selected @endif>{{ $i * 15 }}</option>
                                                                     @endfor
                                                                 </select>
                                                             </div>
@@ -118,7 +118,7 @@
                                 <label class="col-md-2 control-label">Tiempo límite para reservas</label>
                                 <select class="form-control col-md-10" name="tiempo_limite_reserva" id="">
                                     @for ($i = 1; $i < 24; $i++)
-                                        <option value="{{ $i * 5 }}"@if($pista->tiempo_limite_reserva == $i) selected @endif>{{ $i * 5 }} min</option>
+                                        <option value="{{ $i * 5 }}"@if($pista->tiempo_limite_reserva == $i * 5) selected @endif>{{ $i * 5 }} min</option>
                                     @endfor
                                 </select>
                             </div>
@@ -149,8 +149,8 @@
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
                                                         <select class="form-control" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][secuencia]" id="">
-                                                            @for ($i = 1; $i < 24; $i++)
-                                                                <option value="{{ $i * 5 }}">{{ $i * 5 }}</option>
+                                                            @for ($i = 1; $i < 9; $i++)
+                                                                <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>
@@ -193,8 +193,8 @@
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
                                                         <select class="form-control" name="horario[${$(this).prev().data('index') + 1}][intervalo][0][secuencia]" id="">
-                                                            @for ($i = 1; $i < 24; $i++)
-                                                                <option value="{{ $i * 5 }}">{{ $i * 5 }}</option>
+                                                            @for ($i = 1; $i < 9; $i++)
+                                                                <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>

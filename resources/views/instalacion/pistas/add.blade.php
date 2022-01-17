@@ -64,8 +64,8 @@
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
                                                         <select class="form-control" name="horario[0][intervalo][0][secuencia]" id="">
-                                                            @for ($i = 1; $i < 24; $i++)
-                                                                <option value="{{ $i * 5 }}">{{ $i * 5 }}</option>
+                                                            @for ($i = 1; $i < 9; $i++)
+                                                                <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>
@@ -137,8 +137,8 @@
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
                                                         <select class="form-control" name="horario[${$(this).parent().parent().parent().data('index') + 1}][intervalo][${$(this).parent().prev().data('index') + 1}][secuencia]" id="">
-                                                            @for ($i = 1; $i < 24; $i++)
-                                                                <option value="{{ $i * 5 }}">{{ $i * 5 }}</option>
+                                                            @for ($i = 1; $i < 9; $i++)
+                                                                <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>
@@ -181,8 +181,8 @@
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
                                                         <select class="form-control" name="horario[${$(this).prev().data('index') + 1}][intervalo][0][secuencia]" id="">
-                                                            @for ($i = 1; $i < 24; $i++)
-                                                                <option value="{{ $i * 5 }}">{{ $i * 5 }}</option>
+                                                            @for ($i = 1; $i < 9; $i++)
+                                                                <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
                                                         </select>
                                                     </div>

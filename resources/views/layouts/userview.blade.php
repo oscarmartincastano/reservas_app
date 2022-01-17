@@ -76,7 +76,7 @@
             padding-top: 0;
             padding-bottom: 0;
         }
-        .tabla-reservas td a.btn-reservar{
+        a.btn-reservar{
             background: #52b5f7;
             color: white;
             display: flex;
@@ -84,13 +84,72 @@
             align-items: center;
             height: 100%;
             font-size: 14px;
+            border: 2px solid;
         }
-        .tabla-reservas td:hover, .tabla-reservas td:hover a, .tabla-reservas td.reserved,.tabla-reservas td.reserved a{
+        .empty a{
+            background: #c9c9c9;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 14px;
+            border: 2px solid;
+            font-size: 16px;
+        }
+        .tabla-reservas td:hover, .tabla-reservas td:hover a, .tabla-reservas td.reserved,.tabla-reservas td.reserved a, a.btn-reservar:hover, a.btn-reservar.reservado{
             background: #0077c7 !important;
         }
 
         .tabla-reservas td.reserved a{
             font-weight: bold;
+        }
+        .thead{
+            display: flex;
+            justify-content: space-evenly;
+            padding: 20px;
+        }
+        .th{
+            font-weight: bold;
+            text-align: center;
+        }
+        .thead>div>div{
+            height: 6rem;
+        }
+        .thead>div{
+            width: 100%;
+        }
+        .divider{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            padding: 34px;
+        }
+        .divider div{
+            border-bottom: 1px solid;
+            width: 50%;
+        }
+        .select-deporte{
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .is-8{
+            gap: 3rem;
+        }
+        .btn-no-disponible{
+            background: #819daf;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 14px;
+            border: 2px solid;
+        }
+
+        .btn-no-disponible:hover{
+            background: #819daf;
+            color: white;
         }
     </style>
 </head>
