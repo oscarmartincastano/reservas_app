@@ -9,11 +9,12 @@
 
     <title>Reserva de pista</title>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- Styles -->
     <link href="https://entradas.aquasierra.es/css/app.css" rel="stylesheet">
     <style>
@@ -72,8 +73,9 @@
                                     Estás reservando para <em>{{ $pista->nombre }}</em>. Por favor, revise y confirme
                                     los datos siguientes.
                                 </p>
-                                <form method="POST" action="/{{ request()->deporte }}/{{ request()->id_pista }}/{{ request()->timestamp }}/reserva">
+                                <form method="POST" action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}/{{ request()->timestamp }}/reserva">
                                     @csrf
+                                    <input type="hidden" name="secuencia" id="secuencia" value="{{ $secuencia }}">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label py-0">Deporte:</label>
                                         <div class="col-sm-10">
@@ -95,9 +97,9 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label py-0">Tarifa:</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control">
-                                                <option>RESERVA {{ $secuencia }} MINUTOS</option>
-                                                <option>RESERVA {{ $secuencia*2 }} MINUTOS</option>
+                                            <select class="form-control" name="tarifa" id="tarifa">
+                                                <option data-hfin="{{ date('H:i',strtotime (date('H:i', $fecha) . " +" . $secuencia * 1 . " minutes")) }}" value="1">RESERVA {{ $secuencia }} MINUTOS</option>
+                                                <option data-hfin="{{ date('H:i',strtotime (date('H:i', $fecha) . " +" . $secuencia * 2 . " minutes")) }}" value="2">RESERVA {{ $secuencia*2 }} MINUTOS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -122,7 +124,15 @@
             </div>
         </main>
     </div>
+    <script>
+        $(document).ready(function () {
 
+            $('#tarifa').change(function (e) { 
+                e.preventDefault();
+                $('.hfin').html($(this).find(`[value="${$(this).val()}"]`).data('hfin'));
+            });
+        });
+    </script>
 
 </body>
 

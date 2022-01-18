@@ -16,7 +16,7 @@
 <div class="container is-max-desktop">
     <div class="columns is-8 select-deporte">
         @foreach ($instalacion->deportes as $item)
-            <div class="column has-text-centered"><a href="/{{ $item }}"><img src="{{ asset('img/deportes/'.$item.'.jpg') }}"></a></div>
+            <div class="column has-text-centered"><a href="/{{ request()->slug_instalacion }}/{{ $item }}"><img src="{{ asset('img/deportes/'.$item.'.jpg') }}"></a></div>
         @endforeach
     </div>
 </div>

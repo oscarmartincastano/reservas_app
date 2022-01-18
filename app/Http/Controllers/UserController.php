@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Instalacion;
 use App\Models\Pista;
+use App\Models\Reserva;
 use DateTime;
 
 class UserController extends Controller
@@ -32,13 +33,19 @@ class UserController extends Controller
             $pista_selected = $pistas[0];
         }
 
-        return view('pista', compact('period', 'pistas', 'pista_selected'));
+        return view('pista.pista', compact('period', 'pistas', 'pista_selected'));
     }
 
     public function reserva(Request $request)
     {
+        $reserva = Reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp]])->first();
+        
         $pista = Pista::find($request->id_pista);
         $fecha = $request->timestamp;
+
+        if ($reserva) {
+            return view('pista.reservanodisponible');
+        }
         
         foreach ($pista->horario_deserialized as $item){
             if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
@@ -62,6 +69,28 @@ class UserController extends Controller
             }
         }
 
-        return view('reserva', compact('pista', 'fecha', 'secuencia'));
+        return view('pista.reserva', compact('pista', 'fecha', 'secuencia'));
     }
+
+    public function reservar(Request $request)
+    {
+        $minutos_totales = $request->secuencia * $request->tarifa;
+
+        Reserva::create([
+            'id_pista' => $request->id_pista,
+            'id_usuario' => auth()->user()->id,
+            'timestamp' => $request->timestamp,
+            'fecha' => date('Y/m/d', $request->timestamp),
+            'hora' => date('Hi', $request->timestamp),
+            'tarifa' => $request->tarifa,
+            'minutos_totales' => $minutos_totales
+        ]);
+
+        return redirect("/{$request->slug_instalacion}/{$request->deporte}/{$request->id_pista}");
+    }
+
+    /* public function login_instalacion(Request $request)
+    {
+        # code...
+    } */
 }

@@ -6,7 +6,7 @@
 
 <section class="hero is-medium">
     <div class="hero-body has-text-centered" style="padding-top: 20px;padding-bottom: 3rem">
-        <h1 class="title is-2">Tenis</h1>
+        <h1 class="title is-2">{{ $pista_selected->tipo }}</h1>
         
     </div>
 </section>
@@ -17,7 +17,7 @@
             <div class="div-reservas">
                 <div class="pistas">
                     @foreach ($pistas as $index => $pista)
-                        <div class="@if($pista->id == $pista_selected->id) active @endif"><a class=" select-pista" data-id_pista="{{ $pista->id }}" href="/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a></div>
+                        <div class="@if($pista->id == $pista_selected->id) active @endif"><a class=" select-pista" data-id_pista="{{ $pista->id }}" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a></div>
                     @endforeach
                 </div>
                 <div class="calendario-horarios">
@@ -114,13 +114,12 @@
                                                             $date_horario->modify("-{$resta} minutes");
                                                         @endphp
 
-                                                        @if ($hora->format('d') == date('d') && $date_horario < $date_now)
+                                                        @if (($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', request()->id_pista], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
                                                             <a href="#" class="btn-no-disponible">
-                                                                {{ $string_hora }}<br>
-                                                                (NO DISPONIBLE)
+                                                                {{ $string_hora }}
                                                             </a>
                                                         @else
-                                                            <a href="/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
+                                                            <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
                                                                 {{ $string_hora }}
                                                             </a>
                                                         @endif
@@ -179,13 +178,12 @@
                                                             $date_horario->modify("-{$resta} minutes");
                                                         @endphp
 
-                                                        @if ($hora->format('d') == date('d') && $date_horario < $date_now)
+                                                        @if (($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', request()->id_pista], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
                                                             <a href="#" class="btn-no-disponible">
-                                                                {{ $string_hora }}<br>
-                                                                (NO DISPONIBLE)
+                                                                {{ $string_hora }}
                                                             </a>
                                                         @else
-                                                            <a href="/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
+                                                            <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
                                                                 {{ $string_hora }}
                                                             </a>
                                                         @endif

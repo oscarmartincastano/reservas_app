@@ -13,28 +13,37 @@
         <!-- BEGIN SIDEBAR MENU ITEMS-->
         <ul class="menu-items">
             <li class="m-t-10 {{ request()->is('/') ? 'active' : '' }}">
-                <a href="/admin/" class="detailed">
+                <a href="/{{ request()->slug_instalacion }}/admin/" class="detailed">
                     <span class="title">Inicio</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="home"></i></span>
             </li>
-            <li class="{{ request()->is('pistas*') ? 'active' : '' }}">
-                <a href="/admin/pistas" class="detailed">
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/pistas*') ? 'active' : '' }}">
+                <a href="/{{ request()->slug_instalacion }}/admin/pistas" class="detailed">
                     <span class="title">Pistas</span>
                 </a>
                 <span class="icon-thumbnail"><i class="material-icons sports_tennis">&#xea32;</i></span>
             </li>
-            <li class="{{ request()->is('users*') ? 'active' : '' }}">
-                <a href="/admin/users" class="detailed">
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/users*') ? 'active' : '' }}">
+                <a href="/{{ request()->slug_instalacion }}/admin/users" class="detailed">
                     <span class="title">Usuarios</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
             </li>
-            <li class="{{ request()->is('configuracion*') ? 'active' : '' }}">
-                <a href="/admin/configuracion" class="detailed">
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'active' : '' }}">
+                <a href="/{{ request()->slug_instalacion }}/admin/configuracion" class="detailed">
                     <span class="title">Configuracion</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="settings"></i></span>
+            </li>
+            <li>
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="detailed">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <span class="title">Logout</span>
+                </a>
+                <span class="icon-thumbnail"><i data-feather="power"></i></span>
             </li>
         </ul>
         <div class="clearfix"></div>

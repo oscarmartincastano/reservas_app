@@ -6,7 +6,7 @@
         
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">{{ auth()->user()->name }}</h3>
+                    <h3 class="text-primary no-margin">{{ auth()->user()->instalacion->nombre }}</h3>
                 </div>
             </div>
             
@@ -16,12 +16,13 @@
                         <div class="card-title">Listado de usuarios</div>
                     </div>
                     <div class="card-body">
-                        <a href="/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
+                        <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
+                                    <th>Rol</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -30,6 +31,7 @@
                                     <tr>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
+                                        <td>{{ $item->rol }}</td>
                                         <td><a href="#" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach

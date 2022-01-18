@@ -18,7 +18,7 @@
         
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">{{ auth()->user()->name }}</h3>
+                    <h3 class="text-primary no-margin">{{ auth()->user()->instalacion->nombre }}</h3>
                 </div>
             </div>
             
@@ -28,7 +28,7 @@
                         <div class="card-title">Listado de pistas</div>
                     </div>
                     <div class="card-body">
-                        <a href="/admin/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
+                        <a href="/{{ request()->slug_instalacion }}/admin/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
                         <table class="table table-condensed table-hover">
                             <thead>
                                 <tr>
@@ -44,8 +44,9 @@
                                         <td>{{ $item->nombre }}</td>
                                         <td>{{ $item->tipo }}</td>
                                         <td>
-                                            @foreach (unserialize($item->horario) as $horario)
-                                                @if (count($horario['dias']) == 7)
+                                            @foreach ($item->horario_deserialized as $horario)
+{{--                                             {{ dd($instalacion->pistas->find(11)->horario_deserialized) }}
+ --}}                                                @if (count($horario['dias']) == 7)
                                                     <strong>Todos los días:</strong>
                                                 @else
                                                     @if (checkConsec($horario['dias']))
@@ -115,7 +116,7 @@
                                                     @endforeach
                                             @endforeach
                                         </td>
-                                        <td><a href="/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td><a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

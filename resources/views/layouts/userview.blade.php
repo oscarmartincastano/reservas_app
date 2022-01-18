@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Bulma Version 0.9.0-->
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
     <title>Instalación - @yield('pagename')</title>
@@ -137,8 +139,14 @@
             gap: 3rem;
         }
         .btn-no-disponible{
-            background: #819daf;
-            color: white;
+            border: 1px solid;
+            border-width: 1px;
+            border-style: solid;
+            white-space: nowrap;
+            cursor: default !important;
+            background: #eee !important;
+            border-color: #ddd !important;
+            color: #aaa !important;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -150,6 +158,10 @@
         .btn-no-disponible:hover{
             background: #819daf;
             color: white;
+            cursor: default;
+        }
+        .navbar-item{
+            font-weight: bold;
         }
     </style>
 </head>
@@ -172,10 +184,20 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a class="navbar-item"> Inicio </a>
-                    <a class="navbar-item"> Reservar </a>
-                    <a class="navbar-item"> Normas </a>
-                    <a class="navbar-item"> Acceder</a>
+                    <a href="/" class="navbar-item"> Inicio </a>
+                    <a href="/" class="navbar-item"> Reservar </a>
+                    <a href="/" class="navbar-item"> Normas </a>
+                    @if (\Auth::check())
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="navbar-item">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <i class="fas fa-power-off mr-1"></i> Cerrar sesión
+                        </a>
+                    @else
+                        <a href="/login" class="navbar-item"><i class="fas fa-sign-in-alt mr-1"></i> Acceder</a>
+
+                    @endif
                 </div>
             </div>
         </div>

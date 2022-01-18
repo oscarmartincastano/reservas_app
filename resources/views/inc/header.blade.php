@@ -12,7 +12,7 @@
                         class="pg-icon">search</i>Type anywhere to <span
                         class="bold">search</span></a>
             </div>
-            <div class="d-flex align-items-center">
+            {{-- <div class="d-flex align-items-center">
                 
                 
                 <div class="dropdown pull-right d-lg-block d-none">
@@ -31,5 +31,5 @@
                         <a href="#" class="dropdown-item">Logout</a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
     ];
 
     /**
@@ -46,6 +47,10 @@ class User extends Authenticatable
 
     public function instalacion()
     {
-        return $this->belongsToMany(Instalacion::class, 'users_instalaciones', 'id_user', 'id_instalacion');
+        return $this->hasOne(Instalacion::class, 'id', 'id_instalacion');
+    }
+
+    public function getSlugInstalacionAttribute() {
+        return $this->slugInstalacion();
     }
 }

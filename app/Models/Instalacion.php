@@ -17,13 +17,14 @@ class Instalacion extends Model
         'nombre',
         'direccion',
         'tlfno',
+        'slug',
     ];
 
     protected $appends = ['deportes'];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'users_instalaciones', 'id_instalacion', 'id_user');
+        return $this->hasMany(User::class, 'id_instalacion');
     }
 
     public function pistas()

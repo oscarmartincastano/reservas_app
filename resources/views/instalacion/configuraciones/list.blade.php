@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">{{ auth()->user()->name }}</h3>
+                    <h3 class="text-primary no-margin">{{ auth()->user()->instalacion->nombre }}</h3>
                 </div>
             </div>
 
@@ -16,7 +16,32 @@
                         <div class="card-title">Configuraciones</div>
                     </div>
                     <div class="card-body">
+
                         <table class="table table-condensed table-hover">
+                        
+                            <tbody>
+                                <tr>
+                                    <th>Reservas activas permitidas por usuario</th>
+                                    <td>{{ $instalacion->nombre }}</td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/nombre" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                </tr>
+                                <tr>
+                                <tr>
+                                    <th>Permitir cancelar reservas</th>
+                                    <td>{{ $instalacion->direccion }}</td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/direccion" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <th>Bloquear el día de hoy</th>
+                                    <td>{{ $instalacion->tlfno }}</td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>{{ $instalacion->slug }}</td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/slug" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

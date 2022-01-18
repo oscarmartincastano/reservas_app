@@ -129,14 +129,14 @@
                 e.preventDefault();
                 $(this).parent().prev().after(`<div class="row my-2 p-2 border interval-horario align-items-center" style="gap: 18px" data-index="${$(this).parent().prev().data('index') + 1}">
                                                     <div><label class="mb-0">Hora inicio: </label><input
-                                                            class="form-control" type="time" name="horario[${$(this).parent().parent().parent().data('index') + 1}][intervalo][${$(this).parent().prev().data('index') + 1}][hinicio]"
+                                                            class="form-control" type="time" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][hinicio]"
                                                             id="hora_inicio"></div>
                                                     <div><label class="mb-0">Hora Fin: </label><input
-                                                            class="form-control" type="time" name="horario[${$(this).parent().parent().parent().data('index') + 1}][intervalo][${$(this).parent().prev().data('index') + 1}][hfin]"
+                                                            class="form-control" type="time" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][hfin]"
                                                             id="hora_fin"></div>
                                                     <div>
                                                         <label class="mb-0">Secuencia:</label>
-                                                        <select class="form-control" name="horario[${$(this).parent().parent().parent().data('index') + 1}][intervalo][${$(this).parent().prev().data('index') + 1}][secuencia]" id="">
+                                                        <select class="form-control" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][secuencia]" id="">
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor

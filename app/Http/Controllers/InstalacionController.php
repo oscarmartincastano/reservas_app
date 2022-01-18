@@ -6,16 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pista;
 use App\Models\Instalacion;
+use App\Models\User;
 
 class InstalacionController extends Controller
 {
     public function index() {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         return view('instalacion.home', compact('instalacion'));
     }
 
     public function edit_info(Request $request) {
-        $instalacion = auth()->user()->instalacion[0]->toArray();
+        $instalacion = auth()->user()->instalacion->toArray();
 
         return view('instalacion.editdata.edit', compact('instalacion'));
     }
@@ -24,24 +25,24 @@ class InstalacionController extends Controller
         $data = $request->all();
         array_shift($data);
 
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         
         Instalacion::find($instalacion->id)->update($data);
         return redirect('/admin/');
     }
 
     public function pistas() {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         return view('instalacion.pistas.list', compact('instalacion'));
     }
 
     public function add_pista_view() {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         return view('instalacion.pistas.add', compact('instalacion'));
     }
 
     public function add_pista(Request $request) {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
 
         $data = $request->all();
         $data['id_instalacion'] = $instalacion->id;
@@ -76,7 +77,7 @@ class InstalacionController extends Controller
     }
 
     public function edit_pista_view(Request $request) {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         $pista = Pista::find($request->id);
         return view('instalacion.pistas.edit', compact('instalacion', 'pista'));
     }
@@ -115,13 +116,33 @@ class InstalacionController extends Controller
     }
 
     public function configuracion(Request $request) {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         
         return view('instalacion.configuraciones.list', compact('instalacion'));
     }
 
     public function users() {
-        $instalacion = auth()->user()->instalacion[0];
+        $instalacion = auth()->user()->instalacion;
         return view('instalacion.users.list', compact('instalacion'));
     }
+
+    public function add_user_view(Request $request)
+    {
+        $instalacion = auth()->user()->instalacion;
+        return view('instalacion.users.add', compact('instalacion'));
+    }
+
+    public function add_user(Request $request)
+    {
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'id_instalacion' => $request->id_instalacion,
+            'rol' => 'user',
+            'password' => \Hash::make($request->password),
+        ]);
+
+        return redirect('/admin/users');
+    }
+
 }
