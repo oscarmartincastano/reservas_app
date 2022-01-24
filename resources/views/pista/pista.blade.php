@@ -5,9 +5,9 @@
 @section('content')
 
 <section class="hero is-medium">
-    <div class="hero-body has-text-centered" style="padding-top: 20px;padding-bottom: 3rem">
-        <h1 class="title is-2">{{ $pista_selected->tipo }}</h1>
-        
+    <div class="has-text-centered title-div" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg);
+    background-size:cover;">
+        <h1 class="title">{{ $pista_selected->tipo }}</h1>
     </div>
 </section>
 
@@ -114,7 +114,7 @@
                                                             $date_horario->modify("-{$resta} minutes");
                                                         @endphp
 
-                                                        @if (($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', request()->id_pista], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
+                                                        @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || ($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'],  ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
                                                             <a href="#" class="btn-no-disponible">
                                                                 {{ $string_hora }}
                                                             </a>
@@ -178,7 +178,7 @@
                                                             $date_horario->modify("-{$resta} minutes");
                                                         @endphp
 
-                                                        @if (($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', request()->id_pista], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
+                                                        @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || ($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
                                                             <a href="#" class="btn-no-disponible">
                                                                 {{ $string_hora }}
                                                             </a>

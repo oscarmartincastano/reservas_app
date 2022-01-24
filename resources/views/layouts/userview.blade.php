@@ -11,166 +11,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
-    <title>Instalación - @yield('pagename')</title>
-    <style type="text/css">
-        html,
-        body {
-            font-family: 'Open Sans';
-        }
-        .navbar-item img {
-            max-height: none;
-        }
-        .div-reservas{
-            box-shadow: 0px 0px 20px 0px rgb(204 204 204);
-        }
-        .div-reservas .pistas{
-            background: rgba(55,61,67,1);
-            display: flex;
-            justify-content: center;
-            border-radius: 7px 7px 0 0;
-        }
-        .div-reservas .pistas a {
-            color: #828282;
-            font-size: 20px;
-        }
-        .div-reservas .pistas .active a {
-            color: white;
-        }
-        .div-reservas .pistas a:hover {
-            color: white;
-        }
-        .div-reservas .pistas div {
-            margin: 15px 0;
-            padding: 0 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 220px;
-        }
-        .div-reservas .pistas div:not(:first-child) {
-            border-left: 1px solid #ccc;
-        }
-        .div-reservas .calendario-horarios{
-            padding: 20px;
-        }
-        .navigator{
-            display: flex;
-            justify-content: space-between;
-        }
-        .table{
-            border: 1px solid #eee;
-            margin: 0 0 15px;
-            text-align: center;
-            width: 100%;
-        }
-        .tabla-reservas{
-            padding: 20px;
-        }
-        .tabla-reservas th, .tabla-reservas td{
-            border: 2px solid white;
-        }
+    
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    @yield('style')
 
-        .tabla-reservas td{
-            height: 1.5rem;
-            background: #52b5f7;
-            vertical-align: middle;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        a.btn-reservar{
-            background: #52b5f7;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 14px;
-            border: 2px solid;
-        }
-        .empty a{
-            background: #c9c9c9;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 14px;
-            border: 2px solid;
-            font-size: 16px;
-        }
-        .tabla-reservas td:hover, .tabla-reservas td:hover a, .tabla-reservas td.reserved,.tabla-reservas td.reserved a, a.btn-reservar:hover, a.btn-reservar.reservado{
-            background: #0077c7 !important;
-        }
-
-        .tabla-reservas td.reserved a{
-            font-weight: bold;
-        }
-        .thead{
-            display: flex;
-            justify-content: space-evenly;
-            padding: 20px;
-        }
-        .th{
-            font-weight: bold;
-            text-align: center;
-        }
-        .thead>div>div{
-            height: 6rem;
-        }
-        .thead>div{
-            width: 100%;
-        }
-        .divider{
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            padding: 34px;
-        }
-        .divider div{
-            border-bottom: 1px solid;
-            width: 50%;
-        }
-        .select-deporte{
-            display: flex;
-            justify-content: space-evenly;
-        }
-        .is-8{
-            gap: 3rem;
-        }
-        .btn-no-disponible{
-            border: 1px solid;
-            border-width: 1px;
-            border-style: solid;
-            white-space: nowrap;
-            cursor: default !important;
-            background: #eee !important;
-            border-color: #ddd !important;
-            color: #aaa !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 14px;
-            border: 2px solid;
-        }
-
-        .btn-no-disponible:hover{
-            background: #819daf;
-            color: white;
-            cursor: default;
-        }
-        .navbar-item{
-            font-weight: bold;
+    <style>
+        .active{
+            color: #3273dc;
         }
     </style>
+
+    <title>Instalación - @yield('pagename')</title>
 </head>
 
 <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/">
+                <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
                     <img src="{{ asset('img/matagrande.jpg') }}" width="75" />
                 </a>
 
@@ -184,18 +45,20 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a href="/" class="navbar-item"> Inicio </a>
-                    <a href="/" class="navbar-item"> Reservar </a>
-                    <a href="/" class="navbar-item"> Normas </a>
+                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item {{request()->is(request()->slug_instalacion) ? 'active' : '' }}"> Inicio </a>
+                    {{-- <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Reservar </a> --}}
+                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Normas </a>
                     @if (\Auth::check())
+                        <a href="/{{ request()->slug_instalacion }}/mis-reservas" class="navbar-item {{request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i class="fas fa-book-open mr-2"></i> Mis reservas </a>
+                        <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i class="fas fa-user mr-2"></i> Mi prefil </a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="navbar-item">
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                            <i class="fas fa-power-off mr-1"></i> Cerrar sesión
+                            <i class="fas fa-power-off mr-2"></i> Cerrar sesión
                         </a>
                     @else
-                        <a href="/login" class="navbar-item"><i class="fas fa-sign-in-alt mr-1"></i> Acceder</a>
+                        <a href="{{ route('login_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i> Acceder</a>
 
                     @endif
                 </div>

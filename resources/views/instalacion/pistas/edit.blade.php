@@ -16,7 +16,7 @@
                         <div class="card-title">Información</div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('edit_pista', ['id' => $pista->id]) }}" method="post" role="form" class="form-horizontal">
+                        <form action="{{ route('edit_pista', ['id' => $pista->id, 'slug_instalacion' => $pista->instalacion->slug]) }}" method="post" role="form" class="form-horizontal">
                             @csrf
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nombre</label>

@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Añadir pista</h3>
+                    <h3 class="text-primary no-margin">Añadir usuario</h3>
                 </div>
             </div>
 
@@ -16,7 +16,7 @@
                         <div class="card-title">Información</div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('add_user') }}" method="post" role="form" class="form-horizontal">
+                        <form action="{{ route('add_user', ['slug_instalacion' => $instalacion->slug]) }}" method="post" role="form" class="form-horizontal">
                             @csrf
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nombre</label>

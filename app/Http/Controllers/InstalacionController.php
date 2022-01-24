@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Pista;
 use App\Models\Instalacion;
 use App\Models\User;
+use App\Models\Configuracion;
 
 class InstalacionController extends Controller
 {
@@ -28,7 +29,7 @@ class InstalacionController extends Controller
         $instalacion = auth()->user()->instalacion;
         
         Instalacion::find($instalacion->id)->update($data);
-        return redirect('/admin/');
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/');
     }
 
     public function pistas() {
@@ -73,7 +74,7 @@ class InstalacionController extends Controller
 
         Pista::create($data);
 
-        return redirect('/admin/pistas');
+        return redirect("/" . auth()->user()->instalacion->slug . "/admin/pistas");
     }
 
     public function edit_pista_view(Request $request) {
@@ -112,13 +113,36 @@ class InstalacionController extends Controller
         /* return $data; */
         Pista::where('id', $request->id)->update($data);
         
-        return redirect('/admin/pistas');
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/pistas');
     }
 
-    public function configuracion(Request $request) {
+    public function configuracion_pistas_reservas(Request $request) {
         $instalacion = auth()->user()->instalacion;
+        return view('instalacion.configuraciones.pistas_reservas', compact('instalacion'));
+    }
+
+    public function configuracion_instalacion(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+        return view('instalacion.configuraciones.instalacion', compact('instalacion'));
+    }
+
+    public function edit_configuracion(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+        $data = $request->all();
+        array_shift($data);
         
-        return view('instalacion.configuraciones.list', compact('instalacion'));
+        if (!isset($request->allow_cancel)) {
+            $data['allow_cancel'] = 0;
+        }
+        if (!isset($request->block_today)) {
+            $data['block_today'] = 0;
+        }
+        if (!isset($request->observaciones)) {
+            $data['observaciones'] = 0;
+        }
+
+        Configuracion::find($instalacion->configuracion->id)->update($data);
+        return redirect()->back();
     }
 
     public function users() {
@@ -142,7 +166,7 @@ class InstalacionController extends Controller
             'password' => \Hash::make($request->password),
         ]);
 
-        return redirect('/admin/users');
+        return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
     }
 
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Reserva;
+use App\Models\Instalacion;
 
 class Pista extends Model
 {
@@ -25,6 +26,11 @@ class Pista extends Model
     ];
 
     protected $appends = ['horario_deserialized'/* , 'string_horario' */];
+
+    public function instalacion()
+    {
+        return $this->hasOne(Instalacion::class, 'id', 'id_instalacion');
+    }
 
     public function getHorarioDeserializedAttribute() {
         return $this->horarioDeserializado();

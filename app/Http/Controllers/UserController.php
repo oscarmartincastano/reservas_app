@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Instalacion;
 use App\Models\Pista;
 use App\Models\Reserva;
+use App\Models\User;
 use DateTime;
 
 class UserController extends Controller
@@ -38,11 +40,14 @@ class UserController extends Controller
 
     public function reserva(Request $request)
     {
-        $reserva = Reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp]])->first();
+        $reserva = Reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp], ['estado', 'active']])->first();
         
         $pista = Pista::find($request->id_pista);
         $fecha = $request->timestamp;
 
+        if (count(auth()->user()->reservas_activas) >= auth()->user()->instalacion->configuracion->num_reservas_por_user) {
+            return view('pista.reservanodisponible')->with('maxreservas', 'true');
+        }
         if ($reserva) {
             return view('pista.reservanodisponible');
         }
@@ -75,8 +80,8 @@ class UserController extends Controller
     public function reservar(Request $request)
     {
         $minutos_totales = $request->secuencia * $request->tarifa;
-
-        Reserva::create([
+        
+        $reserva = Reserva::create([
             'id_pista' => $request->id_pista,
             'id_usuario' => auth()->user()->id,
             'timestamp' => $request->timestamp,
@@ -86,11 +91,51 @@ class UserController extends Controller
             'minutos_totales' => $minutos_totales
         ]);
 
-        return redirect("/{$request->slug_instalacion}/{$request->deporte}/{$request->id_pista}");
+        if (isset($request->observaciones)) {
+            $reserva->update(['observaciones' => $request->observaciones]);
+        }
+        
+        return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
 
-    /* public function login_instalacion(Request $request)
+    public function mis_reservas(Request $request)
     {
-        # code...
-    } */
+        $reservas = auth()->user()->reservas;
+
+        return view('user.misreservas', compact('reservas'));
+    }
+
+    public function cancel_reservas(Request $request)
+    {
+        Reserva::find($request->id)->update(['estado' => 'canceled']);
+
+        return redirect()->back();
+    }
+
+    public function perfil(Request $request)
+    {
+        return view('user.perfil');
+    }
+
+    public function edit_perfil(Request $request)
+    {
+        $data = $request->all();
+
+        array_shift($data);
+
+        if (!isset($request->password)) {
+            unset($data['password']);
+            unset($data['password_rep']);
+            User::where('id', auth()->user()->id)->update($data);
+        }else {
+            if ($data['password'] == $data['password_rep']) {
+                unset($data['password_rep']);
+                $data['password'] = Hash::make($request->password);
+                User::where('id', auth()->user()->id)->update($data);
+            } else {
+                return redirect()->back()->with('error', 'true');
+            }
+        }
+        return redirect()->back()->with('success', 'true');
+    }
 }

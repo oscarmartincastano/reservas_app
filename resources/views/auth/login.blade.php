@@ -12,7 +12,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="@if (isset(request()->slug_instalacion)) {{ route('login', ['slug_instalacion' => request()->slug_instalacion]) }} @else {{ route('login') }} @endif">
             @csrf
 
             <!-- Email Address -->

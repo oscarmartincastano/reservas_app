@@ -45,8 +45,7 @@
                                         <td>{{ $item->tipo }}</td>
                                         <td>
                                             @foreach ($item->horario_deserialized as $horario)
-{{--                                             {{ dd($instalacion->pistas->find(11)->horario_deserialized) }}
- --}}                                                @if (count($horario['dias']) == 7)
+                                               @if (count($horario['dias']) == 7)
                                                     <strong>Todos los días:</strong>
                                                 @else
                                                     @if (checkConsec($horario['dias']))
@@ -116,7 +115,7 @@
                                                     @endforeach
                                             @endforeach
                                         </td>
-                                        <td><a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td><a href="/{{ $instalacion->slug }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

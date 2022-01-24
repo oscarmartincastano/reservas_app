@@ -18,6 +18,7 @@
     <!-- Styles -->
     <link href="https://entradas.aquasierra.es/css/app.css" rel="stylesheet">
     <style>
+        
         .descripcion{
             font-weight: 300;
         }
@@ -59,12 +60,22 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
-                                </div>
-                                <p class="descripcion">
-                                    Esta reserva no está disponible porque ya ha sido reservada.
-                                </p>
+                                @if (isset($maxreservas))
+                                    <div class="d-flex justify-content-between">
+                                        <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
+                                    </div>
+                                    <p class="descripcion">
+                                        No puedes reservar porque ya tienes varias reservas activas. Haz click aquí para ver tus reservas:<br><br>
+                                        <a href="/{{ auth()->user()->instalacion->slug }}/mis-reservas">Mis reservas</a>
+                                    </p>
+                                @else
+                                    <div class="d-flex justify-content-between">
+                                        <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
+                                    </div>
+                                    <p class="descripcion">
+                                        Esta reserva no está disponible porque ya ha sido reservada.
+                                    </p>
+                                @endif
                             </div>
                         </div>
                     </div>

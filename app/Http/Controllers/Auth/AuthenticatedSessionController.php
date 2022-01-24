@@ -32,6 +32,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (isset($request->slug_instalacion)) {
+            return redirect(request()->slug_instalacion . '/');
+        }
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

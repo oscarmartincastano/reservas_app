@@ -21,11 +21,13 @@ class Reserva extends Model
         'fecha',
         'hora',
         'minutos_totales',
+        'estado',
+        'observaciones',
     ];
 
     public function pista()
     {
-        return $this->hasOne(Pista::class, 'id_pista');
+        return $this->hasOne(Pista::class, 'id', 'id_pista');
     }
 
 }

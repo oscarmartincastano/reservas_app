@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Instalacion;
+use App\Models\Reserva;
 
 class User extends Authenticatable
 {
@@ -45,12 +46,72 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['reservas_activas', 'reservas_pasadas', 'reservas_canceladas'];
+
     public function instalacion()
     {
         return $this->hasOne(Instalacion::class, 'id', 'id_instalacion');
     }
 
-    public function getSlugInstalacionAttribute() {
-        return $this->slugInstalacion();
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class,'id_usuario');
+    }
+
+    public function getReservasActivasAttribute() {
+        return $this->reservas_activas();
+    }
+
+    public function reservas_activas()
+    {
+        $reservas_activas = [];
+
+        foreach ($this->reservas as $key => $item) {
+            if ($item->estado == 'active' && $item->fecha >= date('Y-m-d')) {
+                array_push($reservas_activas, $item);
+            }
+        }
+
+        return $reservas_activas;
+    }
+
+    public function getReservasPasadasAttribute() {
+        return $this->reservas_pasadas();
+    }
+
+    public function reservas_pasadas()
+    {
+        $reservas_pasadas = [];
+
+        foreach ($this->reservas as $key => $item) {
+            if ($item->estado == 'active' && $item->fecha < date('Y-m-d')) {
+                array_push($reservas_pasadas, $item);
+            }
+            if (count($reservas_pasadas) == 10) {
+               break;
+            }
+        }
+
+        return $reservas_pasadas;
+    }
+
+    public function getReservasCanceladasAttribute() {
+        return $this->reservas_canceladas();
+    }
+
+    public function reservas_canceladas()
+    {
+        $reservas_canceladas = [];
+
+        foreach ($this->reservas as $key => $item) {
+            if ($item->estado == 'canceled') {
+                array_push($reservas_canceladas, $item);
+            }
+            if (count($reservas_canceladas) == 10) {
+               break;
+            }
+        }
+
+        return $reservas_canceladas;
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Pista;
+use App\Models\Configuracion;
 
 class Instalacion extends Model
 {
@@ -30,6 +31,11 @@ class Instalacion extends Model
     public function pistas()
     {
         return $this->hasMany(Pista::class, 'id_instalacion');
+    }
+
+    public function configuracion()
+    {
+        return $this->hasOne(Configuracion::class, 'id_instalacion');
     }
 
     public function getDeportesAttribute() {

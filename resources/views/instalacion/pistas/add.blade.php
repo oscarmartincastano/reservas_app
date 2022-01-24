@@ -16,7 +16,7 @@
                         <div class="card-title">Información</div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('add_pista') }}" method="post" role="form" class="form-horizontal">
+                        <form action="{{ route('add_pista', ['slug_instalacion' => $instalacion->slug]) }}" method="post" role="form" class="form-horizontal">
                             @csrf
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nombre</label>
