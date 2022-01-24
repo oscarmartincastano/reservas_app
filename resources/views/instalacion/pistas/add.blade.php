@@ -29,6 +29,7 @@
                                     <option value="Pádel">Pádel</option>
                                     <option value="Fútbol">Fútbol</option>
                                     <option value="Ping pong">Ping pong</option>
+                                    <option value="Sala/oficina">Sala/oficina</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -87,14 +88,6 @@
                                     class="form-control col-md-10">
                             </div> --}}
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Antelación cancelaciones</label>
-                                <select class="form-control col-md-10" name="antelacion_cancel" id="">
-                                    @for ($i = 1; $i < 30; $i++)
-                                        <option value="{{ $i }}">{{ $i }} días</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-md-2 control-label">Antelación de la reserva</label>
                                 <select class="form-control col-md-10" name="atenlacion_reserva" id="">
                                     @for ($i = 1; $i < 30; $i++)
@@ -103,11 +96,17 @@
                                 </select>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Tiempo límite para reservas</label>
-                                <select class="form-control col-md-10" name="tiempo_limite_reserva" id="">
-                                    @for ($i = 1; $i < 24; $i++)
-                                        <option value="{{ $i * 5 }}">{{ $i * 5 }} min</option>
-                                    @endfor
+                                <label class="col-md-2 control-label">Permite cancelación</label>
+                                <select class="form-control col-md-10" name="allow_cancel" id="allow_cancel">
+                                    <option value="1" >Sí</option>
+                                    <option value="0" >No</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Permite reservar varios tramos</label>
+                                <select class="form-control col-md-10" name="allow_more_res" id="allow_more_res">
+                                    <option value="1" >Sí</option>
+                                    <option value="0" >No</option>
                                 </select>
                             </div>
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Añadir</button>

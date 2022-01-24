@@ -6,7 +6,7 @@
 
 
 <div class="container">
-    <h1 class="title text-center">Selecciona deporte</h1>
+    <h1 class="title text-center">Selecciona espacio</h1>
     <div class="divider mb-5">
         <div></div>
     </div>

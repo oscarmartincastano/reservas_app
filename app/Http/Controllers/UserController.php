@@ -15,7 +15,10 @@ class UserController extends Controller
 {
     public function index() {
         $instalacion = Instalacion::first();
-        return view('home', compact('instalacion'));
+        if (count($instalacion->pistas)>1 || count($instalacion->pistas) == 0) {
+            return view('home', compact('instalacion'));
+        }
+        return redirect("{$instalacion->slug}/{$instalacion->pistas->first()->tipo}");
     }
 
     public function pistas(Request $request) {
@@ -66,6 +69,7 @@ class UserController extends Controller
                     for ($i=0; $i < floor($numero_veces); $i++) { 
                         if ($hora->format('h:i') == date(date('h:i', $fecha))) {
                             $secuencia = $intervalo['secuencia'];
+                            $number = $numero_veces - $i;
                             /* $hfin = date('h:i',strtotime (date('h:i', $fecha) . " +{$intervalo['secuencia']} minutes")); */
                         }
                         $hora->modify("+{$intervalo['secuencia']} minutes");
@@ -74,7 +78,7 @@ class UserController extends Controller
             }
         }
 
-        return view('pista.reserva', compact('pista', 'fecha', 'secuencia'));
+        return view('pista.reserva', compact('pista', 'fecha', 'secuencia', 'number'));
     }
 
     public function reservar(Request $request)

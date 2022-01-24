@@ -29,6 +29,7 @@
                                     <option {{ $pista->nombre == 'Pádel' }} value="Pádel">Pádel</option>
                                     <option {{ $pista->nombre == 'Fútbol' }} value="Fútbol">Fútbol</option>
                                     <option {{ $pista->nombre == 'Ping pong' }} value="Ping pong">Ping pong</option>
+                                    <option {{ $pista->nombre == 'Sala/oficina' }} value="Sala/oficina">Sala/oficina</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -99,11 +100,10 @@
                                     class="form-control col-md-10">
                             </div> --}}
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Antelación cancelaciones</label>
-                                <select class="form-control col-md-10" name="antelacion_cancel" id="">
-                                    @for ($i = 1; $i < 30; $i++)
-                                        <option value="{{ $i }}" @if($pista->antelacion_cancel == $i) selected @endif>{{ $i }} días</option>
-                                    @endfor
+                                <label class="col-md-2 control-label">Permite cancelación</label>
+                                <select class="form-control col-md-10" name="allow_cancel" id="allow_cancel">
+                                    <option value="1" @if($pista->allow_cancel) selected @endif>Sí</option>
+                                    <option value="0" @if(!$pista->allow_cancel) selected @endif>No</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -115,11 +115,10 @@
                                 </select>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Tiempo límite para reservas</label>
-                                <select class="form-control col-md-10" name="tiempo_limite_reserva" id="">
-                                    @for ($i = 1; $i < 24; $i++)
-                                        <option value="{{ $i * 5 }}"@if($pista->tiempo_limite_reserva == $i * 5) selected @endif>{{ $i * 5 }} min</option>
-                                    @endfor
+                                <label class="col-md-2 control-label">Permite reservar varios tramos</label>
+                                <select class="form-control col-md-10" name="allow_more_res" id="">
+                                    <option value="0" @if($pista->allow_more_res) selected @endif>No</option>
+                                    <option value="1" @if(!$pista->allow_more_res) selected @endif>Sí</option>
                                 </select>
                             </div>
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Editar</button>

@@ -20,9 +20,8 @@ class Pista extends Model
         'tipo',
         'horario',
         'allow_cancel',
-        'antelacion_cancel',
         'atenlacion_reserva',
-        'tiempo_limite_reserva',
+        'allow_more_res',
     ];
 
     protected $appends = ['horario_deserialized'/* , 'string_horario' */];

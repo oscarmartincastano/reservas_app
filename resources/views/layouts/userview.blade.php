@@ -32,7 +32,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
-                    <img src="{{ asset('img/matagrande.jpg') }}" width="75" />
+                    <img src="{{ asset('img/cecoworking.png') }}" height="100" />
                 </a>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"

@@ -25,7 +25,7 @@
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
                 <div class="card ">
                     <div class="card-header">
-                        <div class="card-title">Listado de pistas</div>
+                        <div class="card-title">Listado de espacios</div>
                     </div>
                     <div class="card-body">
                         <a href="/{{ request()->slug_instalacion }}/admin/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
