@@ -62,199 +62,95 @@
                                 @foreach ($pista_selected->horario_deserialized as $item)
                                     @if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias'])))
                                         @foreach ($item['intervalo'] as $index => $intervalo)
-                                            @if ($index == 0)
-                                                        {{-- @php
-                                                        $a = new \DateTime('6:00');
-                                                        $b = new \DateTime($intervalo['hinicio']);
-                                                        $interval = $a->diff($b);
-                                                        $dif_start = $interval->format("%h") * 60;
-                                                        $dif_start += $interval->format("%i");
-                                                        $dif_start = $dif_start / 60;
-                                                        if (!is_int($dif_start)) {
-                                                            $decimal = $dif_start - floor($dif_start); 
-                                                        }
-                                                    @endphp --}}
-                                                        {{-- {{ dd($dif_start) }} --}}
-                                                        {{-- <div class="empty" style="height:{{  str_replace(',', '.', $dif_start*6) }}rem"><a href="#"></a></div> --}}
+                                        
+                                            {{-- @php
+                                                $a = new \DateTime($item['intervalo'][$index - 1]['hfin']);
+                                                $b = new \DateTime($intervalo['hinicio']);
+                                                $interval = $a->diff($b);
+                                                $dif_start = $interval->format("%h") * 60;
+                                                $dif_start += $interval->format("%i");
+                                                $dif_start = $dif_start / 60;
+                                                if (!is_int($dif_start)) {
+                                                    $decimal = $dif_start - floor($dif_start); 
+                                                }
+                                            @endphp
 
-                                                        {{-- @if (!is_int($dif_start))
-                                                        @for ($i = 0; $i < ceil($dif_start); $i++)
-                                                            @if ($i == ceil($dif_start) - 1)
-                                                                <div class="empty" style="height:{{  str_replace(',', '.', ($decimal*6)) }}rem"><a href="#"></a></div>
-                                                            @else
-                                                                <div class="empty"><a href="#"></a></div>
-                                                            @endif
-                                                        @endfor
+                                            @if (!is_int($dif_start))
+                                                @for ($i = 0; $i < ceil($dif_start); $i++)
+                                                    @if ($i == 0)
+                                                        <div class="empty" style="height:{{  str_replace(',', '.', ($decimal*6)) }}rem"><a href="#"></a></div>
                                                     @else
-                                                        @for ($i = 0; $i < round($dif_start); $i++)
-                                                            <div class="empty"><a href="#"></a></div>
-                                                        @endfor
-                                                    @endif --}}
-
-                                                        {{-- @if (is_int($dif_start))
-                                                        @for ($i = 0; $i < $dif_start; $i++)
-                                                            <div class="empty"><a href="#"></a></div>
-                                                        @endfor
-                                                    @endif --}}
-
-                                                @php
-                                                    $a = new \DateTime($intervalo['hfin']);
-                                                    $b = new \DateTime($intervalo['hinicio']);
-                                                    $interval = $a->diff($b);
-                                                    $dif = $interval->format('%h') * 60;
-                                                    $dif += $interval->format('%i');
-                                                    $dif = $dif / $intervalo['secuencia'];
-                                                @endphp
-
-                                                @if (is_int($dif))
-                                                    @for ($i = 0; $i < $dif; $i++)
-                                                        @php
-                                                            $mins_totales_reserva = false;
-                                                            if ($i == 0) {
-                                                                $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
-                                                                if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
-                                                                    $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
-                                                                    /*                                                                 $hora->modify("-{$mins_totales_reserva} minutes")->modify("+{$intervalo['secuencia']} minutes");
-                                                                     */
-                                                                } else {
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                                }
-                                                            } else {
-                                                                if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
-                                                                    $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
-                                                                    /*                                                                 $hora->modify("-{$mins_totales_reserva} minutes")->modify("+{$intervalo['secuencia']} minutes");
-                                                                     */
-                                                                } else {
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                                }
-                                                            }
-                                                            
-                                                            $date_now = new \DateTime();
-                                                            $date_horario = new \DateTime($hora->format('d-m-Y H:i:s'));
-                                                            $resta = $intervalo['secuencia'] + $pista_selected->atenlacion_reserva * 24 * 60;
-                                                            $date_horario->modify("-{$resta} minutes");
-                                                        @endphp
-                                                        {{-- {{ dd($date_horario) }} --}}
-                                                        @if ($mins_totales_reserva)
-                                                            <div
-                                                                style="height:{{ str_replace(',', '.', (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($mins_totales_reserva)->timestamp]])->first()->minutos_totales / 60) * 6) }}rem">
-                                                                <a href="#" class="btn-no-disponible">
-                                                                    {{ $string_hora }}
-                                                                </a>
-                                                            </div>
-                                                            @php $mins_totales_reserva = false; @endphp
-                                                        @else
-                                                            <div
-                                                                style="height:{{ str_replace(',', '.', $intervalo['secuencia'] / 10) }}rem">
-                                                                @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || $date_horario < $date_now)
-                                                                    <a href="#" class="btn-no-disponible">
-                                                                        {{ $string_hora }}
-                                                                    </a>
-                                                                @else
-                                                                    <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}"
-                                                                        class="btn-reservar">
-                                                                        {{ $string_hora }}
-                                                                    </a>
-                                                                @endif
-                                                            </div>
-                                                        @endif
-                                                        @if ($hora->format('H:i') == $intervalo['hfin'])
-                                                            @break
-                                                        @endif
-                                                    @endfor
-                                                @endif
-                                            @else
-                                                {{-- @php
-                                                    $a = new \DateTime($item['intervalo'][$index - 1]['hfin']);
-                                                    $b = new \DateTime($intervalo['hinicio']);
-                                                    $interval = $a->diff($b);
-                                                    $dif_start = $interval->format("%h") * 60;
-                                                    $dif_start += $interval->format("%i");
-                                                    $dif_start = $dif_start / 60;
-                                                    if (!is_int($dif_start)) {
-                                                        $decimal = $dif_start - floor($dif_start); 
-                                                    }
-                                                @endphp
-
-                                                @if (!is_int($dif_start))
-                                                    @for ($i = 0; $i < ceil($dif_start); $i++)
-                                                        @if ($i == 0)
-                                                            <div class="empty" style="height:{{  str_replace(',', '.', ($decimal*6)) }}rem"><a href="#"></a></div>
-                                                        @else
-                                                            <div class="empty"><a href="#"></a></div>
-                                                        @endif
-                                                    @endfor
-                                                @else
-                                                    @for ($i = 0; $i < round($dif_start); $i++)
                                                         <div class="empty"><a href="#"></a></div>
-                                                    @endfor
-                                                @endif --}}
+                                                    @endif
+                                                @endfor
+                                            @else
+                                                @for ($i = 0; $i < round($dif_start); $i++)
+                                                    <div class="empty"><a href="#"></a></div>
+                                                @endfor
+                                            @endif --}}
 
-                                                @php
-                                                    $a = new \DateTime($intervalo['hfin']);
-                                                    $b = new \DateTime($intervalo['hinicio']);
-                                                    $interval = $a->diff($b);
-                                                    $dif = $interval->format('%h') * 60;
-                                                    $dif += $interval->format('%i');
-                                                    $dif = $dif / $intervalo['secuencia'];
-                                                @endphp
-                                                @if (is_int($dif))
-                                                    @for ($i = 0; $i < $dif; $i++)
-                                                        @php
-                                                            $mins_totales_reserva = false;
-                                                            if ($i == 0) {
-                                                                $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
-                                                                if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
-                                                                    $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
-                                                                } else {
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                                }
+                                            @php
+                                                $a = new \DateTime($intervalo['hfin']);
+                                                $b = new \DateTime($intervalo['hinicio']);
+                                                $interval = $a->diff($b);
+                                                $dif = $interval->format('%h') * 60;
+                                                $dif += $interval->format('%i');
+                                                $dif = $dif / $intervalo['secuencia'];
+                                            @endphp
+                                            @if (is_int($dif))
+                                                @for ($i = 0; $i < $dif; $i++)
+                                                    @php
+                                                        $mins_totales_reserva = false;
+                                                        if ($i == 0) {
+                                                            $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
+                                                            if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
+                                                                $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
+                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
                                                             } else {
-                                                                if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
-                                                                    $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
-                                                                } else {
-                                                                    $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                                }
+                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
                                                             }
-                                                            
-                                                            $date_now = new \DateTime();
-                                                            $date_horario = new \DateTime($hora->format('d-m-Y H:i:s'));
-                                                            $resta = $intervalo['secuencia'] + $pista_selected->atenlacion_reserva * 24 * 60;
-                                                            $date_horario->modify("-{$resta} minutes");
-                                                        @endphp
+                                                        } else {
+                                                            if (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->count()) {
+                                                                $mins_totales_reserva = \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->timestamp]])->first()->minutos_totales;
+                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$mins_totales_reserva} minutes")->format('H:i');
+                                                            } else {
+                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
+                                                            }
+                                                        }
+                                                        
+                                                        $date_now = new \DateTime();
+                                                        $date_horario = new \DateTime($hora->format('d-m-Y H:i:s'));
+                                                        $resta = $intervalo['secuencia'] + $pista_selected->atenlacion_reserva * 24 * 60;
+                                                        $date_horario->modify("-{$resta} minutes");
+                                                    @endphp
 
-                                                        @if ($mins_totales_reserva)
-                                                            <div
-                                                                style="height:{{ str_replace(',', '.', (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($mins_totales_reserva)->timestamp]])->first()->minutos_totales / 60) * 6) }}rem">
+                                                    @if ($mins_totales_reserva)
+                                                        <div
+                                                            style="height:{{ str_replace(',', '.', (\App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($mins_totales_reserva)->timestamp]])->first()->minutos_totales / 60) * 6) }}rem">
+                                                            <a href="#" class="btn-no-disponible">
+                                                                {{ $string_hora }}
+                                                            </a>
+                                                        </div>
+                                                        @php $mins_totales_reserva = false; @endphp
+                                                    @else
+                                                        <div
+                                                            style="height:{{ str_replace(',', '.', $intervalo['secuencia'] / 10) }}rem">
+                                                            @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || $date_horario < $date_now)
                                                                 <a href="#" class="btn-no-disponible">
                                                                     {{ $string_hora }}
                                                                 </a>
-                                                            </div>
-                                                            @php $mins_totales_reserva = false; @endphp
-                                                        @else
-                                                            <div
-                                                                style="height:{{ str_replace(',', '.', $intervalo['secuencia'] / 10) }}rem">
-                                                                @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || $date_horario < $date_now)
-                                                                    <a href="#" class="btn-no-disponible">
-                                                                        {{ $string_hora }}
-                                                                    </a>
-                                                                @else
-                                                                    <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}"
-                                                                        class="btn-reservar">
-                                                                        {{ $string_hora }}
-                                                                    </a>
-                                                                @endif
-                                                            </div>
-                                                        @endif
-                                                        @if ($hora->format('H:i') == $intervalo['hfin'])
-                                                            @break
-                                                        @endif
-                                                    @endfor
-                                                @endif
+                                                            @else
+                                                                <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}"
+                                                                    class="btn-reservar">
+                                                                    {{ $string_hora }}
+                                                                </a>
+                                                            @endif
+                                                        </div>
+                                                    @endif
+                                                    @if ($hora->format('H:i') == $intervalo['hfin'])
+                                                        @break
+                                                    @endif
+                                                @endfor
                                             @endif
                                         @endforeach
                                     @endif
