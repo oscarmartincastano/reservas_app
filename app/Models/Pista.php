@@ -31,6 +31,11 @@ class Pista extends Model
         return $this->hasOne(Instalacion::class, 'id', 'id_instalacion');
     }
 
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class, 'id', 'id_pista');
+    }
+
     public function getHorarioDeserializedAttribute() {
         return $this->horarioDeserializado();
     }
@@ -40,80 +45,19 @@ class Pista extends Model
         return $horario;
     }
 
-    /* public function getStringHorarioAttribute() {
-        return $this->stringHorario();
+    public function reservas_por_dia($fecha)
+    {
+        return Reserva::where('id_pista', $this->id)->where('fecha', $fecha)->get();
     }
 
-    public function stringHorario() {
-        @foreach ($item->horario_deserialized as $horario)
-            @if (count($horario['dias']) == 7)
-                <strong>Todos los días:</strong>
-            @else
-                @if (checkConsec($horario['dias']))
-                    @foreach ($horario['dias'] as $index => $dia)
-                        @switch($dia)
-                            @case(1)
-                                @php $horario['dias'][$index] = 'lunes' @endphp
-                                @break
-                            @case(2)
-                                @php $horario['dias'][$index] = 'martes' @endphp
-                                @break
-                            @case(3)
-                                @php $horario['dias'][$index] = 'miércoles' @endphp
-                                @break
-                            @case(4)
-                                @php $horario['dias'][$index] = 'jueves' @endphp
-                                @break
-                            @case(5)
-                                @php $horario['dias'][$index] = 'viernes' @endphp
-                                @break
-                            @case(6)
-                                @php $horario['dias'][$index] = 'sábado' @endphp
-                                @break
-                            @case(7)
-                                @php $horario['dias'][$index] = 'domingo' @endphp
-                                @break
-                            @default
-                        @endswitch
-                    @endforeach
-                    <strong>@if (count($horario['dias']) > 1) {{ ucfirst($horario['dias'][0]) }} a {{ $horario['dias'][count($horario['dias']) - 1] }} @else {{ ucfirst($horario['dias'][0]) }} @endif</strong></div>
-                @else
-                    @foreach ($horario['dias'] as $index => $dia)
-                        @switch($dia)
-                            @case(1)
-                                @php $horario['dias'][$index] = 'lunes' @endphp
-                                @break
-                            @case(2)
-                                @php $horario['dias'][$index] = 'martes' @endphp
-                                @break
-                            @case(3)
-                                @php $horario['dias'][$index] = 'miércoles' @endphp
-                                @break
-                            @case(4)
-                                @php $horario['dias'][$index] = 'jueves' @endphp
-                                @break
-                            @case(5)
-                                @php $horario['dias'][$index] = 'viernes' @endphp
-                                @break
-                            @case(6)
-                                @php $horario['dias'][$index] = 'sábado' @endphp
-                                @break
-                            @case(7)
-                                @php $horario['dias'][$index] = 'domingo' @endphp
-                                @break
-                            @default
-                        @endswitch
-                    @endforeach
-                    <strong>
-                        @foreach ($horario['dias'] as $index => $dia)
-                           @if ($index == 0){{ ucfirst($dia) }}@else{{ $dia }}@endif<i></i>@if ($index != count($horario['dias']) - 1), @endif
-                        @endforeach
-                    </strong>
-                @endif
-            @endif
-                @foreach ($horario['intervalo'] as $int)
-                    <li style="margin-left: 10px">{{ $int['hinicio'] }}h -{{ $int['hfin'] }}h cada {{ $int['secuencia'] }} min.</li>
-                @endforeach
-        @endforeach
-    } */
+    public function horario_con_reservas_por_dia($fecha)
+    {
+        /* return Reserva::where('id_pista', $this->id)->where('fecha', $fecha)->get(); */
+        $fecha = new \DateTime($fecha);
+        foreach ($this->horario_deserialized as $key => $item) {
+            if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias']))) {
+
+            }
+        }
+    }
 }

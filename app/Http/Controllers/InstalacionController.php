@@ -8,12 +8,47 @@ use App\Models\Pista;
 use App\Models\Instalacion;
 use App\Models\User;
 use App\Models\Configuracion;
+use App\Models\Reserva;
+use DateTime;
 
 class InstalacionController extends Controller
 {
+    public function rangeWeek () {
+        $dt = strtotime (date('d-m-Y'));
+        return array (
+          "start" => date ('N', $dt) == 1 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('last monday', $dt)),
+          "end" => date('N', $dt) == 7 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('next monday', $dt))
+        );
+      }
+      
     public function index() {
         $instalacion = auth()->user()->instalacion;
-        return view('instalacion.home', compact('instalacion'));
+        $semana = $this->rangeWeek();
+
+        $period = new \DatePeriod(new DateTime($semana['start']), new \DateInterval('P1D'), new DateTime($semana['end']));
+        $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
+
+        return view('instalacion.home', compact('instalacion', 'period', 'pistas'));
+    }
+
+    public function reservas_dia(Request $request)
+    {
+        $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->where('fecha', $request->fecha)->get();
+        $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
+        $fecha = new DateTime($request->fecha);
+        $string = '';
+        foreach ($pistas as $pista){
+            $string .= '<h4><strong>'. $pista->nombre .'</strong> Reservas para <span class="fecha">' . date('d/m/Y', strtotime($request->fecha)) .'</span></h4>
+            <div class="tab-pane active" id="'.$pista->id.'">';
+            
+            foreach ($pista->reservas_por_dia($request->fecha) as $reservas) {
+                
+                $string .= '<div>'. $reservas->timestamp .'</div>';
+            }
+            $string .= `</div>`;
+        }
+
+        return $string;
     }
 
     public function edit_info(Request $request) {

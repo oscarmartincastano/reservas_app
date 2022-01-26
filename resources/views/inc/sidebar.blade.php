@@ -20,7 +20,7 @@
             </li>
             <li class="{{ request()->is(request()->slug_instalacion . '/admin/pistas*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/pistas" class="detailed">
-                    <span class="title">Pistas</span>
+                    <span class="title">Espacios</span>
                 </a>
                 <span class="icon-thumbnail"><i class="material-icons sports_tennis">&#xea32;</i></span>
             </li>
