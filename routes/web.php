@@ -32,7 +32,9 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
     Route::group(['prefix' =>'admin', 'middleware' => 'auth_admin_instalacion'], function() {
         Route::get('/', 'InstalacionController@index');
         Route::prefix('reservas')->group(function () {
+            Route::get('/', 'InstalacionController@index');
             Route::get('/{fecha}', 'InstalacionController@reservas_dia');
+            Route::post('/validar/{id}', 'InstalacionController@validar_reserva');
         });
 
     
