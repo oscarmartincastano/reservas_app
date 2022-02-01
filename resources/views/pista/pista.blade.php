@@ -5,7 +5,7 @@
 @section('content')
 
     <section class="hero is-medium">
-        <div class="has-text-centered title-div" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg);
+        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg) center;
             background-size:cover;">
             <h1 class="title">{{ $pista_selected->tipo }}</h1>
         </div>
@@ -29,7 +29,7 @@
                                 <a class="button" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}">
                                     <
                                 </a>
-                                <a class="button" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}">
+                                <a class="button {{ request()->semana == null || request()->semana == 0 ? 'active' : '' }}" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}">
                                     Hoy
                                 </a> 
                                 <a class="button" href="?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}">
@@ -45,7 +45,7 @@
                                 </form>
                             </div>
                             <div style="text-transform: capitalize" class="mes">
-                                {{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%B %Y') }}
+                                {{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b')}}
                             </div>
                         </div>
                     </div>
