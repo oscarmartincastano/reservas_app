@@ -15,6 +15,13 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+
+        <style>
+            .cuadro-login{
+                justify-content: center;
+                padding: 14px;
+            }
+        </style>
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">

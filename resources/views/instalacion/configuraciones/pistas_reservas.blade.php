@@ -33,25 +33,25 @@
                                     value="{{ $instalacion->configuracion->num_reservas_por_user }}">
                             </div>
                             
-                            <div class="form-group mb-4">
+                            {{-- <div class="form-group mb-4">
                                 <label for="num_reservas_por_user">Quiénes pueden reservar</label>
                                 <select class="form-control form-control-lg">
                                     <option>Usuario</option>
                                     <option>Invitado</option>
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" value="1" id="observaciones" name="observaciones" @if ($instalacion->configuracion->observaciones) checked @endif>
                                 <label class="form-check-label" for="observaciones">
                                     Añadir campo de observaciones en la reserva
                                 </label>
                             </div>
-                            <div class="form-check mb-4">
+                            {{-- <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" value="1" id="allow_cancel" name="allow_cancel" @if ($instalacion->configuracion->allow_cancel) checked @endif>
                                 <label class="form-check-label" for="allow_cancel">
                                     Permitir a usuarios editar nombre y email
                                 </label>
-                            </div>
+                            </div> --}}
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" value="1" id="allow_cancel" name="allow_cancel" @if ($instalacion->configuracion->allow_cancel) checked @endif>
                                 <label class="form-check-label" for="allow_cancel">

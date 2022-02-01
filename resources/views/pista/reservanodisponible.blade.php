@@ -60,22 +60,13 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                @if (isset($maxreservas))
-                                    <div class="d-flex justify-content-between">
-                                        <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
-                                    </div>
-                                    <p class="descripcion">
-                                        No puedes reservar porque ya tienes varias reservas activas. Haz click aquí para ver tus reservas:<br><br>
-                                        <a href="/{{ auth()->user()->instalacion->slug }}/mis-reservas">Mis reservas</a>
-                                    </p>
-                                @else
-                                    <div class="d-flex justify-content-between">
-                                        <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
-                                    </div>
-                                    <p class="descripcion">
-                                        Esta reserva no está disponible porque ya ha sido reservada.
-                                    </p>
-                                @endif
+                                <div class="d-flex justify-content-between">
+                                    <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
+                                </div>
+                                <p class="descripcion">
+                                    Esta reserva no está disponible, elija en otro tramo horario.
+                                </p>
+                                <div><a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}{{ isset(request()->semana) ? "?semana{request()->semana}" : '' }}" class="btn btn-info text-white"><i class="fas fa-long-arrow-alt-left"></i> Volver</a></div>
                             </div>
                         </div>
                     </div>

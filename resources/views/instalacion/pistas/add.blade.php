@@ -29,6 +29,7 @@
                                     <option value="Pádel">Pádel</option>
                                     <option value="Fútbol">Fútbol</option>
                                     <option value="Ping pong">Ping pong</option>
+                                    <option value="Sala">Sala</option>
                                 </select>
                             </div>
                             <div class="form-group row">
@@ -62,7 +63,7 @@
                                                             class="form-control" type="time" name="horario[0][intervalo][0][hfin]"
                                                             id="hora_fin"></div>
                                                     <div>
-                                                        <label class="mb-0">Secuencia:</label>
+                                                        <label class="mb-0">Secuencia (min):</label>
                                                         <select class="form-control" name="horario[0][intervalo][0][secuencia]" id="">
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
@@ -81,33 +82,37 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Número de reservas por tramo</label>
+                                <input name="reservas_por_tramo" type="number" value="1"  min="1" placeholder="Reservas por tramo..."
+                                    class="form-control col-md-10">
+                            </div>
                             {{-- <div class="form-group row">
                                 <label class="col-md-2 control-label">Precio por tramo (€)</label>
                                 <input name="precio_por_tramo" type="number" step=".01" placeholder="Precio..."
                                     class="form-control col-md-10">
                             </div> --}}
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Antelación cancelaciones</label>
-                                <select class="form-control col-md-10" name="antelacion_cancel" id="">
+                                <label class="col-md-2 control-label">Antelación de la reserva (horas)</label>
+                                <input class="form-control col-md-10" type="number" name="atenlacion_reserva" id="atenlacion_reserva" placeholder="Antelación de reserva (horas)...">
+                                {{-- <select class="form-control col-md-10" name="atenlacion_reserva" id="">
                                     @for ($i = 1; $i < 30; $i++)
                                         <option value="{{ $i }}">{{ $i }} días</option>
                                     @endfor
+                                </select> --}}
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Permite cancelación</label>
+                                <select class="form-control col-md-10" name="allow_cancel" id="allow_cancel">
+                                    <option value="1" >Sí</option>
+                                    <option value="0" >No</option>
                                 </select>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Antelación de la reserva</label>
-                                <select class="form-control col-md-10" name="atenlacion_reserva" id="">
-                                    @for ($i = 1; $i < 30; $i++)
-                                        <option value="{{ $i }}">{{ $i }} días</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 control-label">Tiempo límite para reservas</label>
-                                <select class="form-control col-md-10" name="tiempo_limite_reserva" id="">
-                                    @for ($i = 1; $i < 24; $i++)
-                                        <option value="{{ $i * 5 }}">{{ $i * 5 }} min</option>
-                                    @endfor
+                                <label class="col-md-2 control-label">Permite reservar varios tramos</label>
+                                <select class="form-control col-md-10" name="allow_more_res" id="allow_more_res">
+                                    <option value="1" >Sí</option>
+                                    <option value="0" >No</option>
                                 </select>
                             </div>
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Añadir</button>
@@ -135,7 +140,7 @@
                                                             class="form-control" type="time" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][hfin]"
                                                             id="hora_fin"></div>
                                                     <div>
-                                                        <label class="mb-0">Secuencia:</label>
+                                                        <label class="mb-0">Secuencia (min):</label>
                                                         <select class="form-control" name="horario[${$(this).parent().parent().parent().data('index')}][intervalo][${$(this).parent().prev().data('index') + 1}][secuencia]" id="">
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
@@ -179,7 +184,7 @@
                                                             class="form-control" type="time" name="horario[${$(this).prev().data('index') + 1}][intervalo][0][hfin]"
                                                             id="hora_fin"></div>
                                                     <div>
-                                                        <label class="mb-0">Secuencia:</label>
+                                                        <label class="mb-0">Secuencia (min):</label>
                                                         <select class="form-control" name="horario[${$(this).prev().data('index') + 1}][intervalo][0][secuencia]" id="">
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>

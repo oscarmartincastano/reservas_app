@@ -34,6 +34,9 @@
     <link href="/simply_white/assets/plugins/mapplic/css/mapplic.css" rel="stylesheet" type="text/css" />
     <link href="/simply_white/assets/css/dashboard.widgets.css" rel="stylesheet" type="text/css" media="screen" />
     <link class="main-stylesheet" href="/simply_white/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     @yield('style')
 </head>
 
@@ -83,6 +86,8 @@
     <!-- BEGIN PAGE LEVEL JS -->
     <script src="/simply_white/assets/js/dashboard.js" type="text/javascript"></script>
     <script src="/simply_white/assets/js/scripts.js" type="text/javascript"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <!-- END PAGE LEVEL JS -->
     @yield('script')
 

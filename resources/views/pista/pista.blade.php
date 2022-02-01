@@ -4,202 +4,125 @@
 
 @section('content')
 
-<section class="hero is-medium">
-    <div class="has-text-centered title-div" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg);
-    background-size:cover;">
-        <h1 class="title">{{ $pista_selected->tipo }}</h1>
-    </div>
-</section>
+    <section class="hero is-medium">
+        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg) center;
+            background-size:cover;">
+            <h1 class="title">{{ $pista_selected->tipo }}</h1>
+        </div>
+    </section>
 
-<div class="container is-max-desktop">
-    <div class="columns">
-        <div class="column is-full">
-            <div class="div-reservas">
-                <div class="pistas">
-                    @foreach ($pistas as $index => $pista)
-                        <div class="@if($pista->id == $pista_selected->id) active @endif"><a class=" select-pista" data-id_pista="{{ $pista->id }}" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a></div>
-                    @endforeach
-                </div>
-                <div class="calendario-horarios">
-                    <div class="navigator"> 
-                        <div><a class="button" href="#"><</a> <a class="button" href="#">Hoy</a> <a class="button" href="#">></a> </div>
-                        <div style="text-transform: capitalize">{{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%B %Y')  }}</div> 
+    <div class="container is-max-desktop">
+        <div class="columns">
+            <div class="column is-full">
+                <div class="div-reservas">
+                    <div class="pistas">
+                        @foreach ($pistas as $index => $pista)
+                            <div class="@if ($pista->id == $pista_selected->id) active @endif"><a class=" select-pista"
+                                    data-id_pista="{{ $pista->id }}"
+                                    href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a>
+                            </div>
+                        @endforeach
                     </div>
-                </div>
-                <div class="thead">
-                    {{-- <div>
-                        <div class="th">Hora</div>
-                        <div class="th">6:00 - 7:00</div>
-                        <div class="th">7:00 - 8:00</div>
-                        <div class="th">8:00 - 9:00</div>
-                        <div class="th">9:00 - 10:00</div>
-                        <div class="th">10:00 - 11:00</div>
-                        <div class="th">11:00 - 12:00</div>
-                        <div class="th">12:00 - 13:00</div>
-                        <div class="th">13:00 - 14:00</div>
-                        <div class="th">14:00 - 15:00</div>
-                        <div class="th">15:00 - 16:00</div>
-                        <div class="th">16:00 - 17:00</div>
-                        <div class="th">17:00 - 18:00</div>
-                        <div class="th">18:00 - 19:00</div>
-                        <div class="th">19:00 - 20:00</div>
-                        <div class="th">20:00 - 21:00</div>
-                        <div class="th">21:00 - 22:00</div>
-                        <div class="th">22:00 - 23:00</div>
-                    </div> --}}
-                    @foreach ($period as $fecha)
-                        <div class="th" style="text-transform: capitalize">
-                            <div>{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}<br>{{ $fecha->format('d/m') }}</div>
-                            @foreach ($pista_selected->horario_deserialized as $item)
-                                @if (in_array($fecha->format('w'), $item['dias']) || ( $fecha->format('w') == 0 && in_array(7, $item['dias']) ))
-                                    @foreach ($item['intervalo'] as $index => $intervalo)
-                                        @if ($index == 0)
-                                            {{-- @php
-                                                $a = new \DateTime('6:00');
-                                                $b = new \DateTime($intervalo['hinicio']);
-                                                $interval = $a->diff($b);
-                                                $dif_start = $interval->format("%h") * 60;
-                                                $dif_start += $interval->format("%i");
-                                                $dif_start = $dif_start / 60;
-                                                if (!is_int($dif_start)) {
-                                                    $decimal = $dif_start - floor($dif_start); 
-                                                }
-                                            @endphp --}}
-                                            {{-- {{ dd($dif_start) }} --}}
-                                            {{-- <div class="empty" style="height:{{  str_replace(',', '.', $dif_start*6) }}rem"><a href="#"></a></div> --}}
-
-                                            {{-- @if (!is_int($dif_start))
-                                                @for ($i = 0; $i < ceil($dif_start); $i++)
-                                                    @if ($i == ceil($dif_start) - 1)
-                                                        <div class="empty" style="height:{{  str_replace(',', '.', ($decimal*6)) }}rem"><a href="#"></a></div>
-                                                    @else
-                                                        <div class="empty"><a href="#"></a></div>
-                                                    @endif
-                                                @endfor
-                                            @else
-                                                @for ($i = 0; $i < round($dif_start); $i++)
-                                                    <div class="empty"><a href="#"></a></div>
-                                                @endfor
-                                            @endif --}}
-
-                                            {{-- @if (is_int($dif_start))
-                                                @for ($i = 0; $i < $dif_start; $i++)
-                                                    <div class="empty"><a href="#"></a></div>
-                                                @endfor
-                                            @endif --}}
-                                            
-                                            @php
-                                                $a = new \DateTime($intervalo['hfin']);
-                                                $b = new \DateTime($intervalo['hinicio']);
-                                                $interval = $a->diff($b);
-                                                $dif = $interval->format("%h") * 60;
-                                                $dif += $interval->format("%i");
-                                                $dif = $dif / $intervalo['secuencia'];
-                                            @endphp
-                                            
-                                            @if (is_int($dif))
-                                                @for ($i = 0; $i < $dif; $i++)
-                                                    <div style="height:{{  str_replace(',', '.', $intervalo['secuencia']/10) }}rem">
-                                                        @php
-                                                            if ($i == 0) {
-                                                                $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
-                                                                $string_hora = $intervalo['hinicio'] . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                            } else {
-                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                            }
-
-                                                            $date_now = new \DateTime();
-                                                            $date_horario = new \DateTime($hora->format('d-m-Y H:i:s'));
-                                                            $resta = $intervalo['secuencia'] + $pista_selected->tiempo_limite_reserva;
-                                                            $date_horario->modify("-{$resta} minutes");
-                                                        @endphp
-
-                                                        @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || ($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'],  ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
-                                                            <a href="#" class="btn-no-disponible">
-                                                                {{ $string_hora }}
-                                                            </a>
-                                                        @else
-                                                            <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
-                                                                {{ $string_hora }}
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                @endfor
-                                            @endif
-                                        @else
-                                            {{-- @php
-                                                $a = new \DateTime($item['intervalo'][$index - 1]['hfin']);
-                                                $b = new \DateTime($intervalo['hinicio']);
-                                                $interval = $a->diff($b);
-                                                $dif_start = $interval->format("%h") * 60;
-                                                $dif_start += $interval->format("%i");
-                                                $dif_start = $dif_start / 60;
-                                                if (!is_int($dif_start)) {
-                                                    $decimal = $dif_start - floor($dif_start); 
-                                                }
-                                            @endphp
-
-                                            @if (!is_int($dif_start))
-                                                @for ($i = 0; $i < ceil($dif_start); $i++)
-                                                    @if ($i == 0)
-                                                        <div class="empty" style="height:{{  str_replace(',', '.', ($decimal*6)) }}rem"><a href="#"></a></div>
-                                                    @else
-                                                        <div class="empty"><a href="#"></a></div>
-                                                    @endif
-                                                @endfor
-                                            @else
-                                                @for ($i = 0; $i < round($dif_start); $i++)
-                                                    <div class="empty"><a href="#"></a></div>
-                                                @endfor
-                                            @endif --}}
-                                            
-                                            @php
-                                                $a = new \DateTime($intervalo['hfin']);
-                                                $b = new \DateTime($intervalo['hinicio']);
-                                                $interval = $a->diff($b);
-                                                $dif = $interval->format("%h") * 60;
-                                                $dif += $interval->format("%i");
-                                                $dif = $dif / $intervalo['secuencia'];
-                                            @endphp
-                                            @if (is_int($dif))
-                                                @for ($i = 0; $i < $dif; $i++)
-                                                    <div style="height:{{  str_replace(',', '.', $intervalo['secuencia']/10) }}rem">
-                                                        @php
-                                                            if ($i == 0) {
-                                                                $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
-                                                                $string_hora = $intervalo['hinicio'] . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                            } else {
-                                                                $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
-                                                            }
-                                                            
-                                                            $date_now = new \DateTime();
-                                                            $date_horario = new \DateTime($hora->format('d-m-Y H:i:s'));
-                                                            $resta = $intervalo['secuencia'] + $pista_selected->tiempo_limite_reserva;
-                                                            $date_horario->modify("-{$resta} minutes");
-                                                        @endphp
-
-                                                        @if (($pista->instalacion->configuracion->block_today && $hora->format('d/m/Y') == date('d/m/Y')) || ($hora->format('d') == date('d') && $date_horario < $date_now) || \App\Models\Reserva::where([['id_pista', $pista_selected->id], ['estado', 'active'], ['timestamp', \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp]])->count())
-                                                            <a href="#" class="btn-no-disponible">
-                                                                {{ $string_hora }}
-                                                            </a>
-                                                        @else
-                                                            <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp }}" class="btn-reservar">
-                                                                {{ $string_hora }}
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                @endfor
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endforeach
+                    <div class="calendario-horarios">
+                        <div class="navigator">
+                            <div class="semanas">
+                                <a class="button" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}">
+                                    <
+                                </a>
+                                <a class="button {{ request()->semana == null || request()->semana == 0 ? 'active' : '' }}" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}">
+                                    Hoy
+                                </a> 
+                                <a class="button" href="?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}">
+                                    >
+                                </a> 
+                            </div>
+                            <div class="calendario">
+                                <form id="form-dia" method="get" action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}">
+                                    <div class="input-group diapicker">
+                                        <a href="#" class="btn btn-secondary"><i class="fas fa-calendar"></i></a>
+                                        <input type="text" id="dia" class="datepicker date-input form-control" name="dia" value="{{ request()->dia == null ? date('d/m/Y') : request()->dia }}">
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="text-transform: capitalize" class="mes">
+                                {{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b')}}
+                            </div>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="thead">
+                        {{-- <div>
+                            <div class="th">Hora</div>
+                            <div class="th">6:00 - 7:00</div>
+                            <div class="th">7:00 - 8:00</div>
+                            <div class="th">8:00 - 9:00</div>
+                            <div class="th">9:00 - 10:00</div>
+                            <div class="th">10:00 - 11:00</div>
+                            <div class="th">11:00 - 12:00</div>
+                            <div class="th">12:00 - 13:00</div>
+                            <div class="th">13:00 - 14:00</div>
+                            <div class="th">14:00 - 15:00</div>
+                            <div class="th">15:00 - 16:00</div>
+                            <div class="th">16:00 - 17:00</div>
+                            <div class="th">17:00 - 18:00</div>
+                            <div class="th">18:00 - 19:00</div>
+                            <div class="th">19:00 - 20:00</div>
+                            <div class="th">20:00 - 21:00</div>
+                            <div class="th">21:00 - 22:00</div>
+                            <div class="th">22:00 - 23:00</div>
+                        </div> --}}
+                        @foreach ($period as $fecha)
+                            <div class="th" style="text-transform: capitalize">
+                                <div>
+                                    {{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}<br>{{ $fecha->format('d M') }}
+                                </div>
+                                @foreach ($pista_selected->horario_con_reservas_por_dia($fecha->format('Y-m-d')) as $item)
+                                    @foreach ($item as $intervalo)
+                                        <div style="height:{{ $intervalo['height'] }}rem">
+                                            <a @if (!$intervalo['valida']) href="#" class="btn-no-disponible" @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
+                                                {{ $intervalo['string'] }}
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('.btn-no-disponible').click(function (e) { 
+                e.preventDefault();
+            });
+
+            var input_date = $('#dia').pickadate({
+                editable: true,
+                selectYears: 100,
+                selectMonths: true,
+                format: 'dd/mm/yyyy',
+                min: false,
+                max: false
+            });
+
+            var picker = input_date.pickadate('picker');
+            $(".diapicker").on("click", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                picker.open();
+
+                picker.on('set', function(event) {
+                    if (event.select) {
+                        $('#form-dia').submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

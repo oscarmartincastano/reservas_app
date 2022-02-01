@@ -20,9 +20,9 @@ class Pista extends Model
         'tipo',
         'horario',
         'allow_cancel',
-        'antelacion_cancel',
         'atenlacion_reserva',
-        'tiempo_limite_reserva',
+        'allow_more_res',
+        'reservas_por_tramo',
     ];
 
     protected $appends = ['horario_deserialized'/* , 'string_horario' */];
@@ -30,6 +30,11 @@ class Pista extends Model
     public function instalacion()
     {
         return $this->hasOne(Instalacion::class, 'id', 'id_instalacion');
+    }
+
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class, 'id', 'id_pista');
     }
 
     public function getHorarioDeserializedAttribute() {
@@ -41,80 +46,128 @@ class Pista extends Model
         return $horario;
     }
 
-    /* public function getStringHorarioAttribute() {
-        return $this->stringHorario();
+    public function reservas_por_dia($fecha)
+    {
+        return Reserva::where('id_pista', $this->id)->where('fecha', $fecha)->get();
     }
 
-    public function stringHorario() {
-        @foreach ($item->horario_deserialized as $horario)
-            @if (count($horario['dias']) == 7)
-                <strong>Todos los días:</strong>
-            @else
-                @if (checkConsec($horario['dias']))
-                    @foreach ($horario['dias'] as $index => $dia)
-                        @switch($dia)
-                            @case(1)
-                                @php $horario['dias'][$index] = 'lunes' @endphp
-                                @break
-                            @case(2)
-                                @php $horario['dias'][$index] = 'martes' @endphp
-                                @break
-                            @case(3)
-                                @php $horario['dias'][$index] = 'miércoles' @endphp
-                                @break
-                            @case(4)
-                                @php $horario['dias'][$index] = 'jueves' @endphp
-                                @break
-                            @case(5)
-                                @php $horario['dias'][$index] = 'viernes' @endphp
-                                @break
-                            @case(6)
-                                @php $horario['dias'][$index] = 'sábado' @endphp
-                                @break
-                            @case(7)
-                                @php $horario['dias'][$index] = 'domingo' @endphp
-                                @break
-                            @default
-                        @endswitch
-                    @endforeach
-                    <strong>@if (count($horario['dias']) > 1) {{ ucfirst($horario['dias'][0]) }} a {{ $horario['dias'][count($horario['dias']) - 1] }} @else {{ ucfirst($horario['dias'][0]) }} @endif</strong></div>
-                @else
-                    @foreach ($horario['dias'] as $index => $dia)
-                        @switch($dia)
-                            @case(1)
-                                @php $horario['dias'][$index] = 'lunes' @endphp
-                                @break
-                            @case(2)
-                                @php $horario['dias'][$index] = 'martes' @endphp
-                                @break
-                            @case(3)
-                                @php $horario['dias'][$index] = 'miércoles' @endphp
-                                @break
-                            @case(4)
-                                @php $horario['dias'][$index] = 'jueves' @endphp
-                                @break
-                            @case(5)
-                                @php $horario['dias'][$index] = 'viernes' @endphp
-                                @break
-                            @case(6)
-                                @php $horario['dias'][$index] = 'sábado' @endphp
-                                @break
-                            @case(7)
-                                @php $horario['dias'][$index] = 'domingo' @endphp
-                                @break
-                            @default
-                        @endswitch
-                    @endforeach
-                    <strong>
-                        @foreach ($horario['dias'] as $index => $dia)
-                           @if ($index == 0){{ ucfirst($dia) }}@else{{ $dia }}@endif<i></i>@if ($index != count($horario['dias']) - 1), @endif
-                        @endforeach
-                    </strong>
-                @endif
-            @endif
-                @foreach ($horario['intervalo'] as $int)
-                    <li style="margin-left: 10px">{{ $int['hinicio'] }}h -{{ $int['hfin'] }}h cada {{ $int['secuencia'] }} min.</li>
-                @endforeach
-        @endforeach
-    } */
+    public function reservas_activas_por_dia($fecha)
+    {
+        return Reserva::where('id_pista', $this->id)->where('estado', 'active')->where('fecha', $fecha)->get();
+    }
+
+    public function get_reservas_fecha_hora($timestamp)
+    {
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw("FIELD (estado, 'active', 'pasado', 'canceled') ASC")->get();
+
+        $ret_reservas = [];
+        foreach ($reservas as $key => $reserva) {
+            if (in_array($timestamp, $reserva->horarios_deserialized)) {
+                $reserva->usuario = User::find($reserva->id_usuario);
+                $reserva->string_intervalo = date('H:i', $timestamp) . ' - ' . date('H:i', strtotime("+{$reserva->minutos_totales} minutes", strtotime(date('H:i', $timestamp))));
+                array_push($ret_reservas, $reserva);
+            }
+        }
+
+        return $ret_reservas;
+    }
+
+    public function get_reserva_activa_fecha_hora($timestamp)
+    {
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw('estado ASC')->get();
+
+        $ret_reservas = [];
+        foreach ($reservas as $key => $reserva) {
+            if (in_array($timestamp, $reserva->horarios_deserialized) && $reserva->estado != 'canceled') {
+                $reserva->usuario = User::find($reserva->id_usuario);
+                array_push($ret_reservas, $reserva);
+            }
+        }
+
+        return $ret_reservas;
+    }
+
+    public function check_reserva_valida($timestamp)
+    {
+        if ($this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function horario_con_reservas_por_dia($fecha)
+    {
+        $fecha = new \DateTime($fecha);
+        $horario=[];
+        foreach ($this->horario_deserialized as $key => $item) {
+            if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
+                    $a = new \DateTime($intervalo['hfin']);
+                    $b = new \DateTime($intervalo['hinicio']);
+                    $interval = $a->diff($b);
+                    $dif = $interval->format('%h') * 60;
+                    $dif += $interval->format('%i');
+                    $dif = $dif / $intervalo['secuencia'];
+
+                    $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
+
+                    for ($i = 0; $i < $dif+1; $i++) {
+                        
+                        $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
+                        $timestamp = \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp;
+
+                        $horario[$index][$i]['reservado'] = $this->get_reserva_activa_fecha_hora($timestamp) ? true : false;
+                        $horario[$index][$i]['string'] = $string_hora;
+                        $horario[$index][$i]['height'] = str_replace(',', '.', $intervalo['secuencia'] / 10);
+                        $horario[$index][$i]['tramos'] = 1;
+                        $horario[$index][$i]['timestamp'] = $timestamp;
+                        $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
+                        $horario[$index][$i]['valida'] = $this->check_reserva_valida($timestamp);
+
+                        if ($hora->format('H:i') == $intervalo['hfin']) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $horario;
+    }
+
+    public function horario_con_reservas_por_dia_admin($fecha)
+    {
+        $fecha = new \DateTime($fecha);
+        $horario=[];
+        foreach ($this->horario_deserialized as $key => $item) {
+            if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
+                    $a = new \DateTime($intervalo['hfin']);
+                    $b = new \DateTime($intervalo['hinicio']);
+                    $interval = $a->diff($b);
+                    $dif = $interval->format('%h') * 60;
+                    $dif += $interval->format('%i');
+                    $dif = $dif / $intervalo['secuencia'];
+
+                    $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
+
+                    for ($i = 0; $i < $dif+1; $i++) {
+                        
+                        $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
+                        $timestamp = \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp;
+
+                        $horario[$index][$i]['reservado'] = $this->get_reservas_fecha_hora($timestamp) ? true : false;
+                        $horario[$index][$i]['string'] = $string_hora;
+                        $horario[$index][$i]['tramos'] = 1;
+                        $horario[$index][$i]['reservas'] = $this->get_reservas_fecha_hora($timestamp);
+                        $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
+
+                        if ($hora->format('H:i') == $intervalo['hfin']) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $horario;
+    }
 }

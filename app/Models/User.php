@@ -84,7 +84,7 @@ class User extends Authenticatable
         $reservas_pasadas = [];
 
         foreach ($this->reservas as $key => $item) {
-            if ($item->estado == 'active' && $item->fecha < date('Y-m-d')) {
+            if ($item->estado == 'pasado') {
                 array_push($reservas_pasadas, $item);
             }
             if (count($reservas_pasadas) == 10) {

@@ -8,12 +8,57 @@ use App\Models\Pista;
 use App\Models\Instalacion;
 use App\Models\User;
 use App\Models\Configuracion;
+use App\Models\Reserva;
+use DateTime;
 
 class InstalacionController extends Controller
 {
-    public function index() {
+    public function rangeWeek ($date) {
+        $dt = strtotime ($date);
+        return array (
+          "start" => date ('N', $dt) == 1 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('last monday', $dt)),
+          "end" => date('N', $dt) == 7 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('next monday', $dt))
+        );
+      }
+      
+    public function index(Request $request) {
         $instalacion = auth()->user()->instalacion;
-        return view('instalacion.home', compact('instalacion'));
+
+        if (isset($request->semana)) {
+            $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+        }else{
+            $semana = $this->rangeWeek(date('Y-m-d'));
+        }
+        
+        $period = new \DatePeriod(new DateTime($semana['start']), new \DateInterval('P1D'), new DateTime($semana['end']));
+        $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
+
+
+        return view('instalacion.home', compact('instalacion', 'period', 'pistas'));
+    }
+
+    public function reservas_dia(Request $request)
+    {
+        $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
+        $ret_pistas = [];
+        foreach ($pistas as $i => $pista){
+            $ret_pistas[$i] = $pista;
+            $ret_pistas[$i]['num_reservas_dia'] = count($pista->reservas_activas_por_dia($request->fecha));
+            $ret_pistas[$i]['res_dia'] = $pista->horario_con_reservas_por_dia_admin($request->fecha);
+        }
+
+        return $ret_pistas;
+    }
+
+    public function validar_reserva(Request $request)
+    {
+        $reserva = Reserva::find($request->id);
+        if ($reserva->estado == 'active') {
+            $reserva->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
+            return redirect()->back();
+        }
+
+        return redirect()->back()->with('error', 'true');
     }
 
     public function edit_info(Request $request) {

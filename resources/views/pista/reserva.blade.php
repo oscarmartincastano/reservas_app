@@ -89,7 +89,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
-                    <img src="{{ asset('img/matagrande.jpg') }}" width="75" />
+                    <img src="{{ asset('img/cecoworking.png') }}" height="50"/>
                 </a>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -133,7 +133,7 @@
     </nav>
     <div id="app">
         <section class="hero is-medium">
-            <div class="has-text-centered title-div" style="padding-top:4.5rem;padding-bottom:3.5rem;margin-bottom:0">
+            <div class="has-text-centered title-div title-reserva-section" style="padding-top:4.5rem;padding-bottom:3.5rem;margin-bottom:0">
                 <h1 class="title text-center mb-0">{{ $pista->nombre }}</h1>
             </div>
         </section>
@@ -162,7 +162,7 @@
                                     @csrf
                                     <input type="hidden" name="secuencia" id="secuencia" value="{{ $secuencia }}">
                                     <div class="form-group row">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Deporte:</label>
+                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Tipo:</label>
                                         <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
                                             <div>{{ $pista->tipo }}</div>
                                         </div>
@@ -181,17 +181,22 @@
                                                         class="hfin">{{ date('H:i', strtotime(date('H:i', $fecha) . " +{$secuencia} minutes")) }}</span></span>)
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>{{-- {{ dd($number) }} --}}
                                     <div class="form-group row">
                                         <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Tarifa:</label>
                                         <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
                                             <select class="form-control" name="tarifa" id="tarifa">
-                                                <option
-                                                    data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia * 1 . ' minutes')) }}"
-                                                    value="1">RESERVA {{ $secuencia }} MINUTOS</option>
-                                                <option
-                                                    data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia * 2 . ' minutes')) }}"
-                                                    value="2">RESERVA {{ $secuencia * 2 }} MINUTOS</option>
+                                                @if ($pista->allow_more_res)
+                                                    @for ($i = 1; $i < $number+1; $i++)
+                                                        <option
+                                                            data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia * $i . ' minutes')) }}"
+                                                            value="{{ $i }}">RESERVA {{ $secuencia * $i }} MINUTOS</option>
+                                                    @endfor
+                                                @else
+                                                    <option
+                                                        data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia  . ' minutes')) }}"
+                                                        value="1">RESERVA {{ $secuencia }} MINUTOS</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>

@@ -9,21 +9,35 @@ use App\Models\Instalacion;
 use App\Models\Pista;
 use App\Models\Reserva;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 
 class UserController extends Controller
 {
     public function index() {
         $instalacion = Instalacion::first();
-        return view('home', compact('instalacion'));
+        if (count($instalacion->deportes)>1) {
+            return view('home', compact('instalacion'));
+        }
+        return redirect("{$instalacion->slug}/{$instalacion->pistas->first()->tipo}");
     }
 
     public function pistas(Request $request) {
 
-        $current_date = new DateTime();
-
-        $plus_date = new DateTime();
-        $plus_date->add(new \DateInterval('P6D'));
+        if (isset($request->semana)) {
+            $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+            $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+            $plus_date->add(new \DateInterval('P6D'));
+        }elseif (isset($request->dia)) {
+            $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
+            $current_date = new DateTime($fecha);
+            $plus_date = new DateTime($fecha);
+            $plus_date->add(new \DateInterval('P6D'));
+        }else{
+            $current_date = new DateTime();
+            $plus_date = new DateTime();
+            $plus_date->add(new \DateInterval('P6D'));
+        }
 
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
@@ -45,10 +59,7 @@ class UserController extends Controller
         $pista = Pista::find($request->id_pista);
         $fecha = $request->timestamp;
 
-        if (count(auth()->user()->reservas_activas) >= auth()->user()->instalacion->configuracion->num_reservas_por_user) {
-            return view('pista.reservanodisponible')->with('maxreservas', 'true');
-        }
-        if ($reserva) {
+        if (!$pista->check_reserva_valida($request->timestamp)) {
             return view('pista.reservanodisponible');
         }
         
@@ -66,6 +77,7 @@ class UserController extends Controller
                     for ($i=0; $i < floor($numero_veces); $i++) { 
                         if ($hora->format('h:i') == date(date('h:i', $fecha))) {
                             $secuencia = $intervalo['secuencia'];
+                            $number = $numero_veces - $i;
                             /* $hfin = date('h:i',strtotime (date('h:i', $fecha) . " +{$intervalo['secuencia']} minutes")); */
                         }
                         $hora->modify("+{$intervalo['secuencia']} minutes");
@@ -74,17 +86,31 @@ class UserController extends Controller
             }
         }
 
-        return view('pista.reserva', compact('pista', 'fecha', 'secuencia'));
+        return view('pista.reserva', compact('pista', 'fecha', 'secuencia', 'number'));
     }
 
     public function reservar(Request $request)
     {
+        $pista = Pista::find($request->id_pista);
+        if (!$pista->check_reserva_valida($request->timestamp)) {
+            return redirect()->back();
+        }
+
         $minutos_totales = $request->secuencia * $request->tarifa;
+
+        $timestamps[0] = (int)$request->timestamp;
+        
+        if ($request->tarifa > 1) {
+            for ($i=1; $i < $request->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+            }
+        }
         
         $reserva = Reserva::create([
             'id_pista' => $request->id_pista,
             'id_usuario' => auth()->user()->id,
             'timestamp' => $request->timestamp,
+            'horarios' => serialize($timestamps),
             'fecha' => date('Y/m/d', $request->timestamp),
             'hora' => date('Hi', $request->timestamp),
             'tarifa' => $request->tarifa,

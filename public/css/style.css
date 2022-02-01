@@ -204,3 +204,78 @@ h2{
     font-size: 1.25rem;
     margin-bottom: 20px;
 }
+
+.navigator .calendario{
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .thead {
+        display: block;
+    }
+    .thead>div.th:not(:first-child) {
+        display: none;
+    }
+    .thead>div.th>div:first-child{
+        height: 5rem;
+    }
+    .navigator .semanas, .navigator .mes {
+        display: none;
+    }
+    .navigator .calendario{
+        display: block;
+        width: 100%;
+    }
+    .navigator .calendario input{
+        border-color: #6c757d;
+    }
+    .picker__header select{
+        padding: 0 !important;
+    }
+    .picker__button--clear{
+        display: none;
+    }
+    .picker__button--close{
+        display: none;
+    }
+
+    input#dia{
+        text-align: center;
+        padding-right: 16%;
+    }
+    .picker__holder {
+        pointer-events: none;
+      }
+    .picker__wrap {
+      pointer-events: auto;
+    }
+    .title-div h1{
+        font-size: 1.75rem;
+    }
+    .title-reserva-section{
+        padding-top: 2.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    .navbar{
+        padding: 0;
+    }
+    .navbar .container{
+        padding: 0;
+    }
+    .navbar .navbar-brand{
+        margin: 0;
+    }
+    .navbar .navbar-brand .navbar-item{
+        padding: 0;
+    }
+    .navbar .navbar-end .navbar-item{
+        border-top: 1px solid #9999998a;
+    }
+    .navbar .navbar-menu{
+        padding: 0;
+    }
+    .title-pista-section{
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+}
