@@ -23,27 +23,27 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <td>{{ $instalacion->nombre }}</td>
-                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/nombre" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/nombre" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Logo</th>
-                                    <td></td>
-                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/logo" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><img src="/img/{{ $instalacion->slug }}.png"></td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/logo" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Dirección</th>
                                     <td>{{ $instalacion->direccion }}</td>
-                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/direccion" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/direccion" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Teléfono</th>
                                     <td>{{ $instalacion->tlfno }}</td>
-                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
                                     <th>Slug</th>
                                     <td>{{ $instalacion->slug }}</td>
-                                    <td><a href="/{{ request()->slug_instalacion }}/admin/edit/slug" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/slug" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>

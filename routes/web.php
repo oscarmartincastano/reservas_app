@@ -36,10 +36,6 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::get('/{fecha}', 'InstalacionController@reservas_dia');
             Route::post('/validar/{id}', 'InstalacionController@validar_reserva');
         });
-
-    
-        Route::get('/edit/{tipo}', 'InstalacionController@edit_info');
-        Route::post('/edit/{tipo}', 'InstalacionController@editar_info');
     
         Route::prefix('pistas')->group(function () {
             Route::get('/', 'InstalacionController@pistas');
@@ -62,7 +58,10 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         });
 
         Route::prefix('configuracion')->group(function () {
-            Route::get('/instalacion', 'InstalacionController@configuracion_instalacion');
+            Route::get('/instalacion', 'InstalacionController@configuracion_instalacion')->name('edit_config_inst');
+            Route::get('/instalacion/edit/{tipo}', 'InstalacionController@edit_info');
+            Route::post('/instalacion/edit/{tipo}', 'InstalacionController@editar_info');
+
             Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
             Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
         });

@@ -50,9 +50,6 @@
         .pagination{
             margin-top: 15px !important;
         }
-        button.cancel{
-            all: initial;
-        }
     </style>
 @endsection
 
@@ -85,12 +82,14 @@
                            <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
                            <td>{{ $item->estado == 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
                            <td>
-                                <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
-                                    @csrf
-                                    <button class="cancel btn text-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                @if (auth()->user()->instalacion->configuracion->allow_cancel && $item->estado == 'active')
+                                    <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
+                                        @csrf
+                                        <button class="cancel btn btn-danger" title="Cancelar reserva">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                @endif
                            </td>
                        </tr>
                     @endforeach

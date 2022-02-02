@@ -9,6 +9,7 @@ use App\Models\Instalacion;
 use App\Models\User;
 use App\Models\Configuracion;
 use App\Models\Reserva;
+use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
 class InstalacionController extends Controller
@@ -68,13 +69,32 @@ class InstalacionController extends Controller
     }
 
     public function editar_info(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+
         $data = $request->all();
         array_shift($data);
 
-        $instalacion = auth()->user()->instalacion;
+        if ($request->logo) {
+            $image = $request->file('logo');
+            $img = Image::make($image->getRealPath());
+            $img->orientate();
+            $path = public_path() . '/img';
+
+            $name = $instalacion->slug . '.png';
+                    
+            if (getimagesize($image)[0] > 1000) {
+                $img->resize(900, 900, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path .'/'. $name, 85, 'png');
+            }else{
+                $img->save($path .'/'. $name, 85, 'png');
+            }
+
+        } else{
+            Instalacion::find($instalacion->id)->update($data);
+        }
         
-        Instalacion::find($instalacion->id)->update($data);
-        return redirect('/' . auth()->user()->instalacion->slug . '/admin/');
+        return redirect()->route('edit_config_inst', ['slug_instalacion'=> $instalacion->slug]);
     }
 
     public function pistas() {

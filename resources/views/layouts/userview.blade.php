@@ -38,6 +38,11 @@
         .active{
             color: #3273dc;
         }
+        
+        a.button.active{
+            border: 1px solid #3273dc;
+            color: #3273dc;
+        }
     </style>
 
     <title>Instalación - @yield('pagename')</title>

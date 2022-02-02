@@ -16,7 +16,7 @@
                         <div class="card-title">{{ request()->tipo == 'tlfno' ? 'Teléfono' : request()->tipo }}</div>
                     </div>
                     <div class="card-body">
-                        <form action="#" method="post" role="form">
+                        <form action="#" method="post" role="form" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
                                 <label>{{ request()->tipo == 'tlfno' ? 'Teléfono' : ucfirst(request()->tipo) }}</label>
