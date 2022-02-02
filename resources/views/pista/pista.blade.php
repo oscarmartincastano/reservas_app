@@ -5,7 +5,7 @@
 @section('content')
 
     <section class="hero is-medium">
-        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ $pista_selected->tipo }}.jpg) center;
+        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ strtolower($pista_selected->tipo) }}.jpg) center;
             background-size:cover;">
             <h1 class="title">{{ $pista_selected->tipo }}</h1>
         </div>
