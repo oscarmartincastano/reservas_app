@@ -41,6 +41,18 @@
             font-weight: bold;
             margin-bottom: 0;
         }
+        .table-reservas thead{
+            font-weight: bold;
+        }
+        #DataTables_Table_0_length > label > select{
+            padding-right: 24px;
+        }
+        .pagination{
+            margin-top: 15px !important;
+        }
+        button.cancel{
+            all: initial;
+        }
     </style>
 @endsection
 
@@ -51,8 +63,41 @@
     <div class="container mt-3">
         <h1 class="title text-center">Mis Reservas</h1>
         <div class="list-reservas row">
-            <h2 class="h2 text-success">Reservas activas</h2>
-            @if (count(auth()->user()->reservas_activas) == 0)
+            <table class="table table-reservas">
+                <thead>
+                    <tr>
+                        <td>Fecha de alquiler</td>
+                        <td>Día de la semana</td>
+                        <td>Hora inicial</td>
+                        <td>Hora final</td>
+                        <td>Espacio</td>
+                        <td>Estado reserva</td>
+                        <td>#</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (auth()->user()->reservas as $item)
+                       <tr>
+                           <td>{{ date('d/m/Y', $item->timestamp) }}</td>
+                           <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->start)->formatLocalized('%A') }}</td>
+                           <td>{{ date('H:i', $item->timestamp) }}</td>
+                           <td>{{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
+                           <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
+                           <td>{{ $item->estado == 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
+                           <td>
+                                <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
+                                    @csrf
+                                    <button class="cancel btn text-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                           </td>
+                       </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            {{-- <h2 class="h2 text-success">Reservas activas</h2> --}}
+            {{-- @if (count(auth()->user()->reservas_activas) == 0)
                 <p class="mt-3 mb-4">No hay reservas activas actualmente.</p>
             @endif
             @foreach (auth()->user()->reservas_activas as $item)
@@ -63,12 +108,6 @@
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
                                 <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
                             </div>
-                            {{-- <div class="row">
-                                <div class="col">
-                                </div>
-                                <div class="col">
-                                </div>
-                            </div> --}}
                             <div class="form-group row mt-5 mb-2">
                                 <label class="col-sm-3 col-form-label py-0">Deporte:</label>
                                 <div class="col-sm-9">
@@ -132,12 +171,6 @@
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
                                 <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
                             </div>
-                            {{-- <div class="row">
-                                <div class="col">
-                                </div>
-                                <div class="col">
-                                </div>
-                            </div> --}}
                             <div class="form-group row mt-5 mb-2">
                                 <label class="col-sm-3 col-form-label py-0">Deporte:</label>
                                 <div class="col-sm-9">
@@ -189,12 +222,6 @@
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
                                 <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
                             </div>
-                            {{-- <div class="row">
-                                <div class="col">
-                                </div>
-                                <div class="col">
-                                </div>
-                            </div> --}}
                             <div class="form-group row mt-5 mb-2">
                                 <label class="col-sm-3 col-form-label py-0">Deporte:</label>
                                 <div class="col-sm-9">
@@ -234,9 +261,22 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @endforeach --}}
         </div>
     </div>
 </div>
 
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('.table-reservas').DataTable({
+                "info": false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                }
+            });
+        });
+    </script>
 @endsection
