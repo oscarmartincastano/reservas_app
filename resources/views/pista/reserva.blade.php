@@ -112,7 +112,7 @@
                             class="navbar-item {{ request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i
                                 class="fas fa-book-open mr-2"></i> Mis reservas </a>
                         <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i
-                                class="fas fa-user mr-2"></i> Mi prefil </a>
+                                class="fas fa-user mr-2"></i> Mi perfil </a>
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                             class="navbar-item">
