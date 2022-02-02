@@ -57,7 +57,7 @@
             @endif
             @foreach (auth()->user()->reservas_activas as $item)
                 <div class="col-md-6 reserva">
-                    <div class="card" style="background:url(/img/deportes/fondo-{{ $item->pista->tipo }}.jpg);background-size: cover; ">
+                    <div class="card" style="background:url(/img/deportes/fondo-{{ strtolower($item->pista->tipo) }}.jpg);background-size: cover; ">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
@@ -126,7 +126,7 @@
             @endif
             @foreach (auth()->user()->reservas_pasadas as $item)
                 <div class="col-md-6 reserva">
-                    <div class="card" style="background:url(/img/deportes/fondo-{{ $item->pista->tipo }}.jpg);background-size: cover; ">
+                    <div class="card" style="background:url(/img/deportes/fondo-{{ strtolower($item->pista->tipo) }}.jpg);background-size: cover; ">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
@@ -183,7 +183,7 @@
             @endif
             @foreach (auth()->user()->reservas_canceladas as $item)
                 <div class="col-md-6 reserva">
-                    <div class="card" style="background:url(/img/deportes/fondo-{{ $item->pista->tipo }}.jpg);background-size: cover; ">
+                    <div class="card" style="background:url(/img/deportes/fondo-{{ strtolower($item->pista->tipo) }}.jpg);background-size: cover; ">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
