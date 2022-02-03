@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Pista;
 use App\Models\Configuracion;
+use App\Models\Campos_personalizados;
 
 class Instalacion extends Model
 {
@@ -31,6 +32,11 @@ class Instalacion extends Model
     public function pistas()
     {
         return $this->hasMany(Pista::class, 'id_instalacion');
+    }
+
+    public function campos_personalizados()
+    {
+        return $this->hasMany(Campos_personalizados::class, 'id_instalacion');
     }
 
     public function configuracion()

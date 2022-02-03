@@ -9,6 +9,7 @@ use App\Models\Instalacion;
 use App\Models\User;
 use App\Models\Configuracion;
 use App\Models\Reserva;
+use App\Models\Desactivacion_reserva;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -130,6 +131,25 @@ class InstalacionController extends Controller
         if (isset($request->observaciones)) {
             $reserva->update(['observaciones' => $request->observaciones]);
         }
+        return redirect($request->slug_instalacion . '/admin');
+    }
+
+    public function desactivar_tramo(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+
+        Desactivacion_reserva::create([
+            'id_pista' => $request->id_pista,
+            'timestamp' => $request->timestamp
+        ]);
+
+        return redirect($request->slug_instalacion . '/admin');
+    }
+
+    public function activar_tramo(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+
+        Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $request->timestamp]])->delete();
+
         return redirect($request->slug_instalacion . '/admin');
     }
 
@@ -279,6 +299,11 @@ class InstalacionController extends Controller
 
         Configuracion::find($instalacion->configuracion->id)->update($data);
         return redirect()->back();
+    }
+
+    public function edit_campos_personalizados() {
+        $instalacion = auth()->user()->instalacion;
+        return view('instalacion.configuraciones.campos_personalizados', compact('instalacion'));
     }
 
     public function users() {

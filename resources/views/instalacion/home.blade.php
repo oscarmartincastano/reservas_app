@@ -160,6 +160,12 @@
         body > div.page-container > div.page-content-wrapper > div.content.sm-gutter > div{
             padding: 0 !important;
         }
+        .inline-block{
+            display: inline-block;
+        }
+        tr.desactivado td{
+            background: #ddd !important;
+        }
     </style>
 @endsection
 
@@ -303,11 +309,15 @@
                                             <tbody>`;
                             pista.res_dia.forEach(item => {
                                 item.forEach(intervalo => {
-                                    string += `<tr>
+                                    string += `<tr ${intervalo.desactivado ? 'class="desactivado"' : ''}>
                                             <td class="timeslot-time"><div style="margin-bottom:20px;"><i class="far fa-clock"></i> ${intervalo.string}</div>`;
 
                                     if (intervalo.num_res < pista.reservas_por_tramo) {
-                                        string += `<div><a href="#" class="btn btn-outline-primary">Desactivar</a> <a href="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/reservar/${intervalo.timestamp}" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                        if (intervalo.desactivado) {
+                                            string += `<div><form class="inline-block" method="POST" action="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/activar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-success">Activar intervalo</button> </form></div></td><td class="timeslot-reserve">`;
+                                        }else{
+                                            string += `<div><form class="inline-block" method="POST" action="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/desactivar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-primary">Desactivar</button> </form> <a href="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/reservar/${intervalo.timestamp}" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                        }
                                     } else {
                                         string += `</td><td class="timeslot-reserve">`;
                                     }
@@ -315,7 +325,7 @@
                                     if (intervalo.reservas.length > 0) {
                                         intervalo.reservas.forEach(reserva => {
                                             string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
-                                                        <h4><a href="#">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado})</span></h4>`;
+                                                        <h4><a href="#">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
                                             if (reserva.estado == 'active') {
                                                 /* string += `<div> <a href="/{{ request()->slug_instalacion }}/admin/reservas/validar/${reserva.id}" class="btn btn-success btn-validar"><i class="fas fa-check"></i> Validar</a>
                                                                 <a href="/{{ request()->slug_instalacion }}/admin/reservas/cancelar/${reserva.id}" class="btn btn-danger btn-cancelar" onclick="return confirm('¿Estás seguro que quieres cancelar esta reserva?')"><i class="fas fa-ban"></i> Cancelar</a>

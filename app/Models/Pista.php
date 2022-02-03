@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Reserva;
 use App\Models\Instalacion;
+use App\Models\Desactivacion_reserva;
 
 class Pista extends Model
 {
@@ -87,9 +88,17 @@ class Pista extends Model
         return $ret_reservas;
     }
 
+    public function check_desactivado($timestamp)
+    {
+        if (Desactivacion_reserva::where([['id_pista', $this->id], ['timestamp', $timestamp]])->first()) {
+            return true;
+        }
+        return false;
+    }
+
     public function check_reserva_valida($timestamp)
     {
-        if ($this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))) {
+        if (!$this->check_desactivado($timestamp) && $this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))) {
             return true;
         }
         return false;
@@ -161,6 +170,7 @@ class Pista extends Model
                         $horario[$index][$i]['reservas'] = $this->get_reservas_fecha_hora($timestamp);
                         $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
                         $horario[$index][$i]['timestamp'] = $timestamp;
+                        $horario[$index][$i]['desactivado'] = $this->check_desactivado($timestamp);
 
                         if ($hora->format('H:i') == $intervalo['hfin']) {
                             break;

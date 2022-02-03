@@ -37,6 +37,8 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::post('/validar/{id}', 'InstalacionController@validar_reserva');
             Route::get('/{id_pista}/reservar/{timestamp}', 'InstalacionController@hacer_reserva_view');
             Route::post('/{id_pista}/reservar/{timestamp}', 'InstalacionController@hacer_reserva');
+            Route::post('/{id_pista}/desactivar/{timestamp}', 'InstalacionController@desactivar_tramo');
+            Route::post('/{id_pista}/activar/{timestamp}', 'InstalacionController@activar_tramo');
         });
     
         Route::prefix('pistas')->group(function () {
@@ -66,6 +68,8 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
             Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
             Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
+            
+            Route::get('/pistas-reservas/campos-personalizados', 'InstalacionController@edit_campos_personalizados');
         });
     });
 

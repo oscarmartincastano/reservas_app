@@ -64,6 +64,26 @@
                                     Bloquear el día de hoy
                                 </label>
                             </div>
+                            <div class="form-group mb-4">
+                                <label for="num_reservas_por_user">Campos personalizados en la reserva</label>
+                                <div class="border p-3">
+                                    @foreach ($instalacion->campos_personalizados as $campo)
+                                        <div>
+                                            <h3>{{ $campo->tipo }}</h3>
+                                            <div>{{ $campo->label }}</div>
+                                            @if ($campo->opciones)
+                                                <div>Opciones</div>
+                                                <ul>
+                                                    @foreach ($campo->opciones as $opcion)
+                                                        <li>{{ $opcion }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                    <a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados" class="btn btn-primary">Editar/añadir campos</a>
+                                </div>
+                            </div>
                             <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
                         </form>
                     </div>
