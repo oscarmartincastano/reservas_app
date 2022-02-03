@@ -157,6 +157,9 @@
             margin-top: 6px;
             margin-left: 3px;
         }
+        body > div.page-container > div.page-content-wrapper > div.content.sm-gutter > div{
+            padding: 0 !important;
+        }
     </style>
 @endsection
 
@@ -304,7 +307,7 @@
                                             <td class="timeslot-time"><div style="margin-bottom:20px;"><i class="far fa-clock"></i> ${intervalo.string}</div>`;
 
                                     if (intervalo.num_res < pista.reservas_por_tramo) {
-                                        string += `<div><a href="#" class="btn btn-outline-primary">Desactivar</a> <a href="#" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                        string += `<div><a href="#" class="btn btn-outline-primary">Desactivar</a> <a href="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/reservar/${intervalo.timestamp}" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
                                     } else {
                                         string += `</td><td class="timeslot-reserve">`;
                                     }
@@ -317,19 +320,37 @@
                                                 /* string += `<div> <a href="/{{ request()->slug_instalacion }}/admin/reservas/validar/${reserva.id}" class="btn btn-success btn-validar"><i class="fas fa-check"></i> Validar</a>
                                                                 <a href="/{{ request()->slug_instalacion }}/admin/reservas/cancelar/${reserva.id}" class="btn btn-danger btn-cancelar" onclick="return confirm('¿Estás seguro que quieres cancelar esta reserva?')"><i class="fas fa-ban"></i> Cancelar</a>
                                                             </div>`; */
-                                                string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div>`
+                                                string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
+                                                if (reserva.creada_por = 'admin') {
+                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>creada por administrador</div>`;
+                                                }
                                                 if (reserva.observaciones) {
-                                                    string += `</div><div class="mt-3"><strong>Observaciones cliente: </strong>${reserva.observaciones}</div>`;
+                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i>  Observaciones reserva: </strong>${reserva.observaciones}</div>`;
                                                 }
                                             }else if (reserva.estado == 'canceled') {
                                                 string += `<div> <a href="#" class="btn btn-info">(${reserva.formated_updated_at}) Cancelado</a></div></div>`;
+                                                
+                                                if (reserva.observaciones) {
+                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
+                                                }
                                                 if (reserva.observaciones_admin) {
-                                                    string += `<div class="mt-3"><strong>Observaciones administrador: </strong>${reserva.observaciones_admin}</div>`;
+                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>`;
+                                                    if (reserva.creada_por = 'admin') {
+                                                        string += 'creada por administrador';
+                                                    }
+                                                    string += `, ${reserva.observaciones_admin}</div>`;
                                                 }
                                             }else{
                                                 string += `<div> <a href="#" class="btn btn-white">(${reserva.formated_updated_at}) Pasada</a></div></div>`;
+                                                if (reserva.observaciones) {
+                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
+                                                }
                                                 if (reserva.observaciones_admin) {
-                                                    string += `<div class="mt-3"><strong>Observaciones administrador: </strong>${reserva.observaciones_admin}</div>`;
+                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>`;
+                                                    if (reserva.creada_por = 'admin') {
+                                                        string += 'creada por administrador';
+                                                    }
+                                                    string += `, ${reserva.observaciones_admin}</div>`;
                                                 }
                                             }
                                             string += `</div></div>`;

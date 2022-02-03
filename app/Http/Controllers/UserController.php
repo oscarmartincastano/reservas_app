@@ -66,26 +66,31 @@ class UserController extends Controller
         foreach ($pista->horario_deserialized as $item){
             if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
                 foreach ($item['intervalo'] as $index => $intervalo){
-                    $a = new \DateTime($intervalo['hfin']);
-                    $b = new \DateTime($intervalo['hinicio']);
-                    $interval = $a->diff($b);
-                    $diff_minutes = $interval->format("%h") * 60;
-                    $diff_minutes += $interval->format("%i");
-                    $numero_veces = $diff_minutes/$intervalo['secuencia'];
-
-                    $hora = new \DateTime($intervalo['hinicio']);
-                    for ($i=0; $i < floor($numero_veces); $i++) { 
-                        if ($hora->format('h:i') == date(date('h:i', $fecha))) {
-                            $secuencia = $intervalo['secuencia'];
-                            $number = $numero_veces - $i;
-                            /* $hfin = date('h:i',strtotime (date('h:i', $fecha) . " +{$intervalo['secuencia']} minutes")); */
+                    $hora = new \DateTime(date('Y-m-d H:i', $fecha));
+                    $a = new \DateTime(date('Y-m-d', $fecha) . ' ' . $intervalo['hfin']);
+                    $b = new \DateTime(date('Y-m-d', $fecha) . ' ' . $intervalo['hinicio']);
+                    if ($hora >= $b && $hora <= $a) {
+                        $secuencia = $intervalo['secuencia'];
+                        $interval = $a->diff($b);
+                        $diff_minutes = $interval->format("%h") * 60;
+                        $diff_minutes += $interval->format("%i");
+                        $numero_veces = $diff_minutes/$secuencia;
+                        
+                        for ($i=0; $i < floor($numero_veces)+1; $i++) {
+                            if (!$pista->check_reserva_valida($hora->getTimestamp())) {
+                                $number = $i;
+                                break;
+                            } 
+                            if ($hora->format('H:i') == $a->format('H:i')) {
+                                $number = $i;
+                                break;
+                            }
+                            $hora->modify("+{$secuencia} minutes");
                         }
-                        $hora->modify("+{$intervalo['secuencia']} minutes");
                     }
                 }
             }
         }
-
         return view('pista.reserva', compact('pista', 'fecha', 'secuencia', 'number'));
     }
 

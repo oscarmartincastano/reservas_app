@@ -160,6 +160,7 @@ class Pista extends Model
                         $horario[$index][$i]['tramos'] = 1;
                         $horario[$index][$i]['reservas'] = $this->get_reservas_fecha_hora($timestamp);
                         $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
+                        $horario[$index][$i]['timestamp'] = $timestamp;
 
                         if ($hora->format('H:i') == $intervalo['hfin']) {
                             break;

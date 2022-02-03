@@ -25,6 +25,7 @@ class Reserva extends Model
         'estado',
         'observaciones',
         'observaciones_admin',
+        'creado_por',
     ];
 
     protected $appends = ['horarios_deserialized', 'formated_updated_at'];

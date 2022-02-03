@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function reservas()
     {
-        return $this->hasMany(Reserva::class,'id_usuario')->orderBy('estado');
+        return $this->hasMany(Reserva::class,'id_usuario');
     }
 
     public function getReservasActivasAttribute() {
