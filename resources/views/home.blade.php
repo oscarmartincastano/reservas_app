@@ -12,7 +12,7 @@
     </div>
     <div class="row">
         @foreach ($instalacion->deportes as $item)
-            <div class="col"><a href="/{{ request()->slug_instalacion }}/{{ $item }}"><img src="{{ asset('img/deportes/'.$item.'.jpg') }}"></a></div>
+            <div class="col"><a href="/{{ request()->slug_instalacion }}/{{ $item }}"><img src="{{ asset('img/deportes/'.strtolower($item).'.jpg') }}"></a></div>
         @endforeach
     </div>
 </div>
