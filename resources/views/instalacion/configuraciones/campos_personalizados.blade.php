@@ -38,17 +38,29 @@
                     <div class="card-body">
                         <form action="#" method="post">
                             @csrf
+                            <div class="form-group">
+                                <label for="tipo">Tipo de campo</label>
+                                <select class="form-control" name="tipo" id="tipo">
+                                    <option value="text">Línea de texto</option>
+                                    <option value="number">Número</option>
+                                    <option value="textarea">Párrafo</option>
+                                    <option value="checkbox">Checkbox</option>
+                                    <option value="select">Select</option>
+                                </select>
+                            </div>
                             <div class="form-group mb-4">
                                 <div class="border p-3">
                                     <div class="campos">
-                                        
-                                    </div>
-                                    <div class="mt-4">
-                                        <a href="#" data-tipo="Línea de texto" id="text" class="add-campo btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Línea de texto</a>
-                                        <a href="#" data-tipo="Número" id="number" class="add-campo btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Número</a>
-                                        <a href="#" data-tipo="Párrafo" id="textarea" class="add-campo btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Párrafo</a>
-                                        <a href="#" data-tipo="Checkbox" id="checkbox" class="add-campo btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Checkbox</a>
-                                        <a href="#" data-tipo="Select" id="select" class="add-campo btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Select</a>
+                                        <h4>Línea de texto</h4>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="1" id="required_field" name="required_field">
+                                            <label class="form-check-label" for="required_field">
+                                                Campo requerido
+                                            </label>
+                                        </div>
+                                        <div class="div-label">
+                                            <input type="text" name="label" class="form-control" placeholder="Titulo del campo..." required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -66,11 +78,10 @@
 @section('script')
     <script>
         $(document).ready(function () {
-            $('.add-campo').click(function (e) { 
+            $('select#tipo').change(function (e) { 
                 e.preventDefault();
-                $(this).parent().prev().append(`
-                <div class="border p-3 mt-2">
-                    <h4>${$(this).data('tipo')}</h4>
+                $(this).parent().next().find('.campos').html(`
+                    <h4>${$(this).find('option:selected').text()}</h4>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="1" id="required_field" name="required_field">
                         <label class="form-check-label" for="required_field">
@@ -78,19 +89,20 @@
                         </label>
                     </div>
                     <div class="div-label">
-                        <input type="text" class="form-control" placeholder="Titulo del campo...">
+                        <input type="text" name="label" class="form-control" placeholder="Titulo del campo..." required>
                     </div>
-                    <div class="div-opciones mt-2 border p-2 ${$(this).attr('id') != 'select' ? 'd-none' : '' }">
-                        <h5>Opciones</h5>
-                        <div class="div-opcion d-flex">
-                            <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" class="form-control" placeholder="Título de la opción...">
+                    ${$(this).val() == 'select' ? `
+                        <div class="div-opciones mt-2 border p-2">
+                            <h5>Opciones</h5>
+                            <div class="div-opcion d-flex">
+                                <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" name="opcion[]" class="form-control" placeholder="Título de la opción..." required>
+                            </div>
+                            <div class="div-opcion d-flex">
+                                <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" name="opcion[]" class="form-control" placeholder="Título de la opción..." required>
+                            </div>
                         </div>
-                        <div class="div-opcion d-flex">
-                            <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" class="form-control" placeholder="Título de la opción...">
-                        </div>
-                    </div>
-                    ${$(this).attr('id') == 'select' ? '<a href="#" class="mt-3 add-opcion btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Opción</a>' : ''}
-                </div>
+                        <a href="#" class="mt-3 add-opcion btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Opción</a>
+                    ` : '' }
                 `);
             });
 
@@ -98,7 +110,7 @@
                 e.preventDefault();
                 $(this).prev().append(`
                 <div class="div-opcion d-flex">
-                    <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" class="form-control" placeholder="Título de la opción...">
+                    <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" name="opcion[]" class="form-control" placeholder="Título de la opción..." required>
                 </div>
                 `);
             });

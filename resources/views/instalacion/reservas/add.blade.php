@@ -83,6 +83,13 @@
         body > div.page-container > div.page-content-wrapper > div.content.sm-gutter > div{
             padding: 0 !important;
         }
+        .datos_new_client{
+            margin: 0 !important;
+            border-top: none !important;
+        }
+        .datos_new_client input{
+            padding: 8px !important;
+        }
     </style>
 @endsection
 
@@ -141,14 +148,16 @@
                                 <div class="form-group row">
                                     <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Cliente:</label>
                                     <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
-                                        <select class="full-width select2" data-init-plugin="select2" name="user_id" id="user_id">
+                                        <select required class="full-width select2 select-cliente" data-init-plugin="select2" name="user_id" id="user_id">
                                             <option></option>
+                                            <option value="new_user">NUEVO CLIENTE</option>
                                             @foreach (auth()->user()->instalacion->users as $item)
                                                 @if ($item->id != auth()->user()->id)
                                                     <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->email }})</option>
                                                 @endif
                                             @endforeach
                                         </select>
+                                        <div class="datos_new_client row border p-2" style="display: none"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -209,6 +218,19 @@
 
             $(".select2").select2({
                 placeholder: "Selecciona un usuario"
+            });
+
+            $('.select-cliente').change(function (e) { 
+                if ($(this).val() == 'new_user') {
+                    $('.datos_new_client').show().html(`
+                    <input required type="text" class="form-control col-sm-12 mb-2" name="name" placeholder="Nombre completo">
+                    <input required type="email" class="form-control col-sm-6 mb-2" name="email" placeholder="Email">
+                    <input required type="text" class="form-control col-sm-6 mb-2" name="tlfno" placeholder="Teléfono">
+                    `);
+                } else {
+                    $('.datos_new_client').hide().html(``);
+                }
+                
             });
         });
     </script>

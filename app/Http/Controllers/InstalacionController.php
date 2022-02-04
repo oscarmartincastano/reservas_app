@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Configuracion;
 use App\Models\Reserva;
 use App\Models\Desactivacion_reserva;
+use App\Models\Campos_personalizados;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -21,7 +22,17 @@ class InstalacionController extends Controller
           "start" => date ('N', $dt) == 1 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('last monday', $dt)),
           "end" => date('N', $dt) == 7 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('next monday', $dt))
         );
-      }
+    }
+
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
       
     public function index(Request $request) {
         $instalacion = auth()->user()->instalacion;
@@ -102,8 +113,16 @@ class InstalacionController extends Controller
         /* if (!$pista->check_reserva_valida($request->timestamp)) {
             return redirect()->back();
         } */
-        if (!isset($request->user_id)) {
-            return redirect()->back()->with('error', 'true');
+
+        if ($request->user_id == 'new_user') {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'id_instalacion' => auth()->user()->instalacion->id,
+                'rol' => 'user',
+                'password' => \Hash::make($this->generateRandomString(6)),
+            ]);
+            $request->user_id = $user->id;
         }
 
         $minutos_totales = $request->secuencia * $request->tarifa;
@@ -301,9 +320,29 @@ class InstalacionController extends Controller
         return redirect()->back();
     }
 
-    public function edit_campos_personalizados() {
+    public function view_campos_personalizados(Request $request) {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.configuraciones.campos_personalizados', compact('instalacion'));
+    }
+
+    public function add_campos_personalizados(Request $request) {
+        if (!isset($request->required_field)) {
+            $request->required_field = 0;
+        }
+        if (!isset($request->opciones)) {
+            $opciones = null;
+        }else{
+            $opciones = serialize($request->opciones);
+        }
+        Campos_personalizados::create([
+            'id_instalacion' => auth()->user()->instalacion->id,
+            'tipo' => $request->tipo,
+            'label' => $request->label,
+            'opciones' => $opciones,
+            'required' => $request->required_field
+        ]);
+
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
     }
 
     public function users() {

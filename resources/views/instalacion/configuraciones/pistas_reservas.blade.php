@@ -5,7 +5,12 @@
         .col-form-label {
             font-weight: bold;
         }
-
+        thead td{
+            font-weight: bold;
+        }
+        td{
+            padding: .75rem !important;
+        }
     </style>
 @endsection
 
@@ -67,21 +72,29 @@
                             <div class="form-group mb-4">
                                 <label for="num_reservas_por_user">Campos personalizados en la reserva</label>
                                 <div class="border p-3">
-                                    @foreach ($instalacion->campos_personalizados as $campo)
-                                        <div>
-                                            <h3>{{ $campo->tipo }}</h3>
-                                            <div>{{ $campo->label }}</div>
-                                            @if ($campo->opciones)
-                                                <div>Opciones</div>
-                                                <ul>
-                                                    @foreach ($campo->opciones as $opcion)
-                                                        <li>{{ $opcion }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                    <a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados" class="btn btn-primary">Editar/añadir campos</a>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>Tipo</td>
+                                                <td>Nombre</td>
+                                                <td style="width: 15%">#</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($instalacion->campos_personalizados as $campo)
+                                                <tr>
+                                                    <td style="text-transform: capitalize">{{ $campo->tipo }}</td>
+                                                    <td>{{ $campo->label }}</td>
+                                                    <td><a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3"><a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Añadir campo</a></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                             <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
