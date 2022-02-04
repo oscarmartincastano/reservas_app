@@ -43,6 +43,9 @@
             border: 1px solid #3273dc;
             color: #3273dc;
         }
+        footer.footer{
+            background-color: white !important;
+        }
     </style>
 
     <title>Instalación - @yield('pagename')</title>
