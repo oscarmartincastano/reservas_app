@@ -22,7 +22,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
-                                    <th>Rol</th>
+                                    <th>Tlfno</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -31,8 +31,8 @@
                                     <tr>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
-                                        <td>{{ $item->rol }}</td>
-                                        <td><a href="#" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td>{{ $item->tlfno }}</td>
+                                        <td><a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

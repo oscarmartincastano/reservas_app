@@ -7,13 +7,34 @@
         }
 
         .btn-dia .numero {
-            border: 2px solid #6dc3ee;
             padding: 10px;
             line-height: 30px;
             font-size: 14px;
             border-radius: 40px;
         }
 
+        .btn-dia:not(.active) .numero.hoy{
+            border: 2px solid #6dc3ee;
+        }
+        .btn-dia:not(.active):hover .numero.hoy{
+            background: #6dc3ee;
+            color: white;
+        }
+
+        .btn-dia .numero.fecha-anterior{
+            border: none;
+            color: rgb(92, 92, 92);
+        }
+
+        .btn-dia:not(.active) .numero.reservas-activas{
+            border: 2px solid #f15934;
+        }
+        .btn-dia:not(.active):hover .numero.reservas-activas{
+            background: #f15934;
+            color: white;
+        }
+
+        
         .col.text-center {
             padding: 0;
         }
@@ -37,8 +58,7 @@
         }
 
         .btn-dia:hover span.numero {
-            background: #6dc3ee;
-            color: white;
+            color: rgb(122, 122, 122);
         }
 
         .btn-dia.active {
@@ -166,6 +186,11 @@
         tr.desactivado td{
             background: #ddd !important;
         }
+        .mostrar-fecha{
+            display: inline-flex;
+            padding: 11px 18px !important;
+            border: 1px solid rgba(6, 18, 35, 0.17);
+        }
     </style>
 @endsection
 
@@ -235,6 +260,7 @@
                             <div class="next-prev-week">
                                 <div>
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
+                                    <div class="mostrar-fecha">{{ request()->semana == null || request()->semana == 0 ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b')}}</div>
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}" class="btn btn-next">></a>
                                 </div>
                             </div>
@@ -249,8 +275,8 @@
                                 <div class="col text-center">
                                     <div class="text-uppercase p-3 dia">
                                         {{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}</div>
-                                    <div><a data-fecha="{{ $fecha->format('Y-m-d') }}" data-fecha_long="{{  $fecha->format('d/m/Y') }}" href="#" class="btn-dia w-100 h-100 d-block p-5 {{ $fecha->format('d/m/Y') == date('d/m/Y') ? 'active' :  ''}}"><span
-                                                class="numero">{{ $fecha->format('d') }}</span></a></div>
+                                    <div><a data-fecha="{{ $fecha->format('Y-m-d') }}" data-fecha_long="{{  $fecha->format('d/m/Y') }}" @if(auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d'))) data-toggle="tooltip" data-placement="top" title="{{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) }} Reservas pendientes" @endif href="#" class="btn-dia w-100 h-100 d-block p-5 {{ $fecha->format('d/m/Y') == date('d/m/Y') ? 'active' :  ''}}"><span
+                                                class="numero {{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) ? 'reservas-activas' : '' }} {{ $fecha->format('Y-m-d')<date('Y-m-d') ? 'fecha-anterior' : ($fecha->format('Y-m-d')==date('Y-m-d') ? 'hoy' : '') }}">{{ $fecha->format('d') }}</span></a></div>
                                 </div>
                             @endforeach
                         </div>

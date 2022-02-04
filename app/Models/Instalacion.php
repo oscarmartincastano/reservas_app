@@ -55,4 +55,11 @@ class Instalacion extends Model
         }
         return array_unique($deportes);
     }
+
+    public function check_reservas_dia($fecha)
+    {
+        $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $this->id)->pluck('id'))->where('fecha', $fecha)->where('estado', 'active')->get();
+
+        return count($reservas) ? count($reservas) : false;
+    }
 }

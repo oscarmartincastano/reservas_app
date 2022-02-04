@@ -369,4 +369,27 @@ class InstalacionController extends Controller
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
     }
 
+    public function edit_user_view(Request $request)
+    {
+        $instalacion = auth()->user()->instalacion;
+        $user = User::find($request->id);
+
+        return view('instalacion.users.edit', compact('instalacion', 'user'));
+    }
+
+    public function editar_user(Request $request)
+    {
+        $data = $request->all();
+
+        array_shift($data);
+
+        if (!isset($request->password)) {
+            unset($data['password']);
+            User::where('id', $request->id)->update($data);
+        }else {
+            $data['password'] = \Hash::make($request->password);
+            User::where('id', $request->id)->update($data);
+        }
+        return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
+    }
 }
