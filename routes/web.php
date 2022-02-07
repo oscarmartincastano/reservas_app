@@ -83,3 +83,20 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         });
     });
 });
+
+
+/* Route::get('/peticion', function($requestHttpMethod, $fechaHoraUTC, $requestUri, $param, $bodyParam, $idInstalacion) {
+    $secretKey = "secret";
+    $requestContentBase64String = "";
+    $nonce = com_create_guid();
+    $uriEncode = urlencode($requestUri);
+    $now = new \DateTime();
+    $timestamp = $now->getTimestamp();
+
+    $APPId = "appkey";
+
+    $firma = $APPId . $requestHttpMethod . $uriEncode . $timestamp . $nonce;
+
+    $hmac = hash_hmac('sha256', $firma, $secretKey);
+
+}); */

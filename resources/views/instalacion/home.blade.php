@@ -191,6 +191,62 @@
             padding: 11px 18px !important;
             border: 1px solid rgba(6, 18, 35, 0.17);
         }
+        .exmp-wrp {
+            background:#0073AA;
+            position: relative;
+            display: inline-block;
+        }
+        #week{
+            background:#0073AA
+            url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='22' viewBox='0 0 20 22'><g fill='none' fill-rule='evenodd' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' transform='translate(1 1)'><rect width='18' height='18' y='2' rx='2'/><path d='M13 0L13 4M5 0L5 4M0 8L18 8'/></g></svg>")
+            right 1rem
+            center
+            no-repeat;
+            cursor: pointer;
+        }
+        .btn-wrp {
+            width: 181px;
+            border: 1px solid #dadada;
+            display: inline-block;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-clck {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .btn-clck::-webkit-calendar-picker-indicator {
+            right: -10px;
+            position: absolute;
+            width: 78px;
+            height: 40px;
+            color: rgba(204, 204, 204, 0);
+            opacity: 0
+        }
+
+        .btn-clck::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        .btn-clck::-webkit-clear-button {
+            margin-right:75px;
+        }
+        .btn-week {
+            height: 96%;
+            background: #0073AA;
+            border: none;
+            color: #fff;
+            padding: 13px;
+            position: absolute;
+            left: 3px;
+            top: 1px;
+            z-index: 11;
+            width: 140px;
+            cursor: auto;
+        }
     </style>
 @endsection
 
@@ -260,7 +316,15 @@
                             <div class="next-prev-week">
                                 <div>
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
-                                    <div class="mostrar-fecha">{{ request()->semana == null || request()->semana == 0 ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b')}}</div>
+                                    <div class="exmp-wrp">
+                                        <button class="btn-week">{!! !isset(request()->week) ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
+                                        <div class="btn-wrp">
+                                            <form action="#" method="get">
+                                                <input type="week" name="week" id="week" value="{{ isset(request()->week) ? request()->week : '' }}" class="btn-clck">
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {{-- <a href="#" class="btn btn-select-week">{!! request()->semana == null || request()->semana == 0 ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!} </a> --}}
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}" class="btn btn-next">></a>
                                 </div>
                             </div>
@@ -423,6 +487,11 @@
                 e.preventDefault();
                 $(this).parent().find('input').val($(this).data('accion'));
                 $('#modalSlideUp').find('form').submit();
+            });
+
+            $('input#week').change(function (e) { 
+                /* console.log(value); */
+                $(this).parent().submit();
             });
         });
     </script>

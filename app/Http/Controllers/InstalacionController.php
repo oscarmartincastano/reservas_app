@@ -43,6 +43,14 @@ class InstalacionController extends Controller
             $semana = $this->rangeWeek(date('Y-m-d'));
         }
         
+        if (isset($request->week)) {
+            $semana = $request->week;
+            $d = (int)substr($semana, 6) * 7;
+            $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
+
+            $semana = $this->rangeWeek($date->format('Y-m-d'));
+        }
+
         $period = new \DatePeriod(new DateTime($semana['start']), new \DateInterval('P1D'), new DateTime($semana['end']));
         $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
 
