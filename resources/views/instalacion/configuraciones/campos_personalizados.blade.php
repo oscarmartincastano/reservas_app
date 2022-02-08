@@ -17,6 +17,12 @@
             gap: 10px;
             margin-bottom: 10px;
         }
+        .select2-container{
+            width: 100% !important;
+        }
+        .select2-selection__clear{
+            display: none;
+        }
     </style>
 @endsection
 
@@ -48,7 +54,24 @@
                                     <option value="select">Select</option>
                                 </select>
                             </div>
-                            <div class="form-group mb-4">
+                            <div class="from-group mt-2">
+                                <label>Pistas a las que se le aplica</label>
+                                    
+                                <div class="border p-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="all" id="pistas" name="pistas">
+                                        <label class="form-check-label" for="pistas">
+                                            Aplicar a todas las pistas
+                                        </label>
+                                    </div>
+                                    <select class="form-control" name="pistas[]" id="pistas_select" data-init-plugin="select2" multiple required>
+                                        @foreach (auth()->user()->instalacion->pistas as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4 mt-2">
                                 <div class="border p-3">
                                     <div class="campos">
                                         <h4>Línea de texto</h4>
@@ -64,7 +87,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
+                            <input type="submit" value="Crear" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
                         </form>
                     </div>
                 </div>
@@ -78,10 +101,9 @@
 @section('script')
     <script>
         $(document).ready(function () {
-            $('select#tipo').change(function (e) { 
-                e.preventDefault();
-                $(this).parent().next().find('.campos').html(`
-                    <h4>${$(this).find('option:selected').text()}</h4>
+            $('select#tipo').on('change', function () {
+                $(this).parent().next().next().find('.campos').html(`
+                    <h4>${$(this).find('option:selected').html()}</h4>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="1" id="required_field" name="required_field">
                         <label class="form-check-label" for="required_field">
@@ -113,6 +135,21 @@
                     <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" name="opcion[]" class="form-control" placeholder="Título de la opción..." required>
                 </div>
                 `);
+            });
+
+            $("#pistas_select").select2({
+                placeholder: "Selecciona las pistas..."
+            });
+
+            $('#pistas').change(function (e) { 
+                e.preventDefault();
+                if ($(this).is(':checked')) {
+                    $('.select2').hide();
+                    $('#pistas_select').val(null).trigger('change').removeAttr('required');
+                } else {
+                    $('#pistas_select').attr('required', 'true');
+                    $('.select2').show();
+                }
             });
         });
     </script>

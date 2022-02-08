@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Pista;
+use App\Models\Valor_campo_personalizado;
 
 class Reserva extends Model
 {
@@ -28,7 +29,7 @@ class Reserva extends Model
         'creado_por',
     ];
 
-    protected $appends = ['horarios_deserialized', 'formated_updated_at'];
+    protected $appends = ['horarios_deserialized', 'formated_updated_at', 'valores_campos_pers'];
 
     public function pista()
     {
@@ -38,6 +39,11 @@ class Reserva extends Model
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'id_usuario');
+    }
+
+    public function valores_campos_personalizados()
+    {
+        return $this->hasMany(Valor_campo_personalizado::class, 'id_reserva', 'id');
     }
 
     public function getHorariosDeserializedAttribute() {
@@ -56,5 +62,13 @@ class Reserva extends Model
     public function updated_at_formateado() {
         $date = date('d/m H:i', strtotime($this->updated_at));
         return $date;
+    }
+
+    public function getValoresCamposPersAttribute() {
+        return $this->valores_campos_pers();
+    }
+
+    public function valores_campos_pers() {
+        return $this->valores_campos_personalizados;
     }
 }

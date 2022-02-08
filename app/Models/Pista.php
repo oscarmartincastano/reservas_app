@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Reserva;
 use App\Models\Instalacion;
 use App\Models\Desactivacion_reserva;
+use App\Models\Campos_personalizados;
 
 class Pista extends Model
 {
@@ -26,7 +27,7 @@ class Pista extends Model
         'reservas_por_tramo',
     ];
 
-    protected $appends = ['horario_deserialized'/* , 'string_horario' */];
+    protected $appends = ['horario_deserialized', 'all_campos_personalizados'];
 
     public function instalacion()
     {
@@ -36,6 +37,26 @@ class Pista extends Model
     public function reservas()
     {
         return $this->hasMany(Reserva::class, 'id', 'id_pista');
+    }
+
+    public function campos_personalizados()
+    {
+        return $this->belongsToMany(Campos_personalizados::class, 'pistas_campos', 'id_pista', 'id_campo');
+    }
+
+    public function getAllCamposPersonalizadosAttribute()
+    {
+        return $this->allCamposPersonalizados();
+    }
+
+    public function allCamposPersonalizados() {
+        
+        $campos_personalizados = $this->campos_personalizados;
+        foreach (Campos_personalizados::where('all_pistas', 1)->get() as $key => $value) {
+            $campos_personalizados->push($value);
+        }
+
+        return $campos_personalizados;
     }
 
     public function getHorarioDeserializedAttribute() {

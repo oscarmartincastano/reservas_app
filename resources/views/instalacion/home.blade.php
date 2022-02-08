@@ -245,7 +245,7 @@
             top: 1px;
             z-index: 11;
             width: 140px;
-            cursor: auto;
+            cursor: auto !important;
         }
     </style>
 @endsection
@@ -317,7 +317,7 @@
                                 <div>
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
                                     <div class="exmp-wrp">
-                                        <button class="btn-week">{!! !isset(request()->week) ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
+                                        <button class="btn-week">{!! (!isset(request()->semana) && !isset(request()->week)) || (request()->semana == 0 && !isset(request()->week)) ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
                                         <div class="btn-wrp">
                                             <form action="#" method="get">
                                                 <input type="week" name="week" id="week" value="{{ isset(request()->week) ? request()->week : '' }}" class="btn-clck">
@@ -414,44 +414,27 @@
                                     
                                     if (intervalo.reservas.length > 0) {
                                         intervalo.reservas.forEach(reserva => {
+                                            console.log(reserva);
                                             string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
                                                         <h4><a href="#">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
                                             if (reserva.estado == 'active') {
-                                                /* string += `<div> <a href="/{{ request()->slug_instalacion }}/admin/reservas/validar/${reserva.id}" class="btn btn-success btn-validar"><i class="fas fa-check"></i> Validar</a>
-                                                                <a href="/{{ request()->slug_instalacion }}/admin/reservas/cancelar/${reserva.id}" class="btn btn-danger btn-cancelar" onclick="return confirm('¿Estás seguro que quieres cancelar esta reserva?')"><i class="fas fa-ban"></i> Cancelar</a>
-                                                            </div>`; */
                                                 string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
-                                                if (reserva.creada_por = 'admin') {
-                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>creada por administrador</div>`;
-                                                }
-                                                if (reserva.observaciones) {
-                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i>  Observaciones reserva: </strong>${reserva.observaciones}</div>`;
-                                                }
                                             }else if (reserva.estado == 'canceled') {
                                                 string += `<div> <a href="#" class="btn btn-info">(${reserva.formated_updated_at}) Cancelado</a></div></div>`;
-                                                
-                                                if (reserva.observaciones) {
-                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
-                                                }
-                                                if (reserva.observaciones_admin) {
-                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>`;
-                                                    if (reserva.creada_por = 'admin') {
-                                                        string += 'creada por administrador';
-                                                    }
-                                                    string += `, ${reserva.observaciones_admin}</div>`;
-                                                }
                                             }else{
                                                 string += `<div> <a href="#" class="btn btn-white">(${reserva.formated_updated_at}) Pasada</a></div></div>`;
-                                                if (reserva.observaciones) {
+                                            }
+                                            $(reserva.valores_campos_pers).each(function (index, element) {
+                                                string += `<div class="mt-2"><strong><i class="fas fa-plus mr-1"></i> ${element.campo.label}: </strong>${element.valor}</div>`;
+                                            });
+                                            if (reserva.observaciones) {
                                                     string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
                                                 }
-                                                if (reserva.observaciones_admin) {
-                                                    string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i>  Observaciones admin: </strong>`;
-                                                    if (reserva.creada_por = 'admin') {
-                                                        string += 'creada por administrador';
-                                                    }
-                                                    string += `, ${reserva.observaciones_admin}</div>`;
-                                                }
+                                            if (reserva.creado_por == 'admin') {
+                                                string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i> Observaciones admin: </strong>creada por admin`;
+                                            }
+                                            if (reserva.observaciones_admin) {
+                                                string += `, ${reserva.observaciones_admin}`;
                                             }
                                             string += `</div></div>`;
                                         });
@@ -495,7 +478,7 @@
             });
         });
     </script>
-    @if (isset(request()->semana) && request()->semana != 0)
+    @if ((isset(request()->semana) && request()->semana != 0) || isset(request()->week))
         <script>
             $(document).ready(function () {
                 $('.btn-dia')[0].click();

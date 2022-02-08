@@ -77,6 +77,7 @@
                                             <tr>
                                                 <td>Tipo</td>
                                                 <td>Nombre</td>
+                                                <td>Pistas</td>
                                                 <td style="width: 15%">#</td>
                                             </tr>
                                         </thead>
@@ -85,6 +86,15 @@
                                                 <tr>
                                                     <td style="text-transform: capitalize">{{ $campo->tipo }}</td>
                                                     <td>{{ $campo->label }}</td>
+                                                    <td>
+                                                        @if ($campo->all_pistas)
+                                                            Todos los espacios
+                                                        @else
+                                                            @foreach ($campo->pistas as $index => $value)
+                                                                {{ $value->nombre }}{{ $index != count($campo->pistas)-1 ? ',' : '' }}
+                                                            @endforeach
+                                                        @endif
+                                                    </td>
                                                     <td><a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
                                                 </tr>
                                             @endforeach

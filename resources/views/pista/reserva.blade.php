@@ -140,7 +140,7 @@
         <main>
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-7 @else col-sm-6 @endif">
+                    <div class="col-sm-7">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
@@ -162,20 +162,20 @@
                                     @csrf
                                     <input type="hidden" name="secuencia" id="secuencia" value="{{ $secuencia }}">
                                     <div class="form-group row">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Tipo:</label>
-                                        <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
+                                        <label class="col-sm-3 col-form-label py-0">Tipo:</label>
+                                        <div class="col-sm-9">
                                             <div>{{ $pista->tipo }}</div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Espacio:</label>
-                                        <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
+                                        <label class="col-sm-3 col-form-label py-0">Espacio:</label>
+                                        <div class="col-sm-9">
                                             <div>{{ $pista->nombre }}</div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Fecha:</label>
-                                        <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
+                                        <label class="col-sm-3 col-form-label py-0">Fecha:</label>
+                                        <div class="col-sm-9">
                                             <div>{{ date('d/m/Y', $fecha) }} (<span
                                                     class="horario">{{ date('H:i', $fecha) }} a <span
                                                         class="hfin">{{ date('H:i', strtotime(date('H:i', $fecha) . " +{$secuencia} minutes")) }}</span></span>)
@@ -183,8 +183,8 @@
                                         </div>
                                     </div>{{-- {{ dd($number) }} --}}
                                     <div class="form-group row">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Tarifa:</label>
-                                        <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
+                                        <label class="col-sm-3 col-form-label py-0">Tarifa:</label>
+                                        <div class="col-sm-9">
                                             <select class="form-control" name="tarifa" id="tarifa">
                                                 @if ($pista->allow_more_res)
                                                     @for ($i = 1; $i < $number+1; $i++)
@@ -202,15 +202,33 @@
                                     </div>
                                     @if (auth()->user()->instalacion->configuracion->observaciones)
                                         <div class="form-group row">
-                                            <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0">Observaciones:</label>
-                                            <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif">
+                                            <label class="col-sm-3 col-form-label py-0">Observaciones:</label>
+                                            <div class="col-sm-9">
                                                 <textarea class="form-control" name="observaciones" rows="3"></textarea>
                                             </div>
                                         </div>
                                     @endif
+                                    @foreach ($pista->all_campos_personalizados as $item)
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label py-0">{{ $item->label }}:</label>
+                                                <div class="col-sm-9">
+                                                    @if ($item->tipo == 'textarea')
+                                                        <textarea class="form-control" name="campo_adicional[{{ $item->id }}]" rows="3" {{ $item->required ? 'required' : '' }}></textarea>
+                                                    @elseif($item->tipo == 'select')
+                                                        <select class="form-control" name="campo_adicional[{{ $item->id }}]">
+                                                            @foreach ($item->opciones as $option)
+                                                                <option value="{{ $option }}">{{ $option }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @else
+                                                        <input type="{{ $item->tipo }}" name="campo_adicional[{{ $item->id }}]" class="form-control" placeholder="{{ $item->label }}" {{ $item->required ? 'required' : '' }}>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                    @endforeach
                                     <div class="form-group row mt-4">
-                                        <label class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-3 @else col-sm-2 @endif col-form-label py-0"></label>
-                                        <div class="@if(auth()->user()->instalacion->configuracion->observaciones) col-sm-9 @else col-sm-10 @endif text-right d-flex justify-content-end" style="gap: 14px">
+                                        <label class="col-sm-3 col-form-label py-0"></label>
+                                        <div class="col-sm-9 text-right d-flex justify-content-end" style="gap: 14px">
                                             <button type="submit" class="btn btn-info text-white">
                                                 <i class="fas fa-check"></i>
                                                 <div>Reservar</div>

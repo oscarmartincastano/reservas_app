@@ -342,13 +342,25 @@ class InstalacionController extends Controller
         }else{
             $opciones = serialize($request->opciones);
         }
-        Campos_personalizados::create([
+
+        $campo = Campos_personalizados::create([
             'id_instalacion' => auth()->user()->instalacion->id,
             'tipo' => $request->tipo,
             'label' => $request->label,
             'opciones' => $opciones,
             'required' => $request->required_field
         ]);
+        
+        if (is_array($request->pistas)) {
+            foreach ($request->pistas as $id_pista) {
+                DB::table('pistas_campos')->insert([
+                    'id_pista' => $id_pista,
+                    'id_campo' => $campo->id
+                ]);
+            }
+        }else{
+            $campo->update(['all_pistas' => 1]);
+        }
 
         return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
     }

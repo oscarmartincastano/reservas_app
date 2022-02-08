@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Valor_campo_personalizado;
 use App\Models\Instalacion;
 use App\Models\Pista;
 use App\Models\Reserva;
@@ -126,6 +127,16 @@ class UserController extends Controller
             $reserva->update(['observaciones' => $request->observaciones]);
         }
         
+        if (isset($request->campo_adicional)) {
+            foreach ($request->campo_adicional as $id_campo => $valor) {
+                Valor_campo_personalizado::create([
+                    'id_reserva' => $reserva->id,
+                    'id_campo' => $id_campo,
+                    'valor' => $valor
+                ]);
+            }
+        }
+
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
 
