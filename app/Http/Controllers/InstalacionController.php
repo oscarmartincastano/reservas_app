@@ -11,6 +11,7 @@ use App\Models\Configuracion;
 use App\Models\Reserva;
 use App\Models\Desactivacion_reserva;
 use App\Models\Campos_personalizados;
+use App\Models\Valor_campo_personalizado;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -157,6 +158,16 @@ class InstalacionController extends Controller
 
         if (isset($request->observaciones)) {
             $reserva->update(['observaciones' => $request->observaciones]);
+        }
+
+        if (isset($request->campo_adicional)) {
+            foreach ($request->campo_adicional as $id_campo => $valor) {
+                Valor_campo_personalizado::create([
+                    'id_reserva' => $reserva->id,
+                    'id_campo' => $id_campo,
+                    'valor' => $valor
+                ]);
+            }
         }
         return redirect($request->slug_instalacion . '/admin');
     }

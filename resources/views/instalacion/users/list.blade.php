@@ -23,6 +23,7 @@
                                     <th>Nombre</th>
                                     <th>Email</th>
                                     <th>Tlfno</th>
+                                    <th>Rol</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -32,6 +33,7 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->tlfno }}</td>
+                                        <td>{{ $item->rol }}</td>
                                         <td><a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                     </tr>
                                 @endforeach
