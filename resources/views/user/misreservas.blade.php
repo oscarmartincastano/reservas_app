@@ -85,10 +85,11 @@
                                 @if (auth()->user()->instalacion->configuracion->allow_cancel && $item->estado == 'active')
                                     <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
                                         @csrf
-                                        <button class="cancel btn btn-danger" title="Cancelar reserva">
-                                            <i class="fas fa-times"></i>
-                                        </button>
                                     </form>
+                                    
+                                    <a class="cancel btn btn-danger" title="Cancelar reserva" onclick="if(confirm('¿Estás seguro que quieres cancelar esta reserva?')){$(this).prev().submit()}">
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                 @endif
                            </td>
                        </tr>

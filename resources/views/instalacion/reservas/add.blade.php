@@ -150,7 +150,7 @@
                                     <div class="col-sm-9">
                                         <select required class="full-width select2 select-cliente" data-init-plugin="select2" name="user_id" id="user_id">
                                             <option></option>
-                                            <option value="new_user">NUEVO CLIENTE</option>
+                                            <option value="new_user">+ NUEVO CLIENTE</option>
                                             @foreach (auth()->user()->instalacion->users as $item)
                                                 @if ($item->id != auth()->user()->id)
                                                     <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->email }})</option>
@@ -210,7 +210,7 @@
                                         <button type="submit" class="btn btn-info text-white">
                                             <i class="fas fa-check mr-2"></i> Reservar
                                         </button>
-                                        <a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}" class="cancel btn btn-danger">
+                                        <a href="/{{ request()->slug_instalacion }}/admin/reservas" class="cancel btn btn-danger">
                                             <i class="fas fa-times mr-2"></i> Cancelar
                                         </a>
                                     </div>
