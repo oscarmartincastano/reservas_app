@@ -376,6 +376,55 @@ class InstalacionController extends Controller
         return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
     }
 
+    public function view_edit_campos_personalizados(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+        $campo = Campos_personalizados::find($request->id);
+        return view('instalacion.configuraciones.edit_campos_personalizados', compact('instalacion','campo'));
+    }
+
+    public function edit_campos_personalizados(Request $request) {
+        if (!isset($request->required_field)) {
+            $request->required_field = 0;
+        }
+        if (!isset($request->opciones)) {
+            $opciones = null;
+        }else{
+            $opciones = serialize($request->opciones);
+        }
+
+        $campo = Campos_personalizados::find($request->id);
+
+        $campo->update([
+            'id_instalacion' => auth()->user()->instalacion->id,
+            'tipo' => $request->tipo,
+            'label' => $request->label,
+            'opciones' => $opciones,
+            'required' => $request->required_field
+        ]);
+
+        DB::table('pistas_campos')->where('id_campo', $campo->id)->delete();
+        
+        if (is_array($request->pistas)) {
+            foreach ($request->pistas as $id_pista) {
+                DB::table('pistas_campos')->insert([
+                    'id_pista' => $id_pista,
+                    'id_campo' => $campo->id
+                ]);
+            }
+        }else{
+            $campo->update(['all_pistas' => 1]);
+        }
+
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
+    }
+
+    public function delete_campos_personalizados(Request $request) {
+        Campos_personalizados::find($request->id)->delete();
+        DB::table('pistas_campos')->where('id_campo', $request->id)->delete();
+
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
+    }
+
     public function users() {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.users.list', compact('instalacion'));

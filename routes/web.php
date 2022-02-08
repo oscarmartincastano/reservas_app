@@ -69,6 +69,9 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
             Route::get('/pistas-reservas/campos-personalizados', 'InstalacionController@view_campos_personalizados');
             Route::post('/pistas-reservas/campos-personalizados', 'InstalacionController@add_campos_personalizados');
+            Route::get('/pistas-reservas/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
+            Route::post('/pistas-reservas/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
+            Route::get('/pistas-reservas/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
         });
     });
 

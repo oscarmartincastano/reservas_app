@@ -59,14 +59,14 @@
                                     
                                 <div class="border p-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="all" id="pistas" name="pistas">
+                                        <input class="form-check-input" type="checkbox" value="all" id="pistas" name="pistas" {{ $campo->all_pistas ? 'checked' : ''}}>
                                         <label class="form-check-label" for="pistas">
                                             Aplicar a todas las pistas
                                         </label>
                                     </div>
-                                    <select class="form-control" name="pistas[]" id="pistas_select" data-init-plugin="select2" multiple required>
+                                    <select @if ($campo->all_pistas) style="display:none" @endif class="form-control" name="pistas[]" id="pistas_select" data-init-plugin="select2" multiple required>
                                         @foreach (auth()->user()->instalacion->pistas as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                            <option value="{{ $item->id }}" @if (in_array($item->id, $campo->pistas->pluck('id')->toArray())) selected @endif>{{ $item->nombre }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -74,20 +74,31 @@
                             <div class="form-group mb-4 mt-2">
                                 <div class="border p-3">
                                     <div class="campos">
-                                        <h4>Línea de texto</h4>
+                                        <h4 style="text-transform:capitalize">{{ $campo->tipo }}</h4>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="1" id="required_field" name="required_field">
+                                            <input class="form-check-input" type="checkbox" value="1" id="required_field" name="required_field" {{ $campo->required ? 'checked' : ''}}>
                                             <label class="form-check-label" for="required_field">
                                                 Campo requerido
                                             </label>
                                         </div>
                                         <div class="div-label">
-                                            <input type="text" name="label" class="form-control" placeholder="Titulo del campo..." required>
+                                            <input type="text" name="label" class="form-control" placeholder="Titulo del campo..." value="{{ $campo->label }}" required>
                                         </div>
+                                        @if ($campo->tipo == 'select')
+                                            <div class="div-opciones mt-2 border p-2">
+                                                <h5>Opciones</h5>
+                                                @foreach (unserialize($campo->opciones) as $item)
+                                                    <div class="div-opcion d-flex">
+                                                        <a href="#" class="text-danger btn"><i class="fas fa-times"></i></a><input type="text" name="opcion[]" class="form-control" placeholder="Título de la opción..." value="{{ $item }}" required>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <a href="#" class="mt-3 add-opcion btn btn-outline-primary mr-1"><i class="fas fa-plus mr-1"></i> Opción</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Crear" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
+                            <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
                         </form>
                     </div>
                 </div>

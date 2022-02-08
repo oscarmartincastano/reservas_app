@@ -247,6 +247,23 @@
             width: 140px;
             cursor: auto !important;
         }
+                
+        .loader-bg {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            position: unset;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999999999;
+            display: none;
+        }
+
+        .loader-bg svg{
+            width: 10vw;
+            opacity: .7;
+        }
     </style>
 @endsection
 
@@ -345,6 +362,9 @@
                             @endforeach
                         </div>
                         <div class="row reservas-dia" style="display: block">
+                            <div class="loader-bg" style="display: none">
+                                @include('instalacion.loader.loader')
+                            </div>
                             <div class="col">
                                 <ul class="nav nav-tabs nav-tabs-fillup d-none d-md-flex d-lg-flex d-xl-flex"
                                     data-init-reponsive-tabs="dropdownfx">
@@ -384,7 +404,9 @@
 
             $('.dias').on('click', '.btn-dia', function(e) {
                 e.preventDefault();
+                $('.loader-bg').show().next().hide();
                 $('.reservas-dia').show();
+
                 $('.btn-dia').removeClass('active');
                 $(this).addClass('active');
                 $('span.fecha').html($(this).data('fecha_long'));
@@ -452,6 +474,8 @@
                                 $(`#tab-espacio-${pista.id} span:last-child`).removeClass('num-reservas').html(``);
                             }
                         });
+                        
+                        $('.loader-bg').hide().next().show();
                     },
                     error: data => {
                         console.log(data)

@@ -95,7 +95,7 @@
                                                             @endforeach
                                                         @endif
                                                     </td>
-                                                    <td><a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
+                                                    <td><a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados/{{ $campo->id }}" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados/{{ $campo->id }}/delete" onclick="return confirm('¿Estás seguro que quieres borrar este campo?');" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
