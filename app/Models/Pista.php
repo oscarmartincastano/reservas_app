@@ -119,7 +119,11 @@ class Pista extends Model
 
     public function check_reserva_valida($timestamp)
     {
-        if (!$this->check_desactivado($timestamp) && $this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))) {
+        if (
+            !$this->check_desactivado($timestamp) && 
+            $this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && 
+            new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))
+            ) {
             return true;
         }
         return false;

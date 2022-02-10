@@ -11,6 +11,7 @@ use App\Models\Configuracion;
 use App\Models\Reserva;
 use App\Models\Desactivacion_reserva;
 use App\Models\Campos_personalizados;
+use App\Models\Pistas_campos_relation;
 use App\Models\Valor_campo_personalizado;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
@@ -334,9 +335,17 @@ class InstalacionController extends Controller
         if (!isset($request->observaciones)) {
             $data['observaciones'] = 0;
         }
+        if (isset($request->max_reservas_tipo_espacio)) {
+            $data['max_reservas_tipo_espacio'] = serialize($request->max_reservas_tipo_espacio);
+        }
 
         Configuracion::find($instalacion->configuracion->id)->update($data);
         return redirect()->back();
+    }
+
+    public function campos_adicionales(Request $request) {
+        $instalacion = auth()->user()->instalacion;
+        return view('instalacion.configuraciones.campos_adicionales', compact('instalacion'));
     }
 
     public function view_campos_personalizados(Request $request) {
@@ -348,10 +357,10 @@ class InstalacionController extends Controller
         if (!isset($request->required_field)) {
             $request->required_field = 0;
         }
-        if (!isset($request->opciones)) {
+        if (!isset($request->opcion)) {
             $opciones = null;
         }else{
-            $opciones = serialize($request->opciones);
+            $opciones = serialize($request->opcion);
         }
 
         $campo = Campos_personalizados::create([
@@ -373,7 +382,7 @@ class InstalacionController extends Controller
             $campo->update(['all_pistas' => 1]);
         }
 
-        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
     public function view_edit_campos_personalizados(Request $request) {
@@ -415,14 +424,14 @@ class InstalacionController extends Controller
             $campo->update(['all_pistas' => 1]);
         }
 
-        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
     public function delete_campos_personalizados(Request $request) {
         Campos_personalizados::find($request->id)->delete();
-        DB::table('pistas_campos')->where('id_campo', $request->id)->delete();
+        Pistas_campos_relation::where('id_campo', $request->id)->delete();
 
-        return redirect('/' . auth()->user()->instalacion->slug . '/admin/configuracion/pistas-reservas');
+        return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
     public function users() {
@@ -462,6 +471,10 @@ class InstalacionController extends Controller
         $data = $request->all();
 
         array_shift($data);
+
+        if (isset($request->max_reservas_tipo_espacio)) {
+            $data['max_reservas_tipo_espacio'] = serialize($request->max_reservas_tipo_espacio);
+        }
 
         if (!isset($request->password)) {
             unset($data['password']);

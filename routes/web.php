@@ -67,11 +67,15 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
             Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
 
-            Route::get('/pistas-reservas/campos-personalizados', 'InstalacionController@view_campos_personalizados');
-            Route::post('/pistas-reservas/campos-personalizados', 'InstalacionController@add_campos_personalizados');
-            Route::get('/pistas-reservas/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
-            Route::post('/pistas-reservas/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
-            Route::get('/pistas-reservas/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
+        });
+
+        Route::prefix('campos-adicionales')->group(function () {
+            Route::get('/', 'InstalacionController@campos_adicionales');
+            Route::get('/campos-personalizados', 'InstalacionController@view_campos_personalizados');
+            Route::post('/campos-personalizados', 'InstalacionController@add_campos_personalizados');
+            Route::get('/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
+            Route::post('/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
+            Route::get('/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
         });
     });
 

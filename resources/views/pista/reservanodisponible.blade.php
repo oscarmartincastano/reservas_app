@@ -64,7 +64,11 @@
                                     <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
                                 </div>
                                 <p class="descripcion">
-                                    Esta reserva no está disponible, elija en otro tramo horario.
+                                    @if (isset($max_reservas))
+                                        Tienes el número máximo de reservas activas para este tipo de espacio. Espera a que se cumplan o <a href="/{{ request()->slug_instalacion }}/mis-reservas">cancelalas</a>.
+                                    @else
+                                        Esta reserva no está disponible, elija en otro tramo horario.
+                                    @endif
                                 </p>
                                 <div><a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}{{ isset(request()->semana) ? "?semana{request()->semana}" : '' }}" class="btn btn-info text-white"><i class="fas fa-long-arrow-alt-left"></i> Volver</a></div>
                             </div>

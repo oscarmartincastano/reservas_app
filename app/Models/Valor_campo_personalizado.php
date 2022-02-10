@@ -32,7 +32,7 @@ class Valor_campo_personalizado extends Model
 
     public function campo()
     {
-        return $this->hasOne(Campos_personalizados::class, 'id', 'id_campo');
+        return $this->hasOne(Campos_personalizados::class, 'id', 'id_campo')->withTrashed();
     }
 
     public function getCampoContentAttribute() {

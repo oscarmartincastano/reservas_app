@@ -216,7 +216,7 @@
                                                         <textarea class="form-control" name="campo_adicional[{{ $item->id }}]" rows="3" {{ $item->required ? 'required' : '' }}></textarea>
                                                     @elseif($item->tipo == 'select')
                                                         <select class="form-control" name="campo_adicional[{{ $item->id }}]">
-                                                            @foreach ($item->opciones as $option)
+                                                            @foreach (unserialize($item->opciones) as $option)
                                                                 <option value="{{ $option }}">{{ $option }}</option>
                                                             @endforeach
                                                         </select>

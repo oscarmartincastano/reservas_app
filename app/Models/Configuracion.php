@@ -14,7 +14,7 @@ class Configuracion extends Model
 
     protected $fillable = [
         'id_instalacion',
-        'num_reservas_por_user',
+        'max_reservas_tipo_espacio',
         'allow_cancel',
         'block_today',
         'hide_weekends',

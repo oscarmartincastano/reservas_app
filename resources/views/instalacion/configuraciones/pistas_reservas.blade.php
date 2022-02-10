@@ -27,19 +27,13 @@
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
                 <div class="card ">
                     <div class="card-header">
-                        <div class="card-title">Pistas y Reservas</div>
+                        <div class="card-title">Espacios y Reservas</div>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('edit_config', ['slug_instalacion' => $instalacion->slug]) }}" method="post">
                             @csrf
-                            <div class="form-group mb-4">
-                                <label for="num_reservas_por_user">Reservas activas permitidas por usuario</label>
-                                <input type="number" class="form-control" name="num_reservas_por_user" id="num_reservas_por_user"
-                                    value="{{ $instalacion->configuracion->num_reservas_por_user }}">
-                            </div>
-                            
                             {{-- <div class="form-group mb-4">
-                                <label for="num_reservas_por_user">Quiénes pueden reservar</label>
+                                <label for="max_reservas_tipo_espacio">Quiénes pueden reservar</label>
                                 <select class="form-control form-control-lg">
                                     <option>Usuario</option>
                                     <option>Invitado</option>
@@ -70,41 +64,13 @@
                                 </label>
                             </div>
                             <div class="form-group mb-4">
-                                <label for="num_reservas_por_user">Campos personalizados en la reserva</label>
+                                <label for="max_reservas_tipo_espacio">Reservas máximas por usuario para cada tipo de espacio</label>
                                 <div class="border p-3">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <td>Tipo</td>
-                                                <td>Nombre</td>
-                                                <td>Pistas</td>
-                                                <td style="width: 15%">#</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($instalacion->campos_personalizados as $campo)
-                                                <tr>
-                                                    <td style="text-transform: capitalize">{{ $campo->tipo }}</td>
-                                                    <td>{{ $campo->label }}</td>
-                                                    <td>
-                                                        @if ($campo->all_pistas)
-                                                            Todos los espacios
-                                                        @else
-                                                            @foreach ($campo->pistas as $index => $value)
-                                                                {{ $value->nombre }}{{ $index != count($campo->pistas)-1 ? ',' : '' }}
-                                                            @endforeach
-                                                        @endif
-                                                    </td>
-                                                    <td><a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados/{{ $campo->id }}" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados/{{ $campo->id }}/delete" onclick="return confirm('¿Estás seguro que quieres borrar este campo?');" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3"><a href="/{{ auth()->user()->instalacion->slug }}/admin/configuracion/pistas-reservas/campos-personalizados" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Añadir campo</a></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                    @foreach ($instalacion->deportes as $tipo_espacio)
+                                        <label for="max_reservas_tipo_espacio[{{ $tipo_espacio }}]">{{ $tipo_espacio }}</label>
+                                        <input type="number" class="form-control" name="max_reservas_tipo_espacio[{{ $tipo_espacio }}]" id="max_reservas_tipo_espacio[{{ $tipo_espacio }}]"
+                                            value="{{ unserialize($instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio] ?? '' }}">
+                                    @endforeach
                                 </div>
                             </div>
                             <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">

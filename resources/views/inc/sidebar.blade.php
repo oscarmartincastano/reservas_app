@@ -31,20 +31,25 @@
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
             </li>
             <li class=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}">
-                <a href="javascript:;"><span class="title">Configuracion</span>
-                <span class="arrow {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}"></span></a>
-                <span class="icon-thumbnail"><i data-feather="settings"></i></span>
-                <ul class="sub-menu" style=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'display:block' : '' }}">
-                  <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/instalacion') ? 'active' : '' }}">
-                    <a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion">Instalación</a>
-                    <span class="icon-thumbnail">in</span>
-                  </li>
-                  <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/pistas-reservas') ? 'active' : '' }}">
+              <a href="javascript:;"><span class="title">Configuracion</span>
+              <span class="arrow {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}"></span></a>
+              <span class="icon-thumbnail"><i data-feather="settings"></i></span>
+              <ul class="sub-menu" style=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'display:block' : '' }}">
+                <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/instalacion') ? 'active' : '' }}">
+                  <a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion">Instalación</a>
+                  <span class="icon-thumbnail">in</span>
+                </li>
+                <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/pistas-reservas') ? 'active' : '' }}">
                     <a href="/{{ request()->slug_instalacion }}/admin/configuracion/pistas-reservas">Pistas y reservas</a>
                     <span class="icon-thumbnail">pi</span>
                   </li>
-                </ul>
-              </li>
+              </ul>
+            </li>
+            
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/campos-adicionales') ? 'active' : '' }}">
+              <a href="/{{ request()->slug_instalacion }}/admin/campos-adicionales">Campos adicionales en reservas</a>
+              <span class="icon-thumbnail"><i data-feather="plus-circle"></i></span>
+            </li>
             {{-- <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/configuracion" class="detailed">
                     <span class="title">Configuracion</span>

@@ -13,10 +13,10 @@
             border-radius: 40px;
         }
 
-        .btn-dia:not(.active) .numero.hoy{
+        .btn-dia .numero.hoy{
             border: 2px solid #6dc3ee;
         }
-        .btn-dia:not(.active):hover .numero.hoy{
+        .btn-dia:hover .numero.hoy{
             background: #6dc3ee;
             color: white;
         }
@@ -414,7 +414,6 @@
                 $.ajax({
                     url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,
                     success: data => {
-                        console.log(data);
                         data.forEach(pista => {
                             let string = '';
                             string += `<table class="table table-timeslots table-hover">

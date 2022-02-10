@@ -1977,7 +1977,6 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
 
 .page-sidebar .sidebar-menu .menu-items>li>a>.arrow {
     float: right;
-    padding-right: 25px;
 }
 
 .page-sidebar .sidebar-menu .menu-items>li>a>.arrow:before {
@@ -2008,7 +2007,7 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 65%;
+    width: 86%;
 }
 
 .page-sidebar .sidebar-menu .menu-items>li>a>.details {

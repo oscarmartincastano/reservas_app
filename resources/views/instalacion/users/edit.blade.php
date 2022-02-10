@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Añadir usuario</h3>
+                    <h3 class="text-primary no-margin">Editar usuario</h3>
                 </div>
             </div>
 
@@ -33,6 +33,16 @@
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Cambiar contraseña</label>
                                 <input name="password" type="password" placeholder="Contraseña..." class="form-control col-md-10">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Reservas máximas para cada tipo de espacio</label>
+                                <div class="col-md-10 border p-3">
+                                    @foreach ($instalacion->deportes as $tipo_espacio)
+                                        <label for="max_reservas_tipo_espacio[{{ $tipo_espacio }}]">{{ $tipo_espacio }}</label>
+                                        <input type="number" class="form-control" name="max_reservas_tipo_espacio[{{ $tipo_espacio }}]" id="max_reservas_tipo_espacio[{{ $tipo_espacio }}]"
+                                            value="{{ unserialize($user->max_reservas_tipo_espacio)[$tipo_espacio] ?? (unserialize($instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio] ?? '') }}">
+                                    @endforeach
+                                </div>
                             </div>
                             <input type="hidden" name="id_instalacion" value="{{ $instalacion->id }}">
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Editar</button>

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'rol',
         'tlfno',
+        'max_reservas_tipo_espacio',
     ];
 
     /**
@@ -114,5 +115,34 @@ class User extends Authenticatable
         }
 
         return $reservas_canceladas;
+    }
+
+    public function numero_total_reservas_tipo($tipo_espacio)
+    {
+        $contador = 0;
+        foreach ($this->reservas_activas as $reserva) {
+            if ($reserva->pista->tipo == $tipo_espacio) {
+                $contador++;
+            }
+        }
+        return $contador;
+    }
+
+    public function check_maximo_reservas_espacio($tipo_espacio)
+    {
+        if (isset($this->max_reservas_tipo_espacio) && isset(unserialize($this->max_reservas_tipo_espacio)[$tipo_espacio])) {
+            if ($this->numero_total_reservas_tipo($tipo_espacio) >= unserialize($this->max_reservas_tipo_espacio)[$tipo_espacio]) {
+                return false;
+            }
+            return true;
+        }
+        if (isset($this->instalacion->configuracion->max_reservas_tipo_espacio) && isset(unserialize($this->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio])) {
+            if ($this->numero_total_reservas_tipo($tipo_espacio) >= unserialize($this->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio]) {
+                return false;
+            }
+            return true;
+        }
+
+        return true;
     }
 }

@@ -58,10 +58,16 @@ class UserController extends Controller
         $reserva = Reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp], ['estado', 'active']])->first();
         
         $pista = Pista::find($request->id_pista);
+        $user = User::find(auth()->user()->id);
         $fecha = $request->timestamp;
 
+        /* return dd($user->numero_total_reservas_tipo($pista->tipo)); */
         if (!$pista->check_reserva_valida($request->timestamp)) {
             return view('pista.reservanodisponible');
+        }
+        if (!$user->check_maximo_reservas_espacio($pista->tipo)) {
+            $max_reservas = true;
+            return view('pista.reservanodisponible', compact('max_reservas'));
         }
         
         foreach ($pista->horario_deserialized as $item){

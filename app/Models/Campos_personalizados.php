@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Instalacion;
 use App\Models\Pista;
@@ -10,6 +11,7 @@ use App\Models\Pista;
 class Campos_personalizados extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'campos_personalizados';
 
