@@ -30,6 +30,9 @@
             right: 11px;
             width: 20px;
         }
+        .select2-container--default .select2-results__option--selected{
+            color: #373d43;
+        }
     </style>
 @endsection
 
