@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/picker.js"></script>
@@ -32,6 +33,8 @@
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     @yield('style')
 
     <style>
@@ -55,8 +58,13 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
-                    <img src="{{ asset('img/cecoworking.png') }}" height="100" />
+                <a class="navbar-item" href="/{{ request()->slug_instalacion }}" style="padding: 10px">
+                    
+                    @if (file_exists(public_path() . '/img/ceco.png'))
+                        <img src="{{ asset('img/'.request()->slug_instalacion.'.png') }}" style="max-height: 50px" />
+                    @else
+                        <img src="/img/tallerempresarial.png" style="max-height: 50px" />
+                    @endif
                 </a>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"

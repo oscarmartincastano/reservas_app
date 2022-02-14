@@ -1827,7 +1827,6 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
 .page-sidebar .sidebar-header {
     /* Side-bar header */
     display: block;
-    height: 60px;
     line-height: 60px;
     background-color: white;
     border-bottom: 1px solid #e6e6e6;
@@ -1839,6 +1838,7 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
     z-index: 10;
     position: relative;
     user-select: none;
+    text-align: center;
 }
 
 .page-sidebar .sidebar-header .sidebar-header-controls {

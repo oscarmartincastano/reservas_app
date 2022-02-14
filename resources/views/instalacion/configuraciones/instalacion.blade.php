@@ -27,7 +27,7 @@
                                 </tr>
                                 <tr>
                                     <th>Logo</th>
-                                    <td><img src="/img/{{ $instalacion->slug }}.png"></td>
+                                    <td><img src="/img/{{ $instalacion->slug }}.png" style="max-width: 200px"></td>
                                     <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/logo" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>

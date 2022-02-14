@@ -35,6 +35,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        $instalacion = Instalacion::create(['nombre' => $request->name, 'direccion' => $request->direccion, 'tlfno' => $request->tlfno]);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -45,13 +47,11 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol' => 'admin',
+            'id_instalacion' => $instalacion->id
         ]);
 
         event(new Registered($user));
-
-        $instalacion = Instalacion::create(['nombre' => $request->name, 'direccion' => $request->direccion, 'tlfno' => $request->tlfno]);
-
-        DB::table('users_instalaciones')->insert(['id_instalacion' => $instalacion->id, 'id_user' => $user->id]);
 
         Auth::login($user);
 

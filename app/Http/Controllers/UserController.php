@@ -17,16 +17,17 @@ use DateTime;
 
 class UserController extends Controller
 {
-    public function index() {
-        $instalacion = Instalacion::first();
-        if (count($instalacion->deportes)>1) {
+    public function index(Request $request) {
+        
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
+        if (count($instalacion->deportes)>1 || count($instalacion->pistas) == 0) {
             return view('home', compact('instalacion'));
         }
         return redirect("{$instalacion->slug}/{$instalacion->pistas->first()->tipo}");
     }
 
     public function pistas(Request $request) {
-
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
         if (isset($request->semana)) {
             $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
             $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
@@ -44,7 +45,7 @@ class UserController extends Controller
 
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
-        $pistas = Pista::where('tipo', $request->deporte)->get();
+        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
 
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);

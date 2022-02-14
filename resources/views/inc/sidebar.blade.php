@@ -3,9 +3,16 @@
     <!-- END SIDEBAR MENU TOP TRAY CONTENT-->
     <!-- BEGIN SIDEBAR MENU HEADER-->
     <div class="sidebar-header">
-        <img src="/img/cecoworking.png" alt="logo" class="brand"
-            data-src="/img/cecoworking.png" data-src-retina="/img/cecoworking.png"
-            width="92%">
+        @if (file_exists(public_path() . '/img/ceco.png'))
+            <img src="/img/{{ request()->slug_instalacion }}.png" alt="logo" class="brand"
+                data-src="/img/{{ request()->slug_instalacion }}.png" data-src-retina="/img/{{ request()->slug_instalacion }}.png"
+                style="max-height: 100px;max-width:92%">
+        @else
+            <img src="/img/tallerempresarial.png" alt="logo" class="brand"
+                data-src="/img/tallerempresarial.png" data-src-retina="/img/tallerempresarial.png"
+                style="max-height: 100px;max-width:92%">
+        @endif
+        
     </div>
     <!-- END SIDEBAR MENU HEADER-->
     <!-- START SIDEBAR MENU -->

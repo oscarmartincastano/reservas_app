@@ -1,9 +1,40 @@
 @extends('layouts.userview')
 
-@section('pagename', 'Tenis')
+@section('pagename', $pista_selected->tipo)
+
+@section('style')
+    <style>
+        #select2-pista-select2-container{
+            text-align: center;
+            color: white;
+            font-size: 20px;
+        }
+        .select2-container--default .select2-selection--single{
+            background-color: #373d43;
+        }
+        #select2-pista-select2-results{
+            color: white;
+            background-color: #373d43;
+        }
+        body > span > span > span.select2-search.select2-search--dropdown{
+            background-color: #373d43;
+        }
+        body > main > div.container.is-max-desktop > div > div > div > div.pistas > span > span.selection > span {
+            height: auto;
+            padding: 12px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow{
+            height: 26px;
+            position: absolute;
+            top: 13px;
+            right: 11px;
+            width: 20px;
+        }
+    </style>
+@endsection
 
 @section('content')
-
+    <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
         <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ strtolower($pista_selected->tipo) }}.jpg) center;
             background-size:cover;">
@@ -16,12 +47,20 @@
             <div class="column is-full">
                 <div class="div-reservas">
                     <div class="pistas">
-                        @foreach ($pistas as $index => $pista)
-                            <div class="@if ($pista->id == $pista_selected->id) active @endif"><a class=" select-pista"
-                                    data-id_pista="{{ $pista->id }}"
-                                    href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a>
-                            </div>
-                        @endforeach
+                        @if (count($pistas) > 4)
+                            <select name="pista" class="form-select" id="pista-select2">
+                                @foreach ($pistas as $pista)
+                                    <option value="{{ $pista->id }}" @if (request()->id_pista == $pista->id) selected @endif>{{ $pista->nombre }}</option>
+                                @endforeach
+                            </select>
+                        @else
+                            @foreach ($pistas as $index => $pista)
+                                <div class="@if ($pista->id == $pista_selected->id) active @endif"><a class=" select-pista"
+                                        data-id_pista="{{ $pista->id }}"
+                                        href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista->id }}">{{ $pista->nombre }}</a>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                     <div class="calendario-horarios">
                         <div class="navigator">
@@ -122,6 +161,12 @@
                         $('#form-dia').submit();
                     }
                 });
+            });
+
+            $('#pista-select2').select2();
+            
+            $('#pista-select2').change(function (e) {
+                window.location.href = $('#url_instalacion').html() + $(this).val();
             });
         });
     </script>

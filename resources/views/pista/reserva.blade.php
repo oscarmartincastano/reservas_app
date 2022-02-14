@@ -89,7 +89,11 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
-                    <img src="{{ asset('img/cecoworking.png') }}" height="50"/>
+                    @if (file_exists(public_path() . '/img/ceco.png'))
+                        <img src="{{ asset('img/'request()->slug_instalacion'.png') }}" height="50" />
+                    @else
+                        <img src="/img/tallerempresarial.png" height="50" />
+                    @endif
                 </a>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
