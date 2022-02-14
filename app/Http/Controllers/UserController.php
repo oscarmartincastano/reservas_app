@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewReserva;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Instalacion;
 use App\Models\Pista;
@@ -142,6 +144,8 @@ class UserController extends Controller
                 ]);
             }
         }
+
+        Mail::to('manuel@tallerempresarial.es')->send(new NewReserva(auth()->user(), $reserva));
 
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }

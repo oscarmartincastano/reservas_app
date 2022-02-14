@@ -46,6 +46,11 @@
                                 value="{{ auth()->user()->email }}">
                         </div>
                         <div class="form-group">
+                            <label for="tlfno">Teléfono</label>
+                            <input type="text" class="form-control" name="tlfno" id="tlfno"
+                                value="{{ auth()->user()->tlfno }}" placeholder="Teléfono">
+                        </div>
+                        <div class="form-group">
                             <label for="password">Cambiar contraseña</label>
                             <div class="row m-0 gap-3">
                                 <input value="" type="password" class="form-control col" name="password" id="password"
