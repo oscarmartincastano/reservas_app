@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Añadir pista</h3>
+                    <h3 class="text-primary no-margin">Añadir espacio</h3>
                 </div>
             </div>
 
@@ -30,6 +30,7 @@
                                     <option value="Fútbol">Fútbol</option>
                                     <option value="Ping pong">Ping pong</option>
                                     <option value="Sala">Sala</option>
+                                    <option value="Gimnasio">Gimnasio</option>
                                 </select>
                             </div>
                             <div class="form-group row">
