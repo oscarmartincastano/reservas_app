@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $instalacion = Instalacion::create(['nombre' => $request->name, 'direccion' => $request->direccion, 'tlfno' => $request->tlfno]);
+        $instalacion = Instalacion::create(['nombre' => $request->name, 'direccion' => $request->direccion, 'tlfno' => $request->tlfno, 'slug' => $request->slug]);
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],

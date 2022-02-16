@@ -37,6 +37,12 @@
 
                 <x-input id="tlfno" class="block mt-1 w-full" type="number" name="tlfno" required autofocus />
             </div>
+
+            <div>
+                <x-label for="slug" :value="__('Slug')" />
+
+                <x-input id="slug" class="block mt-1 w-full" type="text" name="slug" required autofocus />
+            </div>
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Contraseña')" />
