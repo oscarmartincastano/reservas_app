@@ -52,7 +52,7 @@ class Pista extends Model
     public function allCamposPersonalizados() {
         
         $campos_personalizados = $this->campos_personalizados;
-        foreach (Campos_personalizados::where([['id_instalacion', $this->instalacion->id], ['all_pistas', 1]])->get() as $key => $value) {
+        foreach (Campos_personalizados::where('id_instalacion', $this->id_instalacion)->where('all_pistas', 1)->get() as $key => $value) {
             $campos_personalizados->push($value);
         }
 

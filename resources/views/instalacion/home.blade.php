@@ -414,6 +414,7 @@
                 $.ajax({
                     url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,
                     success: data => {
+                        console.log(data);
                         data.forEach(pista => {
                             let string = '';
                             string += `<table class="table table-timeslots table-hover">
