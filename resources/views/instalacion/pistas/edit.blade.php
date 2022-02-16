@@ -30,6 +30,8 @@
                                     <option {{ $pista->tipo == 'Fútbol' ? 'selected' : '' }} value="Fútbol">Fútbol</option>
                                     <option {{ $pista->tipo == 'Ping pong' ? 'selected' : '' }} value="Ping pong">Ping pong</option>
                                     <option {{ $pista->tipo == 'Sala' ? 'selected' : '' }} value="Sala">Sala</option>
+                                    <option {{ $pista->tipo == 'Gimnasio' ? 'selected' : '' }} value="Gimnasio">Gimnasio</option>
+
                                 </select>
                             </div>
                             <div class="form-group row">
