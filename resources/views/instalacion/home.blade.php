@@ -378,7 +378,7 @@
                                 <div class="tab-content reservas-dia">
                                     @foreach ($pistas as $i => $pista)
                                         <div class="tab-pane {{ $i == 0 ? 'active' : '' }}" id="espacio-{{ $pista->id }}">
-                                            <h4><strong>{{ $pista->nombre }}</strong> Reservas para <span class="fecha"></span></h4>
+                                            <div><h4 class="d-inline-block"><strong>{{ $pista->nombre }}</strong> Reservas para <span class="fecha"></span></h4> <a href="/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/desactivar-dia/{{ date('Y-m-d') }}" class="btn btn-outline-primary ml-3 btn-off-dia">DESACTIVAR DÍA COMPLETO</a>  <a href="/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/activar-dia/{{ date('Y-m-d') }}" class="btn btn-outline-primary ml-3 btn-on-dia">ACTIVAR DÍA COMPLETO</a></div>
                                             <div id="content-espacio-{{ $pista->id }}">
 
                                             </div>
@@ -410,11 +410,13 @@
                 $('.btn-dia').removeClass('active');
                 $(this).addClass('active');
                 $('span.fecha').html($(this).data('fecha_long'));
-                
+                $('.btn-off-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/desactivar-dia/${$(this).data('fecha')}`);
+                $('.btn-on-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/activar-dia/${$(this).data('fecha')}`);
+
                 $.ajax({
                     url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,
                     success: data => {
-                        console.log(data);
+                        /* console.log(data); */
                         data.forEach(pista => {
                             let string = '';
                             string += `<table class="table table-timeslots table-hover">

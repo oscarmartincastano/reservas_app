@@ -199,6 +199,33 @@ class InstalacionController extends Controller
         return redirect($request->slug_instalacion . '/admin');
     }
 
+    public function desactivar_dia(Request $request) {
+        $pista = Pista::find($request->id_pista);
+
+        foreach ($pista->horario_con_reservas_por_dia_admin($request->dia) as $item) {
+            foreach ($item as $valor) {
+                Desactivacion_reserva::create([
+                    'id_pista' => $request->id_pista,
+                    'timestamp' => $valor['timestamp']
+                ]);
+            }
+        }
+
+        return redirect($request->slug_instalacion . '/admin');
+    }
+
+    public function activar_dia(Request $request) {
+        $pista = Pista::find($request->id_pista);
+
+        foreach ($pista->horario_con_reservas_por_dia_admin($request->dia) as $item) {
+            foreach ($item as $valor) {
+                Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $valor['timestamp']]])->delete();
+            }
+        }
+
+        return redirect($request->slug_instalacion . '/admin');
+    }
+
     public function edit_info(Request $request) {
         $instalacion = auth()->user()->instalacion->toArray();
 

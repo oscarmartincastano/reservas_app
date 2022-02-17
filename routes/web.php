@@ -43,6 +43,8 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::post('/{id_pista}/reservar/{timestamp}', 'InstalacionController@hacer_reserva');
             Route::post('/{id_pista}/desactivar/{timestamp}', 'InstalacionController@desactivar_tramo');
             Route::post('/{id_pista}/activar/{timestamp}', 'InstalacionController@activar_tramo');
+            Route::get('/{id_pista}/desactivar-dia/{dia}', 'InstalacionController@desactivar_dia');
+            Route::get('/{id_pista}/activar-dia/{dia}', 'InstalacionController@activar_dia');
         });
     
         Route::prefix('pistas')->group(function () {
