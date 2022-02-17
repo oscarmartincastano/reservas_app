@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -21,6 +22,9 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
     Route::get('/', 'UserController@index');
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login_instalacion');
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest')->middleware('login_instalacion');
+
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->middleware('guest')->name('forgot_password_instalacion');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest');
 
     Route::middleware(['auth_instalacion'])->group(function () {
         Route::get('/mis-reservas', 'UserController@mis_reservas');

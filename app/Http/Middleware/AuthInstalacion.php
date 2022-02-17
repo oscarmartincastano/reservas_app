@@ -16,7 +16,7 @@ class AuthInstalacion
             return $next($request);
         }
         Auth::logout();
-        return redirect()->guest(route('login'));
+        return redirect()->guest(route('login_instalacion', ['slug_instalacion' => $request->slug_instalacion]));
     }
 }
 ?>
