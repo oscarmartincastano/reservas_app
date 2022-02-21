@@ -271,7 +271,7 @@
 @section('script')
     <script>
         $(document).ready(function () {
-            $('.table-reservas').DataTable({
+            $('.table-reservas').dataTable({
                 "info": false,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'

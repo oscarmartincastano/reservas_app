@@ -83,6 +83,13 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- <div class="form-group row">
+                                <label class="col-md-2 control-label">Desactivación horas periódicas</label>
+                                <div class="col-md-10">
+                                        
+                                    <a href="#" class="btn btn-success mt-1 add-desactivacion">Añadir desactivación</a>
+                                </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Número de reservas por tramo</label>
                                 <input name="reservas_por_tramo" type="number" value="1"  min="1" placeholder="Reservas por tramo..."
@@ -201,6 +208,36 @@
                                         </div>`);
             });
 
+            /* $('form').on('click', '.add-desactivacion', function(e) {
+                e.preventDefault();
+                $(this).before(`<div class="my-1 mb-3 border" style="padding: 14px" data-index="${$(this).prev().data('index') ? $(this).prev().data('index') + 1 : 0}">
+                                        <select required class="full-width select2 select-desactivacion"
+                                            data-init-plugin="select2" name="desactivaciones[${$(this).prev().data('index') ? $(this).prev().data('index') + 1 : 0}][dias][]"
+                                            multiple>
+                                            <option></option>
+                                            <option value="1">Lunes</option>
+                                            <option value="2">Martes</option>
+                                            <option value="3">Miércoles</option>
+                                            <option value="4">Jueves</option>
+                                            <option value="5">Viernes</option>
+                                            <option value="6">Sábado</option>
+                                            <option value="7">Domingo</option>
+                                        </select>
+                                        <div class="d-flex mt-3">
+                                            <div class="w-100">
+                                                <label class="mb-1">Hora inicio</label>
+                                                <input required type="time"  name="desactivaciones[${$(this).prev().data('index') ? $(this).prev().data('index') + 1 : 0}][hora_inicio]" class="form-control">
+
+                                            </div>
+                                            <div class="w-100">
+                                                <label class="mb-1">Hora fin</label>
+                                                <input required type="time"  name="desactivaciones[${$(this).prev().data('index') ? $(this).prev().data('index') + 1 : 0}][hora_fin]" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                `).prev().find('.select2').select2({placeholder: "Selecciona días..."});
+            });
+ */
             $('form').on('click', '.btn-borrar-intervalo', function(e) {
                 e.preventDefault();
                 $(this).parent().parent().remove();

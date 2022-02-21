@@ -26,7 +26,7 @@ class Instalacion extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'id_instalacion');
+        return $this->hasMany(User::class, 'id_instalacion')->withTrashed();
     }
 
     public function pistas()

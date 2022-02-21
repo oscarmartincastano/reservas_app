@@ -61,8 +61,12 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::get('/', 'InstalacionController@users');
             Route::get('add', 'InstalacionController@add_user_view');
             Route::post('add/annadir', 'InstalacionController@add_user')->name('add_user');
-            Route::get('{id}', 'InstalacionController@edit_user_view');
-            Route::post('{id}', 'InstalacionController@editar_user');
+            Route::prefix('{id}')->group(function () {
+                Route::get('/', 'InstalacionController@edit_user_view');
+                Route::post('/', 'InstalacionController@editar_user');
+                
+                Route::get('/desactivar', 'InstalacionController@desactivar_user');
+            });
         });
 
         Route::prefix('configuracion')->group(function () {

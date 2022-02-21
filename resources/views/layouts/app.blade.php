@@ -33,10 +33,14 @@
         media="screen">
     <link href="/simply_white/assets/plugins/mapplic/css/mapplic.css" rel="stylesheet" type="text/css" />
     <link href="/simply_white/assets/css/dashboard.widgets.css" rel="stylesheet" type="text/css" media="screen" />
-    <link class="main-stylesheet" href="/simply_white/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/simply_white/assets/plugins/jquery-datatable/media/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/simply_white/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" rel="stylesheet" type="text/css" />
+    <link href="/simply_white/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
+    <link class="main-stylesheet" href="/simply_white/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
+
     @yield('style')
 </head>
 
@@ -88,6 +92,12 @@
     <script src="/simply_white/assets/js/scripts.js" type="text/javascript"></script>
     
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="/simply_white/assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/simply_white/assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+    <script src="/simply_white/assets/plugins/jquery-datatable/media/js/dataTables.bootstrap.js" type="text/javascript"></script>
+    <script src="/simply_white/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/simply_white/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
+    <script type="text/javascript" src="/simply_white/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
     <!-- END PAGE LEVEL JS -->
     @yield('script')
 

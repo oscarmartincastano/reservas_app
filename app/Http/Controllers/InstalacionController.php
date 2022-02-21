@@ -16,6 +16,7 @@ use App\Models\Desactivacion_reserva;
 use App\Models\Campos_personalizados;
 use App\Models\Pistas_campos_relation;
 use App\Models\Valor_campo_personalizado;
+use App\Models\Desactivaciones_periodicas;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -301,7 +302,18 @@ class InstalacionController extends Controller
         
         $data['horario'] = serialize($request->horario);
 
-        Pista::create($data);
+        $pista = Pista::create($data);
+
+        if (isset($request->desactivaciones)) {
+            foreach ($request->desactivaciones as $item) {
+                Desactivaciones_periodicas::create([
+                    'id_pista' => $pista->id,
+                    'dias' => serialize($item['dias']),
+                    'hora_inicio' => $item['hora_inicio'],
+                    'hora_fin' => $item['hora_fin']
+                ]);
+            }
+        }
 
         return redirect("/" . auth()->user()->instalacion->slug . "/admin/pistas");
     }
@@ -490,6 +502,18 @@ class InstalacionController extends Controller
         ]);
 
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
+    }
+
+    public function desactivar_user(Request $request)
+    {
+        $user = User::withTrashed()->find($request->id);
+
+        if (!$user->deleted_at) {
+            $user->delete();
+        } else{
+            $user->restore();
+        }
+        return redirect()->back();
     }
 
     public function edit_user_view(Request $request)

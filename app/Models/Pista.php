@@ -109,6 +109,11 @@ class Pista extends Model
         return $ret_reservas;
     }
 
+    public function check_desactivacion_periodica($fecha)
+    {
+        # code...
+    }
+
     public function check_desactivado($timestamp)
     {
         if (Desactivacion_reserva::where([['id_pista', $this->id], ['timestamp', $timestamp]])->first()) {

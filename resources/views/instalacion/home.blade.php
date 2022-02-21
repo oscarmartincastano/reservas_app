@@ -410,8 +410,6 @@
                 $('.btn-dia').removeClass('active');
                 $(this).addClass('active');
                 $('span.fecha').html($(this).data('fecha_long'));
-                $('.btn-off-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/desactivar-dia/${$(this).data('fecha')}`);
-                $('.btn-on-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/activar-dia/${$(this).data('fecha')}`);
 
                 $.ajax({
                     url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,

@@ -17,7 +17,7 @@
                     </div>
                     <div class="card-body">
                         <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
-                        <table class="table table-condensed table-hover">
+                        <table class="table table-condensed table-hover" id="table-users">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
@@ -34,7 +34,10 @@
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->tlfno }}</td>
                                         <td>{{ $item->rol }}</td>
-                                        <td><a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td>
+                                            <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a>
+                                            @if ($item->id != auth()->user()->id) <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar" class="btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}" onclick="return confirm('¿Estás seguro que quieres desactivar este usuario?');" title="Desactivar usuario"><i data-feather="power"></i></a>@endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -47,4 +50,19 @@
         
     </div>
 </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('#table-users').DataTable({
+                "info": false,
+                "paging": false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
+                "order": [[ 3, "asc" ]]
+            });
+        });
+    </script>
 @endsection
