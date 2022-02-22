@@ -37,6 +37,13 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         Route::get('/', 'InstalacionController@index');
         Route::prefix('reservas')->group(function () {
             Route::get('/', 'InstalacionController@index');
+            Route::get('/list', 'InstalacionController@listado_todas_reservas');
+            Route::get('/periodicas', 'InstalacionController@desactivaciones_periodicas');
+            Route::get('/desactivaciones', 'InstalacionController@desactivaciones_periodicas');
+            Route::get('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas_view');
+            Route::post('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas')->name('add_desactivacion');
+
+
             Route::get('/{fecha}', 'InstalacionController@reservas_dia');
             Route::post('/validar/{id}', 'InstalacionController@validar_reserva');
             Route::get('/{id_pista}/reservar/{timestamp}', 'InstalacionController@hacer_reserva_view');

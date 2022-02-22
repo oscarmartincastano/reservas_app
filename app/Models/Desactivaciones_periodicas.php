@@ -16,6 +16,8 @@ class Desactivaciones_periodicas extends Model
     protected $fillable = [
         'id_pista',
         'dias',
+        'fecha_inicio',
+        'fecha_fin',
         'hora_inicio',
         'hora_fin',
     ];

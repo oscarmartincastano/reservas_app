@@ -19,12 +19,31 @@
     <div class="sidebar-menu">
         <!-- BEGIN SIDEBAR MENU ITEMS-->
         <ul class="menu-items">
-            <li class="m-t-10 {{ request()->is('/') ? 'active' : '' }}">
+            <li class="m-t-10 {{ request()->is(request()->slug_instalacion . '/admin') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/" class="detailed">
                     <span class="title">Inicio</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="home"></i></span>
             </li>
+            <li class=" {{ request()->is(request()->slug_instalacion . '/admin/reservas*') ? 'open active' : '' }}">
+                <a href="javascript:;"><span class="title">Reservas</span>
+                <span class="arrow {{ request()->is(request()->slug_instalacion . '/admin/reservas*') ? 'open active' : '' }}"></span></a>
+                <span class="icon-thumbnail"><i data-feather="book"></i></span>
+                <ul class="sub-menu p-0" style=" {{ request()->is(request()->slug_instalacion . '/admin/reservas*') ? 'display:block' : '' }}">
+                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/reservas/list') ? 'active' : '' }}">
+                        <a href="/{{ request()->slug_instalacion }}/admin/reservas/list">Listado</a>
+                        <span class="icon-thumbnail">li</span>
+                    </li>
+                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/reservas/periodicas')  ? 'active' : '' }}">
+                        <a href="/{{ request()->slug_instalacion }}/admin/reservas/periodicas">Reservas periódicas</a>
+                        <span class="icon-thumbnail">rp</span>
+                    </li>
+                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/reservas/desactivaciones') ? 'active' : '' }}">
+                        <a href="/{{ request()->slug_instalacion }}/admin/reservas/desactivaciones">Desactivaciones periódicas</a>
+                        <span class="icon-thumbnail">dp</span>
+                    </li>
+                </ul>
+              </li>
             <li class="{{ request()->is(request()->slug_instalacion . '/admin/pistas*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/pistas" class="detailed">
                     <span class="title">Espacios</span>

@@ -227,6 +227,43 @@ class InstalacionController extends Controller
         return redirect($request->slug_instalacion . '/admin');
     }
 
+    public function listado_todas_reservas(Request $request)
+    {
+        $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+
+        return view('instalacion.reservas.list', compact('reservas'));
+    }
+
+
+
+    public function desactivaciones_periodicas(Request $request)
+    {
+        $desactivaciones = Desactivaciones_periodicas::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+
+        return view('instalacion.reservas.desactivaciones', compact('desactivaciones'));
+    }
+
+    public function add_desactivaciones_periodicas_view(Request $request)
+    {
+        $desactivaciones = Desactivaciones_periodicas::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+
+        return view('instalacion.reservas.add_desactivacion', compact('desactivaciones'));
+    }
+
+    public function add_desactivaciones_periodicas(Request $request)
+    {
+        Desactivaciones_periodicas::create([
+            'id_pista' => $request->espacio,
+            'dias' => serialize($request->dias),
+            'hora_inicio' => $request->hora_inicio,
+            'hora_fin' => $request->hora_fin,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
+        ]);
+
+        return redirect('/'.request()->slug_instalacion.'/admin/reservas/desactivaciones');
+    }
+
     public function edit_info(Request $request) {
         $instalacion = auth()->user()->instalacion->toArray();
 

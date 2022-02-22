@@ -9,6 +9,7 @@ use App\Models\Reserva;
 use App\Models\Instalacion;
 use App\Models\Desactivacion_reserva;
 use App\Models\Campos_personalizados;
+use App\Models\Desactivaciones_periodicas;
 
 class Pista extends Model
 {
@@ -37,6 +38,11 @@ class Pista extends Model
     public function reservas()
     {
         return $this->hasMany(Reserva::class, 'id', 'id_pista');
+    }
+
+    public function desactivaciones_periodicas()
+    {
+        return $this->hasMany(Desactivaciones_periodicas::class, 'id_pista', 'id');
     }
 
     public function campos_personalizados()
@@ -111,13 +117,33 @@ class Pista extends Model
 
     public function check_desactivacion_periodica($fecha)
     {
-        # code...
+        $desactivaciones_dia =[];
+        foreach ($this->desactivaciones_periodicas as $desactivacion) {
+            if (in_array(date('w', strtotime($fecha)), unserialize($desactivacion->dias)) && 
+                $fecha > $desactivacion->fecha_inicio && 
+                $fecha < $desactivacion->fecha_fin
+               ) {
+                array_push($desactivaciones_dia, $desactivacion);
+            }
+        }
+        return count($desactivaciones_dia) != 0 ? $desactivaciones_dia : false;
     }
 
     public function check_desactivado($timestamp)
     {
         if (Desactivacion_reserva::where([['id_pista', $this->id], ['timestamp', $timestamp]])->first()) {
             return true;
+        }
+        $desactivaciones_periodicas_dia = $this->check_desactivacion_periodica(date('Y-m-d', $timestamp));
+        if ($desactivaciones_periodicas_dia) {
+            foreach ($desactivaciones_periodicas_dia as $desactivacion) {
+                if (
+                    strtotime(date('H:i', $timestamp)) >= strtotime($desactivacion->hora_inicio) && 
+                    strtotime(date('H:i', $timestamp)) < strtotime($desactivacion->hora_fin)
+                   ) {
+                    return true;
+                }
+            }
         }
         return false;
     }
