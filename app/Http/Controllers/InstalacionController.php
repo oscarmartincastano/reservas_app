@@ -234,7 +234,12 @@ class InstalacionController extends Controller
         return view('instalacion.reservas.list', compact('reservas'));
     }
 
+    public function reservas_periodicas(Request $request)
+    {
+        $desactivaciones = Reserva::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
 
+        return view('instalacion.reservas.desactivaciones', compact('desactivaciones'));
+    }
 
     public function desactivaciones_periodicas(Request $request)
     {

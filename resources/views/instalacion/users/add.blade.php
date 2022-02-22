@@ -27,8 +27,8 @@
                                 <input name="email" type="email" placeholder="Email..." class="form-control col-md-10" required>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Email</label>
-                                <input name="email" type="email" placeholder="Teléfono..." class="form-control col-md-10">
+                                <label class="col-md-2 control-label">Teléfono</label>
+                                <input name="tlfno" type="text" placeholder="Teléfono..." class="form-control col-md-10">
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Contraseña</label>
