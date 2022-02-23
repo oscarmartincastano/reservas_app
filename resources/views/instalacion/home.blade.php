@@ -426,7 +426,7 @@
 
                                     if (intervalo.num_res < pista.reservas_por_tramo) {
                                         if (intervalo.desactivado) {
-                                            string += `<div><form class="inline-block" method="POST" action="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/activar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-success">Activar intervalo</button> </form></div></td><td class="timeslot-reserve">`;
+                                            string += `<div><form class="inline-block" method="POST" action="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/activar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-success">Activar intervalo</button> </form> <a href="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/reservar/${intervalo.timestamp}" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
                                         }else{
                                             string += `<div><form class="inline-block" method="POST" action="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/desactivar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-primary">Desactivar</button> </form> <a href="/{{ auth()->user()->instalacion->slug }}/admin/reservas/${pista.id}/reservar/${intervalo.timestamp}" class="btn btn-primary">Reservar</a></div></td><td class="timeslot-reserve">`;
                                         }
