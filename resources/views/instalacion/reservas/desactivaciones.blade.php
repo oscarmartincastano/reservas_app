@@ -25,7 +25,7 @@
                                     <td>Fecha fin</td>
                                     <td>Día de la semana</td>
                                     <td>Horas</td>
-                                    <td>#</td>
+                                    {{-- <td>#</td> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,11 +64,11 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $item->hora_inicio }} - {{ $item->hora_fin }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <a class="btn btn-primary text-white" title="Editar">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

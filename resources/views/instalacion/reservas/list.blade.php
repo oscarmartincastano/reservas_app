@@ -38,9 +38,11 @@
                                         <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                         <td>{{ $item->estado > 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
                                         <td>
-                                            <a class="cancel btn btn-primary text-white" title="Cancelar reserva">
-                                                Acción
-                                            </a>
+                                            @if ($item->estado  == 'active' && strtotime(strtotime(date('Y-m-d H:i', $item->timestamp)) . ' +' . $item->minutos_totales . ' minutes') < strtotime(date('Y-m-d H:i')))
+                                                <a class="cancel btn btn-primary text-white" title="Cancelar reserva">
+                                                    Acción
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
