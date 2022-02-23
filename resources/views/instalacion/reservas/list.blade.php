@@ -38,7 +38,7 @@
                                         <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                         <td>{{ $item->estado > 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
                                         <td>
-                                            <a class="cancel btn btn-primary text-white" title="Cancelar reserva" onclick="if(confirm('¿Estás seguro que quieres cancelar esta reserva?')){$(this).prev().submit()}">
+                                            <a class="cancel btn btn-primary text-white" title="Cancelar reserva">
                                                 Acción
                                             </a>
                                         </td>

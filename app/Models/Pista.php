@@ -160,6 +160,39 @@ class Pista extends Model
         return false;
     }
 
+    public function horario_tramos($fecha)
+    {
+        $fecha = new \DateTime($fecha);
+        $horario=[];
+        foreach ($this->horario_deserialized as $key => $item) {
+            if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
+                    $a = new \DateTime($intervalo['hfin']);
+                    $b = new \DateTime($intervalo['hinicio']);
+                    $interval = $a->diff($b);
+                    $dif = $interval->format('%h') * 60;
+                    $dif += $interval->format('%i');
+                    $dif = $dif / $intervalo['secuencia'];
+
+                    $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
+
+                    for ($i = 0; $i < $dif+1; $i++) {
+                        
+                        $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
+                        $timestamp = \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp;
+
+                        $horario[$index][$i] = $timestamp;
+
+                        if ($hora->format('H:i') == $intervalo['hfin']) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $horario;
+    }
+
     public function horario_con_reservas_por_dia($fecha)
     {
         $fecha = new \DateTime($fecha);
@@ -236,5 +269,20 @@ class Pista extends Model
             }
         }
         return $horario;
+    }
+
+    public function get_minutos_given_timestamp($timestamp)
+    {
+        $fecha = new \DateTime(date('Y-m-d H:i', $timestamp));
+
+        foreach ($this->horario_deserialized as $key => $item) {
+            if (in_array($fecha->format('w'), $item['dias']) || ($fecha->format('w') == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
+                    if (strtotime(date('H:i', $timestamp)) >= strtotime($intervalo['hinicio']) && strtotime(date('H:i', $timestamp)) < strtotime($intervalo['hfin'])) {
+                        return $intervalo['secuencia'];
+                    }
+                }
+            }
+        }
     }
 }

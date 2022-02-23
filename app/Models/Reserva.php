@@ -26,6 +26,7 @@ class Reserva extends Model
         'estado',
         'observaciones',
         'observaciones_admin',
+        'reserva_periodica',
         'creado_por',
     ];
 

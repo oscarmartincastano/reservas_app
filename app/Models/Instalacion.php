@@ -22,7 +22,7 @@ class Instalacion extends Model
         'slug',
     ];
 
-    protected $appends = ['deportes'];
+    protected $appends = ['deportes', 'user_admin'];
 
     public function users()
     {
@@ -54,6 +54,14 @@ class Instalacion extends Model
             array_push($deportes, $pista->tipo);
         }
         return array_unique($deportes);
+    }
+
+    public function getUserAdminAttribute() {
+        return $this->user_admin();
+    }
+
+    public function user_admin() {
+        return User::where([['id_instalacion', $this->id], ['rol', 'admin']])->first();
     }
 
     public function check_reservas_dia($fecha)

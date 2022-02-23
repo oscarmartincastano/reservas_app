@@ -17,6 +17,7 @@ use App\Models\Campos_personalizados;
 use App\Models\Pistas_campos_relation;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Desactivaciones_periodicas;
+use App\Models\Reservas_periodicas;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -176,7 +177,7 @@ class InstalacionController extends Controller
         }
 
         Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
-        Mail::to('manuel@tallerempresarial.es')->send(new NewReserva(auth()->user(), $reserva));
+        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
 
         return redirect($request->slug_instalacion . '/admin');
     }
@@ -236,9 +237,70 @@ class InstalacionController extends Controller
 
     public function reservas_periodicas(Request $request)
     {
-        $desactivaciones = Reserva::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+        $reservas_periodicas = Reservas_periodicas::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
 
-        return view('instalacion.reservas.desactivaciones', compact('desactivaciones'));
+        return view('instalacion.reservas.reservas_periodicas', compact('reservas_periodicas'));
+    }
+
+    public function add_reservas_periodicas_view(Request $request)
+    {
+        $reservas_periodicas = Reservas_periodicas::whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+
+        return view('instalacion.reservas.add_reserva_periodica', compact('reservas_periodicas'));
+    }
+
+    public function add_reservas_periodicas(Request $request)
+    {
+        $pista = Pista::find($request->espacio);
+
+        $reserva_periodica = Reservas_periodicas::create([
+            'id_pista' => $request->espacio,
+            'id_user' => $request->user_id,
+            'dias' => serialize($request->dias),
+            'hora_inicio' => $request->hora_inicio,
+            'hora_fin' => $request->hora_fin,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
+        ]);
+
+        $period = new \DatePeriod(new DateTime($request->fecha_inicio), new \DateInterval('P1D'), new DateTime($request->fecha_fin));
+
+        foreach ($period as $fecha) {
+            if (in_array($fecha->format('w'), $request->dias)) {
+                foreach ($pista->horario_tramos($fecha->format('Y-m-d')) as $horas) {
+                    foreach ($horas as $hora) {
+                        if (
+                            strtotime(date('H:i', $hora)) >= strtotime($request->hora_inicio) && 
+                            strtotime(date('H:i', $hora)) < strtotime($request->hora_fin)
+                           ) {
+                            Reserva::create([
+                                'id_pista' => $pista->id,
+                                'id_usuario' => $request->user_id,
+                                'timestamp' => $hora,
+                                'horarios' => serialize([$hora]),
+                                'fecha' => date('Y/m/d', $hora),
+                                'hora' => date('Hi', $hora),
+                                'tarifa' => 1,
+                                'minutos_totales' => $pista->get_minutos_given_timestamp($hora),
+                                'reserva_periodica' => $reserva_periodica->id,
+                                'creado_por' => 'admin'
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
+    }
+
+    public function borrar_reservas_periodicas(Request $request)
+    {
+        Reservas_periodicas::find($request->id)->delete();
+
+        Reserva::where('reserva_periodica', $request->id)->delete();
+        
+        return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
     }
 
     public function desactivaciones_periodicas(Request $request)
