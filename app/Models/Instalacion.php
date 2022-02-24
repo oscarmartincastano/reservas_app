@@ -22,7 +22,7 @@ class Instalacion extends Model
         'slug',
     ];
 
-    protected $appends = ['deportes', 'user_admin'];
+    protected $appends = ['deportes', 'user_admin', 'users_sin_validar'];
 
     public function users()
     {
@@ -54,6 +54,14 @@ class Instalacion extends Model
             array_push($deportes, $pista->tipo);
         }
         return array_unique($deportes);
+    }
+
+    public function getUsersSinValidarAttribute() {
+        return $this->users_sin_validar();
+    }
+
+    public function users_sin_validar() {
+        return User::where([['id_instalacion', $this->id], ['aprobado', null]])->get();
     }
 
     public function getUserAdminAttribute() {

@@ -142,7 +142,6 @@
 
         // Disable scroll to zoom
         setTimeout(function() {
-            location.hash = "#usa";
             $('.mapplic-layer').unbind('mousewheel DOMMouseScroll');
         }, 1000);
         

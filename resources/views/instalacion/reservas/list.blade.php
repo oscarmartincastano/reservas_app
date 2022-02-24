@@ -21,12 +21,12 @@
                         <table class="table table-condensed table-hover" id="table-reservas">
                             <thead>
                                 <tr>
-                                    <td>Fecha de alquiler</td>
-                                    <td>Horas</td>
-                                    <td>Día de la semana</td>
-                                    <td>Espacio</td>
-                                    <td>Estado reserva</td>
-                                    <td>#</td>
+                                    <th>Fecha de alquiler</th>
+                                    <th>Horas</th>
+                                    <th>Día de la semana</th>
+                                    <th>Espacio</th>
+                                    <th>Estado reserva</th>
+                                    <th>#</th>
                                 </tr>
                             </thead>
                             <tbody>

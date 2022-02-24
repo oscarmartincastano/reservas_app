@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 
+@section('style')
+    <style>
+        .clickable {
+            cursor: pointer;
+        }
+    </style>    
+@endsection
+
 @section('content')
 <div class="row">
     <div class="col-lg-12 m-b-10">
@@ -16,6 +24,10 @@
                         <div class="card-title">Listado de usuarios</div>
                     </div>
                     <div class="card-body">
+                        
+                        @if (count(auth()->user()->instalacion->users_sin_validar))
+                            <a href="#" class="btn btn-info">Usuarios no aprobados</a>
+                        @endif
                         <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover" id="table-users">
                             <thead>
@@ -29,7 +41,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($instalacion->users as $item)
-                                    <tr>
+                                    <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->tlfno }}</td>
@@ -62,6 +74,10 @@
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
                 "order": [[ 3, "asc" ]]
+            });
+
+            $('.clickable').click(function() {
+                window.location = $(this).data("href");
             });
         });
     </script>

@@ -50,7 +50,11 @@ class UserController extends Controller
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);
         } else{
-            $pista_selected = $pistas[0];
+            if (isset($pistas[0])) {
+                $pista_selected = $pistas[0];
+            } else {
+                abort(404);
+            }
         }
 
         return view('pista.pista', compact('period', 'pistas', 'pista_selected'));

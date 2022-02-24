@@ -25,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cuota',
         'rol',
         'tlfno',
         'max_reservas_tipo_espacio',
@@ -59,6 +60,11 @@ class User extends Authenticatable
     public function reservas()
     {
         return $this->hasMany(Reserva::class,'id_usuario');
+    }
+
+    public function cobros()
+    {
+        return $this->hasMany(Cobro::class,'id_user');
     }
 
     public function getReservasActivasAttribute() {

@@ -57,4 +57,45 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function create_user_instalacion()
+    {
+        return view('auth.register_user_instalacion');
+    }
+
+    public function store_instalacion(Request $request)
+    {
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        if (isset($request->tlfno)) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'tlfno' => $request->tlfno,
+                'rol' => 'user',
+                'id_instalacion' => $instalacion->id
+            ]);
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'rol' => 'user',
+                'id_instalacion' => $instalacion->id
+            ]);
+        }
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect('/'.$request->slug_instalacion);
+    }
 }

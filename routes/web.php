@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -25,6 +26,12 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->middleware('guest')->name('forgot_password_instalacion');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest');
+
+    Route::get('/register', [RegisteredUserController::class, 'create_user_instalacion'])
+                ->middleware('guest');
+
+    Route::post('/register', [RegisteredUserController::class, 'store_instalacion'])
+                ->middleware('guest');
 
     Route::middleware(['auth_instalacion'])->group(function () {
         Route::get('/mis-reservas', 'UserController@mis_reservas');
@@ -75,7 +82,8 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'InstalacionController@edit_user_view');
                 Route::post('/', 'InstalacionController@editar_user');
-                
+                Route::get('/ver', 'InstalacionController@ver_user');
+
                 Route::get('/desactivar', 'InstalacionController@desactivar_user');
             });
         });

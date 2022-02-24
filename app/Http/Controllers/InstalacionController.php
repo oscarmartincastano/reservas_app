@@ -597,13 +597,11 @@ class InstalacionController extends Controller
 
     public function add_user(Request $request)
     {
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'id_instalacion' => $request->id_instalacion,
-            'rol' => 'user',
-            'password' => \Hash::make($request->password),
-        ]);
+        $data = $request->all();
+        $data['password'] = \Hash::make($request->password);
+        $data['aprobado'] = date('Y-m-d H:i:s');
+        
+        User::where('id', $request->id)->create($data);
 
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
     }
@@ -646,5 +644,12 @@ class InstalacionController extends Controller
             User::where('id', $request->id)->update($data);
         }
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
+    }
+
+    public function ver_user(Request $request)
+    {
+        $user = User::find($request->id);
+
+        return view('instalacion.users.ver', compact('user'));
     }
 }
