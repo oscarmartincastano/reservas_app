@@ -10,5 +10,5 @@
 
 <div style="margin-top:20px">
     Puedes validarlos en el listado de validación de usuarios.<br>
-    <a href="/{{ $user->instalacion->slug }}/admin/users/novalid">Ver listado</a>
+    <a href="{{ url('') }}/{{ $user->instalacion->slug }}/admin/users/novalid">Ver listado</a>
 </div>
