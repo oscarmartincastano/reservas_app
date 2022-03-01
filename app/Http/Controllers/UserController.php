@@ -76,6 +76,10 @@ class UserController extends Controller
             $max_reservas = true;
             return view('pista.reservanodisponible', compact('max_reservas'));
         }
+        if (!$user->aprobado) {
+            $user_no_valid = true;
+            return view('pista.reservanodisponible', compact('user_no_valid'));
+        }
         
         foreach ($pista->horario_deserialized as $item){
             if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
