@@ -3,8 +3,8 @@
 <div>
     <ul>
         <li><strong>Nombre: </strong>{{ $user->name }}</li>
-        <li><strong>Email: </strong>{{ $reserva->email }}</li>
-        <li><strong>Fecha de registro: </strong>{{ $reserva->created_at }}</li>
+        <li><strong>Email: </strong>{{ $user->email }}</li>
+        <li><strong>Fecha de registro: </strong>{{ $user->created_at }}</li>
     </ul>
 </div>
 
