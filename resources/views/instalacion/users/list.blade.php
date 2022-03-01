@@ -76,8 +76,10 @@
                 "order": [[ 3, "asc" ]]
             });
 
-            $('.clickable').click(function() {
-                window.location = $(this).data("href");
+            $('.clickable').click(function(e) {
+                if (e.target.tagName == 'TD') {
+                    window.location = $(this).data("href");
+                }
             });
         });
     </script>
