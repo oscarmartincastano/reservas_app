@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Models\Instalacion;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUser;
 use DB;
 
 class RegisteredUserController extends Controller
@@ -96,6 +98,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        Mail::to('manuel@tallerempresarial.es')->send(new Newuser($user));
         return redirect('/'.$request->slug_instalacion);
     }
 }
