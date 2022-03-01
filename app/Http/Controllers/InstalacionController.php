@@ -592,8 +592,7 @@ class InstalacionController extends Controller
 
     public function users_no_valid() {
         $instalacion = auth()->user()->instalacion;
-        $users = User::where('aprobado', null)->get();
-        return view('instalacion.users.list_no_valid', compact('instalacion', 'users'));
+        return view('instalacion.users.list_no_valid', compact('instalacion'));
     }
 
     public function validar_user(Request $request)

@@ -14,21 +14,16 @@
         
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">{{ auth()->user()->instalacion->nombre }}</h3>
+                    <h3 class="text-primary no-margin">Usuarios sin validar</h3>
                 </div>
             </div>
             
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
                 <div class="card ">
                     <div class="card-header">
-                        <div class="card-title">Listado de usuarios</div>
+                        <div class="card-title">Listado de usuarios sin validar</div>
                     </div>
                     <div class="card-body">
-                        
-                        @if (count(auth()->user()->instalacion->users_sin_validar))
-                            <a href="#" class="btn btn-info">Usuarios no aprobados</a>
-                        @endif
-                        <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover" id="table-users">
                             <thead>
                                 <tr>
@@ -40,7 +35,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $item)
+                                @foreach ($instalacion->users_sin_validar as $item)
                                     <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
