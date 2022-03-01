@@ -56,6 +56,12 @@
                 </a>
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
             </li>
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/cobro*') ? 'active' : '' }}">
+                <a href="/{{ request()->slug_instalacion }}/admin/cobro" class="detailed">
+                    <span class="title">Cobros</span>
+                </a>
+                <span class="icon-thumbnail"><i data-feather="credit-card"></i></span>
+            </li>
             <li class=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}">
               <a href="javascript:;"><span class="title">Configuracion</span>
               <span class="arrow {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}"></span></a>

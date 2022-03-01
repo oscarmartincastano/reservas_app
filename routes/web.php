@@ -83,8 +83,17 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
                 Route::get('/', 'InstalacionController@edit_user_view');
                 Route::post('/', 'InstalacionController@editar_user');
                 Route::get('/ver', 'InstalacionController@ver_user');
-
+                Route::get('/cobro/add', 'InstalacionController@user_add_cobro_view');
+                Route::post('/cobro/add', 'InstalacionController@user_add_cobro');
                 Route::get('/desactivar', 'InstalacionController@desactivar_user');
+            });
+        });
+
+        Route::prefix('cobro')->group(function () {
+            Route::get('/', 'InstalacionController@list_cobros');
+            Route::prefix('{id}')->group(function () {
+                Route::get('/', 'InstalacionController@edit_cobro_view');
+                Route::post('/', 'InstalacionController@edit_cobro');
             });
         });
 

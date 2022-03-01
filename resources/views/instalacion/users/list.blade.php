@@ -48,7 +48,7 @@
                                         <td>{{ $item->rol }}</td>
                                         <td>
                                             <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a>
-                                            @if ($item->id != auth()->user()->id) <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar" class="btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}" onclick="return confirm('¿Estás seguro que quieres desactivar este usuario?');" title="Desactivar usuario"><i data-feather="power"></i></a>@endif
+                                            @if ($item->id != auth()->user()->id) <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar" class="btn-activate btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}" onclick="return confirm('¿Estás seguro que quieres {{ !$item->deleted_at ? 'desactivar' : 'activar' }} este usuario?');" title="{{ !$item->deleted_at ? 'Desactivar' : 'Activar' }} usuario"><i data-feather="power"></i></a>@endif
                                         </td>
                                     </tr>
                                 @endforeach

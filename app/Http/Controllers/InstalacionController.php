@@ -10,6 +10,7 @@ use App\Mail\ReservaAdmin;
 use App\Models\Pista;
 use App\Models\Instalacion;
 use App\Models\User;
+use App\Models\Cobro;
 use App\Models\Configuracion;
 use App\Models\Reserva;
 use App\Models\Desactivacion_reserva;
@@ -648,8 +649,52 @@ class InstalacionController extends Controller
 
     public function ver_user(Request $request)
     {
-        $user = User::find($request->id);
+        $user = User::withTrashed()->find($request->id);
 
         return view('instalacion.users.ver', compact('user'));
+    }
+
+    public function user_add_cobro_view(Request $request)
+    {
+        $user = User::find($request->id);
+
+        return view('instalacion.users.add_cobro', compact('user'));
+    }
+
+    public function user_add_cobro(Request $request)
+    {
+        $user = User::find($request->id);
+        $data = $request->all();
+        $data['id_user'] = $request->id;
+
+        Cobro::create($data);
+
+        return redirect("/{$request->slug_instalacion}/admin/users/{$request->id}/ver");
+    }
+
+    public function list_cobros(Request $request)
+    {
+        $instalacion = auth()->user()->instalacion;
+
+        return view('instalacion.cobros.list', compact('instalacion'));
+    }
+
+    public function edit_cobro_view(Request $request)
+    {
+        $cobro = Cobro::find($request->id);
+
+        return view('instalacion.cobros.edit', compact('cobro'));
+    }
+
+    public function edit_cobro(Request $request)
+    {
+        $cobro = Cobro::find($request->id);
+
+        $data = $request->all();
+        array_shift($data);
+
+        $cobro->update($data);
+
+        return redirect("/{$request->slug_instalacion}/admin/users/{$cobro->user->id}/ver");
     }
 }

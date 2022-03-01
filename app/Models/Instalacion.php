@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Pista;
 use App\Models\Configuracion;
 use App\Models\Campos_personalizados;
+use App\Models\Cobro;
 
 class Instalacion extends Model
 {
@@ -70,6 +71,14 @@ class Instalacion extends Model
 
     public function user_admin() {
         return User::where([['id_instalacion', $this->id], ['rol', 'admin']])->first();
+    }
+
+    public function getCobrosAttribute() {
+        return $this->cobros();
+    }
+
+    public function cobros() {
+        return Cobro::whereIn('id_user', User::where('id_instalacion', $this->id)->pluck('id'))->get();
     }
 
     public function check_reservas_dia($fecha)

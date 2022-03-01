@@ -90,8 +90,8 @@
                                 <div class="card-title">Cobros</div>
                             </div>
                             <div class="card-body">
-                                <a href="#" class="btn btn-primary">Añadir cobro</a>
-                                <table class="table table-hover table-condensed table-detailed">
+                                <a href="/{{ request()->slug_instalacion }}/admin/users/{{ request()->id }}/cobro/add" class="btn btn-primary">Añadir cobro</a>
+                                <table class="table table-hover table-condensed">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
@@ -107,8 +107,8 @@
                                                 <td>{{ $item->fecha }}</td>
                                                 <td>{{ $item->concepto }}</td>
                                                 <td>{{ $item->forma }}</td>
-                                                <td>{{ $item->cantidad }}</td>
-                                                <td></td>
+                                                <td>{{ $item->cantidad }} €</td>
+                                                <td><a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}/delete" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
