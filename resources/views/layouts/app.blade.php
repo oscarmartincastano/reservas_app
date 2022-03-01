@@ -40,7 +40,29 @@
     <link href="/simply_white/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" rel="stylesheet" type="text/css" />
     <link href="/simply_white/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
     <link class="main-stylesheet" href="/simply_white/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
+    <style>
+        .mark {
+            border-radius: 20px;
+            border: 2px solid #FFF;
+            width: 24px;
+            height: 22px;
+            background-color: #FF6B6B;
+            position: absolute;
+            top: 4px;
+            left: 82px;
+            font-size: 10px;
+            line-height: 15px;
+            font-family: 'Roboto', sans-serif;
+            /* font-weight: 400; */
+            color: #FFF;
+            font-weight: 700;
+            text-align: center;
+        }
 
+        .span-users{
+            position: relative;
+        }
+    </style>
     @yield('style')
 </head>
 
