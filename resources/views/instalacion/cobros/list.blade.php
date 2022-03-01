@@ -24,7 +24,7 @@
                         <div class="card-title">Listado de cobros</div>
                     </div>
                     <div class="card-body">
-                        <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
+                        <a href="/{{ request()->slug_instalacion }}/admin/cobro/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover" id="table-users">
                             <thead>
                                 <tr>
@@ -43,7 +43,7 @@
                                         <td>{{ $item->concepto }}</td>
                                         <td>{{ $item->cantidad }}</td>
                                         <td>
-                                            <a href="/{{ request()->slug_instalacion }}/admin/cobros/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a> <a href="/{{ request()->slug_instalacion }}/admin/cobros/{{ $item->id }}/delete" class="btn btn-danger"><i data-feather="trash"></i></a>
+                                            <a href="/{{ request()->slug_instalacion }}/admin/cobros/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a> <a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}/delete" onclick="return confirm('¿Estás seguro que quieres borrar este cobro?')" class="btn btn-danger"><i data-feather="trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

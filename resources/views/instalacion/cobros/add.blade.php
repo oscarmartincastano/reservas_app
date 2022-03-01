@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Añadir Cobro para "{{ $user->name }}"</h3>
+                    <h3 class="text-primary no-margin">Añadir Cobro</h3>
                 </div>
             </div>
 
@@ -18,6 +18,17 @@
                     <div class="card-body">
                         <form method="post" role="form">
                             @csrf
+                            <div class="form-group">
+                                <label for="cliente">Cliente</label>
+                                <select required class="full-width select-user" name="id_user" id="id_user">
+                                    <option></option>
+                                    @foreach (auth()->user()->instalacion->users as $item)
+                                        @if ($item->id != auth()->user()->id)
+                                            <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->email }})</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group row">
                                 <label>Concepto</label>
                                 <input name="concepto" type="text" placeholder="Concepto..." class="form-control" required>
@@ -44,4 +55,14 @@
 
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $(".select-user").select2({
+                placeholder: "Selecciona un usuario"
+            });
+        });
+    </script>
 @endsection

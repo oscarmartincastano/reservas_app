@@ -94,9 +94,12 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
         Route::prefix('cobro')->group(function () {
             Route::get('/', 'InstalacionController@list_cobros');
+            Route::get('/add', 'InstalacionController@add_cobro_view');
+            Route::post('/add', 'InstalacionController@add_cobro');
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'InstalacionController@edit_cobro_view');
                 Route::post('/', 'InstalacionController@edit_cobro');
+                Route::get('/delete', 'InstalacionController@delete_cobro');
             });
         });
 

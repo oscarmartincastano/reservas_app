@@ -699,11 +699,20 @@ class InstalacionController extends Controller
         return view('instalacion.cobros.list', compact('instalacion'));
     }
 
-    public function edit_cobro_view(Request $request)
+    public function add_cobro_view(Request $request)
     {
         $cobro = Cobro::find($request->id);
 
-        return view('instalacion.cobros.edit', compact('cobro'));
+        return view('instalacion.cobros.add', compact('cobro'));
+    }
+
+    public function add_cobro(Request $request)
+    {
+        $data = $request->all();
+        
+        Cobro::create($data);
+
+        return redirect("/{$request->slug_instalacion}/admin/cobro");
     }
 
     public function edit_cobro(Request $request)
@@ -716,5 +725,12 @@ class InstalacionController extends Controller
         $cobro->update($data);
 
         return redirect("/{$request->slug_instalacion}/admin/users/{$cobro->user->id}/ver");
+    }
+
+    public function delete_cobro(Request $request)
+    {
+        Cobro::find($request->id)->delete();
+
+        return redirect()->back();
     }
 }
