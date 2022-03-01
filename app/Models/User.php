@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'cuota',
         'rol',
+        'aprobado',
         'tlfno',
         'max_reservas_tipo_espacio',
     ];

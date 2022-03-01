@@ -77,11 +77,14 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
     
         Route::prefix('users')->group(function () {
             Route::get('/', 'InstalacionController@users');
+            Route::get('/novalid', 'InstalacionController@users_no_valid');
             Route::get('add', 'InstalacionController@add_user_view');
             Route::post('add/annadir', 'InstalacionController@add_user')->name('add_user');
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'InstalacionController@edit_user_view');
                 Route::post('/', 'InstalacionController@editar_user');
+                Route::get('/validar', 'InstalacionController@validar_user');
+                Route::get('/borrar-permanente', 'InstalacionController@borrar_permanente_user');
                 Route::get('/ver', 'InstalacionController@ver_user');
                 Route::get('/cobro/add', 'InstalacionController@user_add_cobro_view');
                 Route::post('/cobro/add', 'InstalacionController@user_add_cobro');

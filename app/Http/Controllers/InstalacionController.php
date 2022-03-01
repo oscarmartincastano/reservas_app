@@ -590,6 +590,27 @@ class InstalacionController extends Controller
         return view('instalacion.users.list', compact('instalacion'));
     }
 
+    public function users_no_valid() {
+        $instalacion = auth()->user()->instalacion;
+        $users = User::where('aprobado', null)->get();
+        return view('instalacion.users.list_no_valid', compact('instalacion', 'users'));
+    }
+
+    public function validar_user(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->update(['aprobado' => date('Y-m-d H:i:s')]);
+        
+        return redirect()->back();
+    }
+
+    public function borrar_permanente_user(Request $request)
+    {
+        DB::table('users')->where('id', $request->id)->delete();
+        
+        return redirect()->back();
+    }
+
     public function add_user_view(Request $request)
     {
         $instalacion = auth()->user()->instalacion;

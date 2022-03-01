@@ -26,7 +26,7 @@
                     <div class="card-body">
                         
                         @if (count(auth()->user()->instalacion->users_sin_validar))
-                            <a href="/{{ request()->slug_instalacion }}/admin/users/novalid" class="btn btn-info">Usuarios no aprobados</a>
+                            <a href="#" class="btn btn-info">Usuarios no aprobados</a>
                         @endif
                         <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover" id="table-users">
@@ -40,15 +40,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($instalacion->users as $item)
+                                @foreach ($users as $item)
                                     <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->tlfno }}</td>
                                         <td>{{ $item->rol }}</td>
                                         <td>
-                                            <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a>
-                                            @if ($item->id != auth()->user()->id) <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar" class="btn-activate btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}" onclick="return confirm('¿Estás seguro que quieres {{ !$item->deleted_at ? 'desactivar' : 'activar' }} este usuario?');" title="{{ !$item->deleted_at ? 'Desactivar' : 'Activar' }} usuario"><i data-feather="power"></i></a>@endif
+                                            <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/validar" class="btn-activate btn btn-success" onclick="return confirm('¿Estás seguro que quieres validar este usuario?');" title="Validar usuario">Validar</a>
+                                            <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/borrar-permanente" class="btn-activate btn btn-danger" onclick="return confirm('¿Estás seguro que quieres borrar este usuario?');" title="Borrar usuario">Borrar</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -62,25 +62,4 @@
         
     </div>
 </div>
-@endsection
-
-@section('script')
-    <script>
-        $(document).ready(function () {
-            $('#table-users').DataTable({
-                "info": false,
-                "paging": false,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                },
-                "order": [[ 3, "asc" ]]
-            });
-
-            $('.clickable').click(function(e) {
-                if (e.target.tagName == 'TD') {
-                    window.location = $(this).data("href");
-                }
-            });
-        });
-    </script>
 @endsection
