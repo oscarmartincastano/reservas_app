@@ -30,7 +30,9 @@
                             </div>
                             <div class="card-header border-bottom text-center">
                                 <div class="mb-3 mx-auto">
-                                    <img class="rounded-circle" src="{{ asset('img/assets/user-default.png') }}" alt="User Avatar" width="110">
+                                    <a href="/{{ request()->slug_instalacion }}/admin/users/{{ $user->id }}/cambiar-foto" style="opacity: 1">
+                                        <img class="rounded-circle" src="{{ asset('img/assets/user-default.png') }}" alt="User Avatar" width="110">
+                                    </a>
                                 </div>
                                 <h4 class="mb-0">{{ $user->name }}</a></h4>
                             </div>

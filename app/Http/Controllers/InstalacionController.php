@@ -667,6 +667,13 @@ class InstalacionController extends Controller
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
     }
 
+    public function cambiar_foto_user(Request $request)
+    {
+        $user = User::find($request->id);
+        
+        return view('instalacion.users.change_photo', compact('user'));
+    }
+
     public function ver_user(Request $request)
     {
         $user = User::withTrashed()->find($request->id);
@@ -701,7 +708,7 @@ class InstalacionController extends Controller
 
     public function add_cobro_view(Request $request)
     {
-        $cobro = Cobro::find($request->id);
+        $instalacion = auth()->user()->instalacion;
 
         return view('instalacion.cobros.add', compact('cobro'));
     }
@@ -713,6 +720,13 @@ class InstalacionController extends Controller
         Cobro::create($data);
 
         return redirect("/{$request->slug_instalacion}/admin/cobro");
+    }
+
+    public function edit_cobro_view(Request $request)
+    {
+        $cobro = Cobro::find($request->id);
+
+        return view('instalacion.cobros.edit', compact('cobro'));
     }
 
     public function edit_cobro(Request $request)

@@ -83,6 +83,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'InstalacionController@edit_user_view');
                 Route::post('/', 'InstalacionController@editar_user');
+                Route::get('/cambiar-foto', 'InstalacionController@cambiar_foto_user');
                 Route::get('/validar', 'InstalacionController@validar_user');
                 Route::get('/borrar-permanente', 'InstalacionController@borrar_permanente_user');
                 Route::get('/ver', 'InstalacionController@ver_user');
