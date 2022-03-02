@@ -710,7 +710,7 @@ class InstalacionController extends Controller
     {
         $instalacion = auth()->user()->instalacion;
 
-        return view('instalacion.cobros.add', compact('cobro'));
+        return view('instalacion.cobros.add');
     }
 
     public function add_cobro(Request $request)
