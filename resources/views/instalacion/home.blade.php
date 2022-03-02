@@ -450,8 +450,11 @@
                                                 string += `<div class="mt-2"><strong><i class="fas fa-plus mr-1"></i> ${element.campo.label}: </strong>${element.valor}</div>`;
                                             });
                                             if (reserva.observaciones) {
-                                                    string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
-                                                }
+                                                string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
+                                            }
+                                            if (reserva.reserva_periodica) {
+                                                string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i> Reserva periódica</strong></div>`;
+                                            }
                                             if (reserva.creado_por == 'admin') {
                                                 string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i> Observaciones admin: </strong>creada por admin`;
                                             }

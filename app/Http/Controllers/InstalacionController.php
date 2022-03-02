@@ -177,9 +177,9 @@ class InstalacionController extends Controller
             }
         }
 
-        Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
+        /* Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
         Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
-
+ */
         return redirect($request->slug_instalacion . '/admin');
     }
 
@@ -299,7 +299,7 @@ class InstalacionController extends Controller
     {
         Reservas_periodicas::find($request->id)->delete();
 
-        Reserva::where('reserva_periodica', $request->id)->delete();
+        Reserva::where([['reserva_periodica', $request->id], ['fecha', '>', date('Y-m-d')]])->delete();
         
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
     }
