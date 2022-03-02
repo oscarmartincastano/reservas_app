@@ -142,6 +142,12 @@
                 modal.find('.user span').html($(this).data('user'));
                 modal.find('form').attr('action', `/{{ request()->slug_instalacion }}/admin/reservas/validar/${$(this).data('reserva')}`);
             });
+
+            $('#modalSlideUp').on('click', '.submit-form-validar', function (e) {
+                e.preventDefault();
+                $(this).parent().find('input').val($(this).data('accion'));
+                $('#modalSlideUp').find('form').submit();
+            });
         });
     </script>
 @endsection
