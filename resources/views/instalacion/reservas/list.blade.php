@@ -132,7 +132,7 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
-                "order": [[ 6, "asc"], [ 1, "asc"], [ 2, "desc"]]
+                "order": [[ 6, "desc"], [ 1, "asc"], [ 2, "desc"]]
             });
 
             $('.btn-accion-reserva').click(function (e) {
