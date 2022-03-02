@@ -18,21 +18,25 @@
                     <div class="card-body">
                         <form method="post" role="form">
                             @csrf
-                            <div class="form-group row">
+                            <div class="form-group ">
                                 <label>Concepto</label>
                                 <input value="{{ $cobro->concepto }}" name="concepto" type="text" placeholder="Concepto..." class="form-control" required>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group ">
                                 <label>Fecha</label>
                                 <input value="{{ $cobro->fecha }}" name="fecha" type="date" placeholder="Fecha..." class="form-control" required>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group ">
                                 <label>Forma</label>
                                 <input value="{{ $cobro->forma }}" name="forma" type="text" placeholder="Forma..." class="form-control">
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group ">
                                 <label>Cantidad (€)</label>
                                 <input value="{{ $cobro->cantidad }}" name="cantidad" type="number" placeholder="Cantidad..." class="form-control">
+                            </div>
+                            <div class="form-group ">
+                                <label>Notas</label>
+                                <textarea name="notas" id="notas" rows="4" class="form-control" placeholder="Notas...">{{ $cobro->notas }}</textarea>
                             </div>
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Editar</button>
                         </form>

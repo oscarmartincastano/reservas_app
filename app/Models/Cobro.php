@@ -20,6 +20,7 @@ class Cobro extends Model
         'forma',
         'cantidad',
         'id_user',
+        'notas',
     ];
 
     public function user()

@@ -299,7 +299,7 @@ class InstalacionController extends Controller
     {
         Reservas_periodicas::find($request->id)->delete();
 
-        Reserva::where([['reserva_periodica', $request->id], ['fecha', '>', date('Y-m-d')]])->delete();
+        Reserva::where([['reserva_periodica', $request->id], ['fecha', '>=', date('Y-m-d')]])->delete();
         
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
     }

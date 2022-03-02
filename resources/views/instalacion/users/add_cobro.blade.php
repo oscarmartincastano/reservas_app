@@ -34,6 +34,10 @@
                                 <label>Cantidad (€)</label>
                                 <input name="cantidad" type="number" placeholder="Cantidad..." class="form-control">
                             </div>
+                            <div class="form-group ">
+                                <label>Notas</label>
+                                <textarea name="notas" id="notas" rows="4" class="form-control" placeholder="Notas..."></textarea>
+                            </div>
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Añadir</button>
                         </form>
                     </div>
