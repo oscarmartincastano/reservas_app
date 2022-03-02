@@ -94,8 +94,12 @@
                                                 @else
                                                     Pasado
                                                 @endif
-                                            @elseif($item->estado = 'canceled')
+                                            @endif
+                                            @if($item->estado == 'canceled')
                                                 <span class="text-danger">Cancelada</span>
+                                            @endif
+                                            @if($item->estado == 'pasado')
+                                                Pasado
                                             @endif
                                         </td>
                                         <td>
