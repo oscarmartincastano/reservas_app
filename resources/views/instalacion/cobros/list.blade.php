@@ -43,7 +43,7 @@
                                         <td>{{ $item->concepto }}</td>
                                         <td>{{ $item->cantidad }}</td>
                                         <td>
-                                            <a href="/{{ request()->slug_instalacion }}/admin/cobros/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a> <a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}/delete" onclick="return confirm('¿Estás seguro que quieres borrar este cobro?')" class="btn btn-danger"><i data-feather="trash"></i></a>
+                                            <a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a> <a href="/{{ request()->slug_instalacion }}/admin/cobro/{{ $item->id }}/delete" onclick="return confirm('¿Estás seguro que quieres borrar este cobro?')" class="btn btn-danger"><i data-feather="trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
