@@ -409,17 +409,6 @@ class InstalacionController extends Controller
 
         $pista = Pista::create($data);
 
-        if (isset($request->desactivaciones)) {
-            foreach ($request->desactivaciones as $item) {
-                Desactivaciones_periodicas::create([
-                    'id_pista' => $pista->id,
-                    'dias' => serialize($item['dias']),
-                    'hora_inicio' => $item['hora_inicio'],
-                    'hora_fin' => $item['hora_fin']
-                ]);
-            }
-        }
-
         return redirect("/" . auth()->user()->instalacion->slug . "/admin/pistas");
     }
 

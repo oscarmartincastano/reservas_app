@@ -223,9 +223,13 @@
                                 </select>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-2 control-label">Días de antelación</label>
+                                <input name="max_dias_antelacion" type="text" placeholder="Días máximos de antelación..." class="form-control col-md-10" value="{{ $pista->max_dias_antelacion }}" required>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-2 control-label">Antelación de la reserva (horas)</label>
                                 <input class="form-control col-md-10" type="number" name="atenlacion_reserva"
-                                    id="atenlacion_reserva" value="{{ $pista->atenlacion_reserva }}">
+                                    id="atenlacion_reserva" value="{{ $pista->atenlacion_reserva }}" required>
                                 {{-- <select class="form-control col-md-10" name="atenlacion_reserva" id="">
                                     @for ($i = 1; $i < 30; $i++)
                                         <option value="{{ $i }}" @if ($pista->atenlacion_reserva == $i) selected @endif>{{ $i }} días</option>

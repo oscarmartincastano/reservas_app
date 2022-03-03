@@ -95,6 +95,10 @@
                                 <input name="reservas_por_tramo" type="number" value="1"  min="1" placeholder="Reservas por tramo..."
                                     class="form-control col-md-10">
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Días de antelación</label>
+                                <input name="max_dias_antelacion" type="text" placeholder="Días máximos de antelación..." class="form-control col-md-10" required>
+                            </div>
                             {{-- <div class="form-group row">
                                 <label class="col-md-2 control-label">Precio por tramo (€)</label>
                                 <input name="precio_por_tramo" type="number" step=".01" placeholder="Precio..."

@@ -26,6 +26,7 @@ class Pista extends Model
         'atenlacion_reserva',
         'allow_more_res',
         'reservas_por_tramo',
+        'max_dias_antelacion',
     ];
 
     protected $appends = ['horario_deserialized', 'all_campos_personalizados'];
@@ -151,6 +152,7 @@ class Pista extends Model
     public function check_reserva_valida($timestamp)
     {
         if (
+            strtotime(date('Y-m-d', $timestamp)) < strtotime(date('Y-m-d') . " +{$this->max_dias_antelacion} days") &&
             !$this->check_desactivado($timestamp) && 
             $this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && 
             new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))
