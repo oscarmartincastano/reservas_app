@@ -27,7 +27,15 @@
                                 <input value="{{ $user->email }}" name="email" type="email" placeholder="Email..." class="form-control col-md-10" required>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Teléfono</label>
+                                <label class="col-md-2 control-label">Cuota (opcional)</label>
+                                <input value="{{ $user->cuota }}" name="cuota" type="text" placeholder="Cuota..." class="form-control col-md-10">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Fecha de nacimiento (opcional)</label>
+                                <input value="{{ $user->date_birth }}" name="date_birth" type="date" placeholder="Fecha de nacimiento..." class="form-control col-md-10">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Teléfono (opcional)</label>
                                 <input value="{{ $user->tlfno }}" name="tlfno" type="text" placeholder="Teléfono..." class="form-control col-md-10">
                             </div>
                             <div class="form-group row">

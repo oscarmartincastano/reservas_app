@@ -610,6 +610,7 @@ class InstalacionController extends Controller
         $data = $request->all();
         $data['password'] = \Hash::make($request->password);
         $data['aprobado'] = date('Y-m-d H:i:s');
+        $data['rol'] = 'user';
         
         User::where('id', $request->id)->create($data);
 
