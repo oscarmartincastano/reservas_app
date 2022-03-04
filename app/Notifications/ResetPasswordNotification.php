@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
+use App\Models\User;
 
 class ResetPasswordNotification extends Notification
 {
@@ -62,8 +63,9 @@ class ResetPasswordNotification extends Notification
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $this->token);
         }
+        $user = User::where('email', $notifiable->getEmailForPasswordReset())->first();
 
-        return $this->buildMailMessage($this->resetUrl($notifiable));
+        return $this->buildMailMessage($this->resetUrl($notifiable), $user);
     }
 
     /**
@@ -72,14 +74,9 @@ class ResetPasswordNotification extends Notification
      * @param  string  $url
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    protected function buildMailMessage($url)
+    protected function buildMailMessage($url, $user)
     {
-        return (new MailMessage)
-            ->subject(Lang::get('Reset Password Notification'))
-            ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
-            ->action(Lang::get('Reset Password'), $url)
-            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+        return (new MailMessage)->view('mails.resetpassword', ['url' => $url, 'user' => $user]);
     }
 
     /**
@@ -94,9 +91,12 @@ class ResetPasswordNotification extends Notification
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
 
-        return url(route('password.reset', [
+        $user = User::where('email', $notifiable->getEmailForPasswordReset())->first();
+
+        return url(route('password.reset_user_instalacion', [
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
+            'slug_instalacion' => $user->instalacion->slug
         ], false));
     }
 

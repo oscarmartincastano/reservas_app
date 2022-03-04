@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -32,6 +33,14 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
     Route::post('/register', [RegisteredUserController::class, 'store_instalacion'])
                 ->middleware('guest');
+
+   Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+                ->middleware('guest')
+                ->name('password.reset_user_instalacion');
+
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+                ->middleware('guest')
+                ->name('password.update');
 
     Route::middleware(['auth_instalacion'])->group(function () {
         Route::get('/mis-reservas', 'UserController@mis_reservas');
