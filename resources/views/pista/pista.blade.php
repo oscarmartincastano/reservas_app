@@ -37,6 +37,25 @@
 @endsection
 
 @section('content')
+@if (!auth()->user())
+<div class="modal" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="top:25vh">
+        <div class="modal-header">
+            <h4 class="h4 mb-0">Aviso</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="mb-4">Si ya tenías perfil en la aplicación anterior establece una nueva contraseña desde este enlace para poder acceder y realizar reservas.</p>
+          <p class="text-center"><a href="/{{ request()->slug_instalacion }}/forgot-password" class="btn btn-primary">Recuperar contraseña</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+@endif
+
     <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
         <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ strtolower($pista_selected->tipo) }}.jpg) center;
@@ -142,7 +161,7 @@
             $('.btn-no-disponible').click(function (e) { 
                 e.preventDefault();
             });
-
+            $("#myModal").modal('show');
             var input_date = $('#dia').pickadate({
                 editable: true,
                 selectYears: 100,
