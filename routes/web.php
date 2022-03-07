@@ -19,9 +19,6 @@ require __DIR__.'/auth.php';
 |
 */
 
-Route::get('/cambiar-reservas-hora', 'InstalacionController@cambiosreservashora');
-
-
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login_instalacion');
