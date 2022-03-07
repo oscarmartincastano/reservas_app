@@ -38,9 +38,9 @@
 
 @section('content')
 @if (!auth()->user())
-<div class="modal" id="myModal" tabindex="-1" role="dialog">
+<div class="modal p-0" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-      <div class="modal-content" style="top:25vh">
+      <div class="modal-content m-0" style="top:25vh">
         <div class="modal-header">
             <h4 class="h4 mb-0">Aviso</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
