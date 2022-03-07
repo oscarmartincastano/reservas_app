@@ -3,7 +3,7 @@
             <a href="#" class="btn-link toggle-sidebar d-lg-none  pg-icon btn-icon-link" data-toggle="sidebar">
                 menu</a>
             <!-- END MOBILE SIDEBAR TOGGLE -->
-            <div class="">
+            {{-- <div class="">
                 <div class="brand inline">
                     <img src="/simply_white/assets/img/logo.png" alt="logo" data-src="/simply_white/assets/img/logo.png"
                         data-src-retina="/simply_white/assets/img/logo_2x.png" width="78" height="22">
@@ -11,7 +11,7 @@
                 <a href="#" class="search-link d-none d-lg-inline-block d-xl-inline-block" data-toggle="search"><i
                         class="pg-icon">search</i>Type anywhere to <span
                         class="bold">search</span></a>
-            </div>
+            </div> --}}
             {{-- <div class="d-flex align-items-center">
                 
                 
