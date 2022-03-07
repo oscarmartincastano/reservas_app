@@ -438,7 +438,7 @@
                                         intervalo.reservas.forEach(reserva => {
                                             console.log(reserva);
                                             string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
-                                                        <h4><a href="#">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
+                                                        <h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
                                             if (reserva.estado == 'active') {
                                                 string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
                                             }else if (reserva.estado == 'canceled') {

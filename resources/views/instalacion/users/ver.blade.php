@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
+                    {{-- <div class="col-lg-12">
                         <div class="card card-default">
                             <div class="card-header  separator">
                                 <div class="card-title">Reservas máximas permitidas para este cliente</div>
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-lg-12">
                         <div class="card card-default">
                             <div class="card-header  separator">
