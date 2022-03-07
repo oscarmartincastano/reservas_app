@@ -26,7 +26,7 @@
                     <div class="card-body">
                         
                         @if (count(auth()->user()->instalacion->users_sin_validar))
-                            <a href="/{{ request()->slug_instalacion }}/admin/users/novalid" class="btn btn-info">Usuarios no aprobados</a>
+                            <a href="/{{ request()->slug_instalacion }}/admin/users/novalid" class="btn btn-info" style="padding-right: 40px">Usuarios no aprobados <mark class="mark" style="border: 0; top:2px;left:172px;">4</mark></a>
                         @endif
                         <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-condensed table-hover" id="table-users">
