@@ -76,7 +76,7 @@
                     @foreach (auth()->user()->reservas as $item)
                        <tr>
                            <td>{{ date('d/m/Y', $item->timestamp) }}</td>
-                           <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->start)->formatLocalized('%A') }}</td>
+                           <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->fecha)->formatLocalized('%A') }}</td>
                            <td>{{ date('H:i', $item->timestamp) }}</td>
                            <td>{{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
                            <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
