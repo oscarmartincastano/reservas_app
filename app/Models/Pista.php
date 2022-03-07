@@ -138,11 +138,20 @@ class Pista extends Model
         $desactivaciones_periodicas_dia = $this->check_desactivacion_periodica(date('Y-m-d', $timestamp));
         if ($desactivaciones_periodicas_dia) {
             foreach ($desactivaciones_periodicas_dia as $desactivacion) {
-                if (
-                    strtotime(date('H:i', $timestamp)) >= strtotime($desactivacion->hora_inicio) && 
-                    strtotime(date('H:i', $timestamp)) < strtotime($desactivacion->hora_fin)
-                   ) {
-                    return true;
+                if ((strtotime(date('Y-m-d', $timestamp)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $timestamp)) <= strtotime('2022-10-30 00:00'))) {
+                    if (
+                        strtotime(date('H:i', $timestamp)) -3600 >= strtotime($desactivacion->hora_inicio) && 
+                        strtotime(date('H:i', $timestamp)) -3600 < strtotime($desactivacion->hora_fin)
+                    ) {
+                        return true;
+                    }
+                }else {
+                    if (
+                        strtotime(date('H:i', $timestamp)) >= strtotime($desactivacion->hora_inicio) && 
+                        strtotime(date('H:i', $timestamp)) < strtotime($desactivacion->hora_fin)
+                    ) {
+                        return true;
+                    }
                 }
             }
         }
