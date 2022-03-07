@@ -204,6 +204,12 @@
                                             </div>
                                         </div>
                                 @endforeach
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label py-0">Enviar notificación correo:</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" name="observaciones" rows="3"></textarea>
+                                    </div>
+                                </div>
                                 <div class="form-group row mt-4">
                                     <label class="col-sm-3 col-form-label py-0"></label>
                                     <div class="col-sm-9 text-right d-flex justify-content-end" style="gap: 14px">

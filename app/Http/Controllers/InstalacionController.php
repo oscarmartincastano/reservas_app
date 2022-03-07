@@ -273,7 +273,10 @@ class InstalacionController extends Controller
                         if (
                             strtotime(date('H:i', $hora)) >= strtotime($request->hora_inicio) && 
                             strtotime(date('H:i', $hora)) < strtotime($request->hora_fin)
-                           ) {
+                           ) { 
+                               if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
+                                    $hora = $hora + 3600;
+                               }
                             Reserva::create([
                                 'id_pista' => $pista->id,
                                 'id_usuario' => $request->user_id,
