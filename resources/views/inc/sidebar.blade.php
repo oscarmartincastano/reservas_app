@@ -52,7 +52,7 @@
             </li>
             <li class="{{ request()->is(request()->slug_instalacion . '/admin/users*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/users" class="detailed">
-                    <span class="title">Usuarios @if (count(auth()->user()->instalacion->users_sin_validar))<mark class="mark">{{ count(auth()->user()->instalacion->users_sin_validar) }}</mark>@endif</span>
+                    <span class="title">Usuarios {{-- @if (count(auth()->user()->instalacion->users_sin_validar))<mark class="mark">{{ count(auth()->user()->instalacion->users_sin_validar) }}</mark>@endif --}}</span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
             </li>
