@@ -177,8 +177,8 @@ class InstalacionController extends Controller
             }
         }
 
-        Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
-        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
+        /* Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
+        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva)); */
 
         return redirect($request->slug_instalacion . '/admin');
     }
@@ -231,7 +231,7 @@ class InstalacionController extends Controller
 
     public function listado_todas_reservas(Request $request)
     {
-        $reservas = Reserva::where('reserva_periodica', '!=', 0)->whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+        $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
 
         return view('instalacion.reservas.list', compact('reservas'));
     }
