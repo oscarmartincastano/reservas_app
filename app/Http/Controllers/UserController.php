@@ -28,24 +28,6 @@ class UserController extends Controller
 
     public function pistas(Request $request) {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
-        if (isset($request->semana)) {
-            $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
-            $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
-            $plus_date->add(new \DateInterval('P7D'));
-        }elseif (isset($request->dia)) {
-            $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
-            $current_date = new DateTime($fecha);
-            $plus_date = new DateTime($fecha);
-            $plus_date->add(new \DateInterval('P7D'));
-        }else{
-            $current_date = new DateTime();
-            $plus_date = new DateTime();
-            $plus_date->add(new \DateInterval('P7D'));
-        }
-
-        $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
-
-        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
 
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);
@@ -56,6 +38,25 @@ class UserController extends Controller
                 abort(404);
             }
         }
+
+        if (isset($request->semana)) {
+            $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
+            $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
+            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+        }elseif (isset($request->dia)) {
+            $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
+            $current_date = new DateTime($fecha);
+            $plus_date = new DateTime($fecha);
+            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+        }else{
+            $current_date = new DateTime();
+            $plus_date = new DateTime();
+            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+        }
+
+        $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
+
+        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
 
         return view('pista.pista', compact('period', 'pistas', 'pista_selected'));
     }
