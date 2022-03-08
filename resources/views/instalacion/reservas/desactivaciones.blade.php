@@ -25,7 +25,7 @@
                                     <td>Fecha fin</td>
                                     <td>Día de la semana</td>
                                     <td>Horas</td>
-                                    {{-- <td>#</td> --}}
+                                    <td>#</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,11 +64,11 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $item->hora_inicio }} - {{ $item->hora_fin }}</td>
-                                        {{-- <td>
-                                            <a class="btn btn-primary text-white" title="Editar">
-                                                <i class="fas fa-edit"></i>
+                                        <td>
+                                            <a href="/{{ request()->slug_instalacion }}/admin/reservas/desactivaciones/{{ $item->id }}/borrar" onclick="return confirm('¿Estás seguro que quieres borrar todas estas desactivaciones periódicas?');" class="btn btn-danger text-white" title="Borrar estas reservas periódicas">
+                                                <i class="fas fa-trash"></i>
                                             </a>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -345,6 +345,13 @@ class InstalacionController extends Controller
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/desactivaciones');
     }
 
+    public function borrar_desactivaciones_periodicas(Request $request)
+    {
+        Desactivaciones_periodicas::find($request->id)->delete();
+
+        return back();
+    }
+
     public function edit_info(Request $request) {
         $instalacion = auth()->user()->instalacion->toArray();
 

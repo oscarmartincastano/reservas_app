@@ -33,7 +33,7 @@
                                 @foreach ($reservas_periodicas as $item)
                                     @if (strtotime(date('Y-m-d')) < strtotime($item->fecha_fin))
                                         <tr>
-                                            <td>{{ $item->user->name }}</td>
+                                            <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a></td>
                                             <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->fecha_inicio)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->fecha_fin)) }}</td>

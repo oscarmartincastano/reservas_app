@@ -82,7 +82,7 @@
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
-                                        <td>{{ $item->user->name }}</td>
+                                        <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a></td>
                                         <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ date('H:i', $item->timestamp) }} - {{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
                                         <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}</td>

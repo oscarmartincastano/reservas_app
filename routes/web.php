@@ -61,7 +61,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::get('/desactivaciones', 'InstalacionController@desactivaciones_periodicas');
             Route::get('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas_view');
             Route::post('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas')->name('add_desactivacion');
-
+            Route::get('/desactivaciones/{id}/borrar', 'InstalacionController@borrar_desactivaciones_periodicas');
 
             Route::get('/{fecha}', 'InstalacionController@reservas_dia');
             Route::post('/validar/{id}', 'InstalacionController@validar_reserva');

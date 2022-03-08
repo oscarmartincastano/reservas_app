@@ -39,7 +39,7 @@
                             <tbody>
                                 @foreach ($instalacion->cobros as $item)
                                     <tr>
-                                        <td>{{ $item->user->name }}</td>
+                                        <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a></td>
                                         <td>{{ $item->fecha }}</td>
                                         <td>{{ $item->concepto }}</td>
                                         <td>{{ $item->cantidad }}€</td>
