@@ -42,18 +42,37 @@ class UserController extends Controller
         }
 
         if (isset($request->semana)) {
-            $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
-            $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
-            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            if ($pista_selected->max_dias_antelacion > 10) {
+                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+                $plus_date->add(new \DateInterval('P8D'));
+            } else {
+                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
+                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
+                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            }
         }elseif (isset($request->dia)) {
-            $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
-            $current_date = new DateTime($fecha);
-            $plus_date = new DateTime($fecha);
-            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            if ($pista_selected->max_dias_antelacion > 10) {
+                $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
+                $current_date = new DateTime($fecha);
+                $plus_date = new DateTime($fecha);
+                $plus_date->add(new \DateInterval('P7D'));
+            } else {
+                $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
+                $current_date = new DateTime($fecha);
+                $plus_date = new DateTime($fecha);
+                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            }
         }else{
-            $current_date = new DateTime();
-            $plus_date = new DateTime();
-            $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            if ($pista_selected->max_dias_antelacion > 10) {
+                $current_date = new DateTime();
+                $plus_date = new DateTime();
+                $plus_date->add(new \DateInterval('P7D'));
+            } else {
+                $current_date = new DateTime();
+                $plus_date = new DateTime();
+                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+            }
         }
 
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
