@@ -1,3 +1,4 @@
+@section('title', 'Iniciar sesión')
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
