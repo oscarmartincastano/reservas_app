@@ -207,7 +207,12 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label py-0">Enviar notificación correo:</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="observaciones" rows="3"></textarea>
+                                        <div class="form-check complete">
+                                            <input type="checkbox" id="sendmail" name="sendmail">
+                                            <label for="sendmail">
+                                              Enviar notificación
+                                            </label>
+                                          </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mt-4">

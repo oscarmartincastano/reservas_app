@@ -177,8 +177,10 @@ class InstalacionController extends Controller
             }
         }
 
-        /* Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
-        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva)); */
+        if (isset($request->sendmail)) {
+            Mail::to($reserva->user->email)->send(new ReservaAdmin($reserva->user, $reserva));
+            Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
+        }
 
         return redirect($request->slug_instalacion . '/admin');
     }
