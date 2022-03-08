@@ -331,8 +331,8 @@
                     <div class="card-body">
                         <div class="row d-flex justify-content-between mb-2">
                             <div class="next-prev-week">
-                                <div>
-                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
+                                <div>{{-- {{ dd(request()->semana) }} --}}
+                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
                                     <div class="exmp-wrp">
                                         <button class="btn-week">{!! (!isset(request()->semana) && !isset(request()->week)) || (request()->semana == 0 && !isset(request()->week)) ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
                                         <div class="btn-wrp">
@@ -342,7 +342,7 @@
                                         </div>
                                     </div>
                                     {{-- <a href="#" class="btn btn-select-week">{!! request()->semana == null || request()->semana == 0 ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!} </a> --}}
-                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}" class="btn btn-next">></a>
+                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}" class="btn btn-next">></a>
                                 </div>
                             </div>
                         </div>

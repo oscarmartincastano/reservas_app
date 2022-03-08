@@ -44,14 +44,22 @@ class InstalacionController extends Controller
       
     public function index(Request $request) {
         $instalacion = auth()->user()->instalacion;
-
+        
         if (isset($request->semana)) {
-            $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+            if (isset($request->week)) {
+                $semana = $request->week;
+                $d = (int)substr($semana, 6) * 7;
+                $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
+                
+                $semana = $this->rangeWeek(date("Y-m-d", strtotime($date->format('Y-m-d')."+{$request->semana} weeks")));
+            }else {
+                $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+            }
         }else{
             $semana = $this->rangeWeek(date('Y-m-d'));
         }
-        
-        if (isset($request->week)) {
+
+        if (isset($request->week) && !isset($request->semana)) {
             $semana = $request->week;
             $d = (int)substr($semana, 6) * 7;
             $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
