@@ -29,6 +29,8 @@ class UserController extends Controller
     public function pistas(Request $request) {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
 
+        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
+
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);
         } else{
@@ -56,7 +58,6 @@ class UserController extends Controller
 
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
-        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
 
         return view('pista.pista', compact('period', 'pistas', 'pista_selected'));
     }
