@@ -14,10 +14,10 @@
         }
 
         .btn-dia .numero.hoy{
-            border: 2px solid #6dc3ee;
+            border: 2px solid #6dc3ee !important;
         }
         .btn-dia:hover .numero.hoy{
-            background: #6dc3ee;
+            background: #6dc3ee !important;
             color: white;
         }
 
