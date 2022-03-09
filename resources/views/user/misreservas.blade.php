@@ -60,7 +60,7 @@
     <div class="container mt-3">
         <h1 class="title text-center">Mis Reservas</h1>
         <div class="list-reservas row">
-            <table class="table table-reservas">
+            <table class="table table-reservas table-responsive w-100" style="overflow-x: auto !important;-webkit-overflow-scrolling: touch !important;">
                 <thead>
                     <tr>
                         <td>Fecha de alquiler</td>
@@ -80,9 +80,23 @@
                            <td>{{ date('H:i', $item->timestamp) }}</td>
                            <td>{{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
                            <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
-                           <td>{{ $item->estado == 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
                            <td>
-                                @if (auth()->user()->instalacion->configuracion->allow_cancel && $item->estado == 'active')
+                            @if ($item->estado  == 'active')
+                                @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
+                                    Pendiente
+                                @else
+                                    Pasado
+                                @endif
+                            @endif
+                            @if($item->estado == 'canceled')
+                                <span class="text-danger">Cancelada</span>
+                            @endif
+                            @if($item->estado == 'pasado')
+                                Pasado
+                            @endif
+                           </td>
+                           <td>
+                                @if ($item->estado  == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                     <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
                                         @csrf
                                     </form>

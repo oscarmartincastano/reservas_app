@@ -104,7 +104,7 @@
                 </a>
             </div>
 
-            <div id="navbarBasicExample" class="navbar-menu">
+            <div id="navbarBasicExample" class="navbar-menu d-none">
                 <div class="navbar-end">
                     <a href="/{{ request()->slug_instalacion }}"
                         class="navbar-item {{ request()->is(request()->slug_instalacion) ? 'active' : '' }}"> Inicio
