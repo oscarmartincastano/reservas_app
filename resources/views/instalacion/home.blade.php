@@ -334,7 +334,7 @@
                                 <div>{{-- {{ dd(request()->semana) }} --}}
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
                                     <div class="exmp-wrp">
-                                        <button class="btn-week">{!! (!isset(request()->semana) && !isset(request()->week)) || (request()->semana == 0 && !isset(request()->week) || ) ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
+                                        <button class="btn-week">{!! (!isset(request()->semana) && !isset(request()->week)) || (request()->semana == 0 && !isset(request()->week)) ? 'Semana actuals' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!}</button>
                                         <div class="btn-wrp">
                                             <form action="#" method="get">
                                                 <input type="week" name="week" id="week" value="{{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->format('Y').'-W'.\Carbon\Carbon::parse(iterator_to_array($period)[0])->format('W') }}" class="btn-clck">
