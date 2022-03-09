@@ -190,7 +190,10 @@ class InstalacionController extends Controller
             Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
         }
 
-        return redirect($request->slug_instalacion . '/admin');
+        $date = new DateTime(date('Y-m-d', $request->timestamp));
+        $week = $date->format("Y") . '-' . 'W' . $date->format("W");
+        
+        return redirect($request->slug_instalacion . '/admin/reservas?week='. $week);
     }
 
     public function desactivar_tramo(Request $request) {
@@ -201,7 +204,7 @@ class InstalacionController extends Controller
             'timestamp' => $request->timestamp
         ]);
 
-        return redirect($request->slug_instalacion . '/admin');
+        return redirect()->back();
     }
 
     public function activar_tramo(Request $request) {
@@ -224,7 +227,7 @@ class InstalacionController extends Controller
             }
         }
 
-        return redirect($request->slug_instalacion . '/admin');
+        return redirect()->back();
     }
 
     public function activar_dia(Request $request) {
@@ -236,7 +239,7 @@ class InstalacionController extends Controller
             }
         }
 
-        return redirect($request->slug_instalacion . '/admin');
+        return redirect()->back();
     }
 
     public function listado_todas_reservas(Request $request)
