@@ -317,7 +317,7 @@
       <!-- /.modal-content -->
     </div>
   </div>
-    <div class="row">
+    <div class="row m-0">
         <div class="col-lg-12 m-b-10">
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
@@ -329,7 +329,7 @@
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
                 <div class="card ">
                     <div class="card-body">
-                        <div class="row d-flex justify-content-between m-0 mb-2">
+                        <div class="row d-flex justify-content-between mb-2">
                             <div class="next-prev-week">
                                 <div>{{-- {{ dd(request()->semana) }} --}}
                                     <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}" class="btn btn-prev"><</a>
