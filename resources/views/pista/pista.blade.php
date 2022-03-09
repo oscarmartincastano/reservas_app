@@ -89,7 +89,7 @@
                                 <form id="form-dia" method="get" action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}">
                                     <div class="input-group diapicker">
                                         <a href="#" class="btn btn-secondary"><i class="fas fa-calendar"></i></a>
-                                        <input type="text" id="dia" class="datepicker date-input form-control" name="dia" value="{{ request()->dia == null ? date('d/m/Y') : request()->dia }}">
+                                        <input type="hidden" id="dia" class="datepicker date-input form-control" name="dia" value="{{ request()->dia == null ? date('d/m/Y') : request()->dia }}">
                                     </div>
                                 </form>
                             </div>
