@@ -663,19 +663,31 @@ class InstalacionController extends Controller
     public function editar_user(Request $request)
     {
         $data = $request->all();
+        $user = User::find($request->id);
 
         array_shift($data);
 
         if (isset($request->max_reservas_tipo_espacio)) {
-            $data['max_reservas_tipo_espacio'] = serialize($request->max_reservas_tipo_espacio);
+            $max_reservas_tipo_espacio = $request->max_reservas_tipo_espacio;
+
+            foreach ($max_reservas_tipo_espacio as $tipo => $value) {
+                if (
+                    isset(unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo]) &&
+                    unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo] == $value
+                    ) {
+                    unset($max_reservas_tipo_espacio[$tipo]);
+                }
+            }
+            
+            $data['max_reservas_tipo_espacio'] = $max_reservas_tipo_espacio ? serialize($max_reservas_tipo_espacio) : null;
         }
 
         if (!isset($request->password)) {
             unset($data['password']);
-            User::where('id', $request->id)->update($data);
+            $user->update($data);
         }else {
             $data['password'] = \Hash::make($request->password);
-            User::where('id', $request->id)->update($data);
+            $user->update($data);
         }
         return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
     }
@@ -692,6 +704,28 @@ class InstalacionController extends Controller
         $user = User::withTrashed()->find($request->id);
 
         return view('instalacion.users.ver', compact('user'));
+    }
+
+    public function update_max_reservas_user(Request $request)
+    {
+        $user = User::find($request->id);
+        
+        $max_reservas_tipo_espacio = $request->max_reservas_tipo_espacio;
+
+        foreach ($max_reservas_tipo_espacio as $tipo => $value) {
+            if (
+                isset(unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo]) &&
+                unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo] == $value
+                ) {
+                unset($max_reservas_tipo_espacio[$tipo]);
+            }
+        }
+
+        $max_reservas_tipo_espacio = $max_reservas_tipo_espacio ? serialize($max_reservas_tipo_espacio) : null;
+
+        $user->update(['max_reservas_tipo_espacio' => $max_reservas_tipo_espacio]);
+
+        return back();
     }
 
     public function user_add_cobro_view(Request $request)

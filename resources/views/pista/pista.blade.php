@@ -37,7 +37,7 @@
 @endsection
 
 @section('content')
-@if (!auth()->user())
+{{-- @if (!auth()->user())
 <div class="modal p-0" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content m-0" style="top:25vh">
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-@endif
+@endif --}}
 
     <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
@@ -161,7 +161,7 @@
             $('.btn-no-disponible').click(function (e) { 
                 e.preventDefault();
             });
-            $("#myModal").modal('show');
+            /* $("#myModal").modal('show');
             var input_date = $('#dia').pickadate({
                 editable: true,
                 selectYears: 100,
@@ -169,7 +169,7 @@
                 format: 'dd/mm/yyyy',
                 min: false,
                 max: false
-            });
+            }); */
 
             var picker = input_date.pickadate('picker');
             $(".diapicker").on("click", function (e) {

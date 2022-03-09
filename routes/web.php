@@ -98,6 +98,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
                 Route::get('/cobro/add', 'InstalacionController@user_add_cobro_view');
                 Route::post('/cobro/add', 'InstalacionController@user_add_cobro');
                 Route::get('/desactivar', 'InstalacionController@desactivar_user');
+                Route::post('/update-maximas-reservas', 'InstalacionController@update_max_reservas_user');
             });
         });
 

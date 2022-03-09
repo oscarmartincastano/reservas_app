@@ -87,24 +87,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    {{-- <div class="col-lg-12">
+                    <div class="col-lg-12">
                         <div class="card card-default">
                             <div class="card-header  separator">
                                 <div class="card-title">Reservas máximas permitidas para este cliente</div>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
-                                    <div class="border p-3">
-                                        @foreach (auth()->user()->instalacion->deportes as $tipo_espacio)
-                                            <label for="max_reservas_tipo_espacio[{{ $tipo_espacio }}]">{{ $tipo_espacio }}</label>
-                                            <input type="number" class="form-control" name="max_reservas_tipo_espacio[{{ $tipo_espacio }}]" id="max_reservas_tipo_espacio[{{ $tipo_espacio }}]"
-                                                value="{{ unserialize($user->max_reservas_tipo_espacio)[$tipo_espacio] ?? (unserialize(auth()->user()->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio] ?? '') }}">
-                                        @endforeach
+                                <form action="/{{ request()->slug_instalacion }}/admin/users/{{ $user->id }}/update-maximas-reservas" method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="border p-3">
+                                            @foreach (auth()->user()->instalacion->deportes as $tipo_espacio)
+                                                <label for="max_reservas_tipo_espacio[{{ $tipo_espacio }}]">{{ $tipo_espacio }}</label>
+                                                <input type="number" class="form-control" name="max_reservas_tipo_espacio[{{ $tipo_espacio }}]" id="max_reservas_tipo_espacio[{{ $tipo_espacio }}]"
+                                                    value="{{ unserialize($user->max_reservas_tipo_espacio)[$tipo_espacio] ?? (unserialize(auth()->user()->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio] ?? '') }}">
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
+                                    <input type="submit" value="Editar" class="btn btn-primary">
+                                </form>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="col-lg-12">
                         <div class="card card-default">
                             <div class="card-header  separator">
