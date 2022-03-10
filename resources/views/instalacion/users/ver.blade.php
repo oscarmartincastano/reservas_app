@@ -70,9 +70,23 @@
                                                 <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                                                 <td>{{ date('H:i', $item->timestamp) }} - {{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
                                                 <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
-                                                <td>{{ $item->estado > 'canceled' ? 'Cancelado' : ($item->estado == 'active' ? 'Pendiente' : 'Pasado') }}</td>
                                                 <td>
-                                                    @if ($item->estado  == 'active' && strtotime(strtotime(date('Y-m-d H:i', $item->timestamp)) . ' +' . $item->minutos_totales . ' minutes') < strtotime(date('Y-m-d H:i')))
+                                                    @if ($item->estado  == 'active')
+                                                        @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
+                                                            Pendiente
+                                                        @else
+                                                            Pasado
+                                                        @endif
+                                                    @endif
+                                                    @if($item->estado == 'canceled')
+                                                        <span class="text-danger">Cancelada</span>
+                                                    @endif
+                                                    @if($item->estado == 'pasado')
+                                                        Pasado
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                                         <a class="cancel btn btn-primary text-white" title="Cancelar reserva">
                                                             Acción
                                                         </a>

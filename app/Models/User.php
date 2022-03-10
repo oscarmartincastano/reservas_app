@@ -84,7 +84,7 @@ class User extends Authenticatable
         $reservas_activas = [];
 
         foreach ($this->reservas as $key => $item) {
-            if ($item->estado == 'active' && $item->fecha >= date('Y-m-d')) {
+            if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) {
                 array_push($reservas_activas, $item);
             }
         }
