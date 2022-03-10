@@ -50,6 +50,9 @@
         .pagination{
             margin-top: 15px !important;
         }
+        nav.navbar{
+            margin-bottom: 25px;
+        }
         @media (min-width: 1215px) {
             table.table-reservas{
                 display: table;
