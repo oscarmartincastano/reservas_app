@@ -53,6 +53,29 @@
         .modal-backdrop {
             z-index: 39 !important;
         }
+        .navbar-burger:hover {
+            background-color: transparent;
+        }
+        .navbar-brand, .navbar-tabs{
+            align-items: center;
+            padding: 10px;
+        }
+        .navbar-brand{
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+        }
+        @media (max-width: 600px) {
+            a.navbar-item {
+                padding: 0;
+            }
+            a.navbar-item>img{
+                max-height: 32px !important;
+            }
+        }
+        @media (max-width: 1025px) {
+            .navbar-end>a.navbar-item{
+                padding: 13px;
+            }
+        }
     </style>
 
     <title>Instalación - @yield('pagename')</title>

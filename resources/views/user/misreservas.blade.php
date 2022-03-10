@@ -55,7 +55,7 @@
 
 @section('content')
 
-<div class="container is-max-desktop">
+<div class="container is-max-desktop mt-2">
     
     <div class="container mt-3">
         <h1 class="title text-center">Mis Reservas</h1>
@@ -285,12 +285,14 @@
 @section('script')
     <script>
         $(document).ready(function () {
+            
             $('.table-reservas').dataTable({
                 "info": false,
+                "paging": false,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
-                "order": [[ 0, "desc" ]]
+                "order": [[ 6, "desc"], [ 1, "asc"], [ 3, "desc"]]
             });
         });
     </script>
