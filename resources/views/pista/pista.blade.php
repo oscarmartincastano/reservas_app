@@ -160,6 +160,11 @@
             });
 
             var picker = input_date.pickadate('picker');
+
+            $('#dia').click(function (e) { 
+                e.preventDefault();
+            });
+
             $(".diapicker").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
