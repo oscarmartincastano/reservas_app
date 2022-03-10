@@ -79,6 +79,74 @@
         .card-body{
             padding: 1.75rem;
         }
+        .navbar>.container {
+            align-items: center;
+            display: flex;
+            min-height: 3.25rem;
+            width: 100%;
+        }
+        .navbar-brand{
+            align-items: center;
+            padding: 10px;
+            display: flex;
+            flex-shrink: 0;
+            min-height: 3.25rem;
+        }
+        .navbar-brand>.navbar-item{
+            padding: 10px;
+            cursor: pointer;
+        }
+        .navbar-burger span:nth-child(1) {
+            top: calc(50% - 9px);
+        }
+        .navbar-burger span:nth-child(2) {
+            top: calc(50% - -1px);
+        }
+        .navbar-burger span:nth-child(3) {
+            top: calc(50% - 4px);
+        }
+        .navbar-burger span {
+            background-color: currentColor;
+            display: block;
+            height: 1px;
+            left: calc(50% - 8px);
+            position: absolute;
+            transform-origin: center;
+            transition-duration: 86ms;
+            transition-property: background-color,opacity,transform;
+            transition-timing-function: ease-out;
+            width: 16px;
+            top: calc(50% - 1px);
+        }
+        .navbar-burger {
+            color: #4a4a4a;
+            cursor: pointer;
+            display: block;
+            height: 3.25rem;
+            position: relative;
+            width: 3.25rem;
+            margin-left: auto;
+        }
+        .navbar-burger{
+            display: none;
+        }
+        @media (max-width: 1200px) {
+            .navbar>.container{
+                display: block;
+            }
+            a.navbar-item {
+                padding: 0;
+            }
+            a.navbar-item>img{
+                max-height: 32px !important;
+            }
+            .navbar-end{
+                display: none;
+            }
+            .navbar-burger{
+                display: block;
+            }
+        }
     </style>
 </head>
 
@@ -104,7 +172,7 @@
                 </a>
             </div>
 
-            <div id="navbarBasicExample" class="navbar-menu d-none">
+            <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
                     <a href="/{{ request()->slug_instalacion }}"
                         class="navbar-item {{ request()->is(request()->slug_instalacion) ? 'active' : '' }}"> Inicio
@@ -142,7 +210,7 @@
             </div>
         </section>
         <main>
-            <div class="container">
+            <div class="container pb-5">
                 <div class="row justify-content-center">
                     <div class="col-sm-7">
                         <div class="card">
