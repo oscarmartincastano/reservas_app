@@ -22,7 +22,7 @@
         }
 
         .btn-dia .numero.fecha-anterior{
-            border: none;
+            border: none !important;
             color: rgb(92, 92, 92);
         }
 
@@ -259,7 +259,6 @@
             z-index: 9999999999;
             display: none;
         }
-
         .loader-bg svg{
             width: 10vw;
             opacity: .7;
