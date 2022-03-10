@@ -50,6 +50,12 @@
         .pagination{
             margin-top: 15px !important;
         }
+        @media (min-width: 1215px) {
+            table.table-reservas{
+                display: table;
+                border: 0;
+            }
+        }
     </style>
 @endsection
 
