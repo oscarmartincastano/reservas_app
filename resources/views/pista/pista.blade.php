@@ -161,8 +161,8 @@
 
             var picker = input_date.pickadate('picker');
 
-            $('#dia').click(function (e) { 
-                e.preventDefault();
+            $("#dia").focus(function(){
+                document.activeElement.blur();
             });
 
             $(".diapicker").on("click", function (e) {
