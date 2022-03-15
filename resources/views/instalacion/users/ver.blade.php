@@ -54,7 +54,7 @@
                                 <div class="card-title">Reservas realizadas</div>
                             </div>
                             <div class="card-body">
-                                <table class="table table-hover table-condensed">
+                                <table class="table table-hover table-condensed table-reservas">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
@@ -162,4 +162,20 @@
 
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('.table-reservas').DataTable({
+                "info": false,
+                "pageLength": 4,
+                "lengthChange": false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
+                "order": [[ 4, "desc"], [ 0, "asc"], [ 1, "desc"]]
+            });
+        });
+    </script>
 @endsection
