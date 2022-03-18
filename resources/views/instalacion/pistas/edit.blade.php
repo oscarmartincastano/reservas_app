@@ -28,35 +28,37 @@
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Tipo</label>
                                 <select class="form-control col-md-10" name="tipo">
-                                    <option {{ $pista->tipo == 'C.C. Centro' ? 'selected' : '' }}  value="C.C. Centro">C.C. Centro</option>
-                                    <option {{ $pista->tipo == 'C.C. Arrabal del Sur' ? 'selected' : '' }}  value="C.C. Arrabal del Sur">C.C. Arrabal del Sur</option>
-                                    <option {{ $pista->tipo == 'C.C. Fuensanta' ? 'selected' : '' }}  value="C.C. Fuensanta">C.C. Fuensanta</option>
-                                    <option {{ $pista->tipo == 'C.C. de Iniciativas Culturales Osio' ? 'selected' : '' }}  value="C.C. de Iniciativas Culturales Osio">C.C. de Iniciativas Culturales Osio</option>
-                                    <option {{ $pista->tipo == 'C.C. Norte' ? 'selected' : '' }}  value="C.C. Norte">C.C. Norte</option>
-                                    <option {{ $pista->tipo == 'C.C. El Naranjo' ? 'selected' : '' }}  value="C.C. El Naranjo">C.C. El Naranjo</option>
-                                    <option {{ $pista->tipo == 'C.C. Levante' ? 'selected' : '' }}  value="C.C. Levante">C.C. Levante</option>
-                                    <option {{ $pista->tipo == 'C.C. Lepanto' ? 'selected' : '' }}  value="C.C. Lepanto">C.C. Lepanto</option>
-                                    <option {{ $pista->tipo == 'C.C. Moreras' ? 'selected' : '' }}  value="C.C. Moreras">C.C. Moreras</option>
-                                    <option {{ $pista->tipo == 'C.C. Sociocultural El Parque' ? 'selected' : '' }}  value="C.C. Sociocultural El Parque">C.C. Sociocultural El Parque</option>
-                                    <option {{ $pista->tipo == 'C.C. Vallehermoso' ? 'selected' : '' }}  value="C.C. Vallehermoso">C.C. Vallehermoso</option>
-                                    <option {{ $pista->tipo == 'C.C. Poniente Sur' ? 'selected' : '' }}  value="C.C. Poniente Sur">C.C. Poniente Sur</option>
-                                    <option {{ $pista->tipo == 'C.C. Sebastián Cuevas' ? 'selected' : '' }}  value="C.C. Sebastián Cuevas">C.C. Sebastián Cuevas</option>
-                                    <option {{ $pista->tipo == 'C.C. Chari Navarro' ? 'selected' : '' }}  value="C.C. Chari Navarro">C.C. Chari Navarro</option>
-                                    <option {{ $pista->tipo == 'C.C. Cerro Muriano' ? 'selected' : '' }}  value="C.C. Cerro Muriano">C.C. Cerro Muriano</option>
-                                    <option {{ $pista->tipo == 'C.C. Santa Cruz' ? 'selected' : '' }}  value="C.C. Santa Cruz">C.C. Santa Cruz</option>
-                                    <option {{ $pista->tipo == 'C.C. Rafael Villar' ? 'selected' : '' }}  value="C.C. Rafael Villar">C.C. Rafael Villar</option>
-                                    <option {{ $pista->tipo == 'C.C. Villarrubia' ? 'selected' : '' }}  value="C.C. Villarrubia">C.C. Villarrubia</option>
-                                    <option {{ $pista->tipo == 'C.C. Trassierra' ? 'selected' : '' }}  value="C.C. Trassierra">C.C. Trassierra</option>
-                                    {{-- <option {{ $pista->tipo == 'Tenis' ? 'selected' : '' }} value="Tenis">Tenis</option>
-                                    <option {{ $pista->tipo == 'Pádel' ? 'selected' : '' }} value="Pádel">Pádel</option>
-                                    <option {{ $pista->tipo == 'Fútbol' ? 'selected' : '' }} value="Fútbol">Fútbol
-                                    </option>
-                                    <option {{ $pista->tipo == 'Ping pong' ? 'selected' : '' }} value="Ping pong">Ping
-                                        pong</option>
-                                    <option {{ $pista->tipo == 'Sala' ? 'selected' : '' }} value="Sala">Sala</option>
-                                    <option {{ $pista->tipo == 'Gimnasio' ? 'selected' : '' }} value="Gimnasio">Gimnasio
-                                    </option> --}}
-
+                                    @if (auth()->user()->instalacion->id == 4)
+                                        <option {{ $pista->tipo == 'C.C. Centro' ? 'selected' : '' }}  value="C.C. Centro">C.C. Centro</option>
+                                        <option {{ $pista->tipo == 'C.C. Arrabal del Sur' ? 'selected' : '' }}  value="C.C. Arrabal del Sur">C.C. Arrabal del Sur</option>
+                                        <option {{ $pista->tipo == 'C.C. Fuensanta' ? 'selected' : '' }}  value="C.C. Fuensanta">C.C. Fuensanta</option>
+                                        <option {{ $pista->tipo == 'C.C. de Iniciativas Culturales Osio' ? 'selected' : '' }}  value="C.C. de Iniciativas Culturales Osio">C.C. de Iniciativas Culturales Osio</option>
+                                        <option {{ $pista->tipo == 'C.C. Norte' ? 'selected' : '' }}  value="C.C. Norte">C.C. Norte</option>
+                                        <option {{ $pista->tipo == 'C.C. El Naranjo' ? 'selected' : '' }}  value="C.C. El Naranjo">C.C. El Naranjo</option>
+                                        <option {{ $pista->tipo == 'C.C. Levante' ? 'selected' : '' }}  value="C.C. Levante">C.C. Levante</option>
+                                        <option {{ $pista->tipo == 'C.C. Lepanto' ? 'selected' : '' }}  value="C.C. Lepanto">C.C. Lepanto</option>
+                                        <option {{ $pista->tipo == 'C.C. Moreras' ? 'selected' : '' }}  value="C.C. Moreras">C.C. Moreras</option>
+                                        <option {{ $pista->tipo == 'C.C. Sociocultural El Parque' ? 'selected' : '' }}  value="C.C. Sociocultural El Parque">C.C. Sociocultural El Parque</option>
+                                        <option {{ $pista->tipo == 'C.C. Vallehermoso' ? 'selected' : '' }}  value="C.C. Vallehermoso">C.C. Vallehermoso</option>
+                                        <option {{ $pista->tipo == 'C.C. Poniente Sur' ? 'selected' : '' }}  value="C.C. Poniente Sur">C.C. Poniente Sur</option>
+                                        <option {{ $pista->tipo == 'C.C. Sebastián Cuevas' ? 'selected' : '' }}  value="C.C. Sebastián Cuevas">C.C. Sebastián Cuevas</option>
+                                        <option {{ $pista->tipo == 'C.C. Chari Navarro' ? 'selected' : '' }}  value="C.C. Chari Navarro">C.C. Chari Navarro</option>
+                                        <option {{ $pista->tipo == 'C.C. Cerro Muriano' ? 'selected' : '' }}  value="C.C. Cerro Muriano">C.C. Cerro Muriano</option>
+                                        <option {{ $pista->tipo == 'C.C. Santa Cruz' ? 'selected' : '' }}  value="C.C. Santa Cruz">C.C. Santa Cruz</option>
+                                        <option {{ $pista->tipo == 'C.C. Rafael Villar' ? 'selected' : '' }}  value="C.C. Rafael Villar">C.C. Rafael Villar</option>
+                                        <option {{ $pista->tipo == 'C.C. Villarrubia' ? 'selected' : '' }}  value="C.C. Villarrubia">C.C. Villarrubia</option>
+                                        <option {{ $pista->tipo == 'C.C. Trassierra' ? 'selected' : '' }}  value="C.C. Trassierra">C.C. Trassierra</option>
+                                    @else
+                                        <option {{ $pista->tipo == 'Tenis' ? 'selected' : '' }} value="Tenis">Tenis</option>
+                                        <option {{ $pista->tipo == 'Pádel' ? 'selected' : '' }} value="Pádel">Pádel</option>
+                                        <option {{ $pista->tipo == 'Fútbol' ? 'selected' : '' }} value="Fútbol">Fútbol
+                                        </option>
+                                        <option {{ $pista->tipo == 'Ping pong' ? 'selected' : '' }} value="Ping pong">Ping
+                                            pong</option>
+                                        <option {{ $pista->tipo == 'Sala' ? 'selected' : '' }} value="Sala">Sala</option>
+                                        <option {{ $pista->tipo == 'Gimnasio' ? 'selected' : '' }} value="Gimnasio">Gimnasio
+                                        </option> 
+                                    @endif
                                 </select>
                             </div>
                             <div class="form-group row">
