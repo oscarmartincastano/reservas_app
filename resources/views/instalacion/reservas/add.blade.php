@@ -94,7 +94,7 @@
 @endsection
 
 @section('content')
-<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if ($instalacion->id != 4), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg) @endif;
+<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. strtolower($pista_selected->tipo) .'.jpg')), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg) @endif;
     background-size:cover;background-position:bottom">
     <section class="hero is-medium">
         <div class="has-text-centered title-div title-reserva-section" style="padding-top:4.5rem;padding-bottom:3.5rem;margin-bottom:0">
