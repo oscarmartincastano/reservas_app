@@ -46,7 +46,7 @@
 @section('content')
     <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
-        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/banner-{{ strtolower($pista_selected->tipo) }}.jpg) center;
+        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)) center;
             background-size:cover;">
             <h1 class="title">{{ $pista_selected->tipo }}</h1>
         </div>

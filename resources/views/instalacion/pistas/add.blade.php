@@ -25,12 +25,31 @@
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Tipo</label>
                                 <select class="form-control col-md-10" name="tipo">
-                                    <option value="Tenis">Tenis</option>
+                                    <option value="C.C. Centro">C.C. Centro</option>
+                                    <option value="C.C. Arrabal del Sur">C.C. Arrabal del Sur</option>
+                                    <option value="C.C. Fuensanta">C.C. Fuensanta</option>
+                                    <option value="C.C. de Iniciativas Culturales Osio">C.C. de Iniciativas Culturales Osio</option>
+                                    <option value="C.C. Norte">C.C. Norte</option>
+                                    <option value="C.C. El Naranjo">C.C. El Naranjo</option>
+                                    <option value="C.C. Levante">C.C. Levante</option>
+                                    <option value="C.C. Lepanto">C.C. Lepanto</option>
+                                    <option value="C.C. Moreras">C.C. Moreras</option>
+                                    <option value="C.C. Sociocultural El Parque">C.C. Sociocultural El Parque</option>
+                                    <option value="C.C. Vallehermoso">C.C. Vallehermoso</option>
+                                    <option value="C.C. Poniente Sur">C.C. Poniente Sur</option>
+                                    <option value="C.C. Sebastián Cuevas">C.C. Sebastián Cuevas</option>
+                                    <option value="C.C. Chari Navarro">C.C. Chari Navarro</option>
+                                    <option value="C.C. Cerro Muriano">C.C. Cerro Muriano</option>
+                                    <option value="C.C. Santa Cruz">C.C. Santa Cruz</option>
+                                    <option value="C.C. Rafael Villar">C.C. Rafael Villar</option>
+                                    <option value="C.C. Villarrubia">C.C. Villarrubia</option>
+                                    <option value="C.C. Trassierra">C.C. Trassierra</option>
+                                    {{-- <option value="Tenis">Tenis</option>
                                     <option value="Pádel">Pádel</option>
                                     <option value="Fútbol">Fútbol</option>
                                     <option value="Ping pong">Ping pong</option>
                                     <option value="Sala">Sala</option>
-                                    <option value="Gimnasio">Gimnasio</option>
+                                    <option value="Gimnasio">Gimnasio</option> --}}
                                 </select>
                             </div>
                             <div class="form-group row">

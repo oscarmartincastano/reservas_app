@@ -94,7 +94,7 @@
 @endsection
 
 @section('content')
-<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg);
+<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5));
     background-size:cover;background-position:bottom">
     <section class="hero is-medium">
         <div class="has-text-centered title-div title-reserva-section" style="padding-top:4.5rem;padding-bottom:3.5rem;margin-bottom:0">

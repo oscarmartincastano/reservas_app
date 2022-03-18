@@ -150,7 +150,7 @@
     </style>
 </head>
 
-<body style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg);
+<body style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5));
     background-size:cover;background-position:bottom">
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
