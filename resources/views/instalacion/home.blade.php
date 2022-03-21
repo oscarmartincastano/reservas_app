@@ -156,7 +156,7 @@
         }
         .nav-tabs li a.active span.num-reservas{
             margin-left: 11px;
-            padding: 7px 9px;
+            padding: 5px 9px;
             background: white;
             border-radius: 50%;
             color: #353f4d;
