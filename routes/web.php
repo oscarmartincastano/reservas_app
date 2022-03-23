@@ -18,7 +18,7 @@ require __DIR__.'/auth.php';
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas');
+/* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login_instalacion');
