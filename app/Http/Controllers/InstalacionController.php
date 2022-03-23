@@ -323,7 +323,7 @@ class InstalacionController extends Controller
             $res->timestamp = $hora;
             $res->horarios = serialize([$hora]);
             $res->hora = date('Hi', $hora);
-            $res->minutos_totales = $res->pista->get_minutos_given_timestamp($hora);
+            $res->minutos_totales = 60;
 
             $res->save();
         }
