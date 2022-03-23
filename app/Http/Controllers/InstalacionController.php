@@ -311,7 +311,7 @@ class InstalacionController extends Controller
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
     }
 
-    public function arreglos_reservas()
+    /* public function arreglos_reservas()
     {
         $reservas = Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]], ['creado_por', 'admin'])->get();
 
@@ -323,13 +323,13 @@ class InstalacionController extends Controller
             $res->timestamp = $hora;
             $res->horarios = serialize([$hora]);
             $res->hora = date('Hi', $hora);
-            $res->minutos_totales = 60;
+            $res->minutos_totales = $res->pista->get_minutos_given_timestamp($hora);
 
             $res->save();
         }
 
         return Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]])->get();
-    }
+    } */
 
     public function borrar_reservas_periodicas(Request $request)
     {
