@@ -311,7 +311,7 @@ class InstalacionController extends Controller
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
     }
 
-    /* public function arreglos_reservas()
+    public function arreglos_reservas()
     {
         $reservas = Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]], ['reserva_periodica', '!=', null])->get();
 
@@ -329,7 +329,7 @@ class InstalacionController extends Controller
         }
 
         return Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]])->get();
-    } */
+    }
 
     public function borrar_reservas_periodicas(Request $request)
     {
