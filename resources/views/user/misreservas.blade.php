@@ -86,7 +86,7 @@
                        <tr>
                            <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                            <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->fecha)->formatLocalized('%A') }}</td>
-                           <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i')  }} <br>{{ $item->timestamp }}</td>
+                           <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i')  }}</td>
                            <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td>
                            <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
                            <td>
