@@ -86,8 +86,8 @@
                        <tr>
                            <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                            <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->fecha)->formatLocalized('%A') }}</td>
-                           <td>{{ date('H:i', $item->timestamp) }}</td>
-                           <td>{{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
+                           <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i')  }} <br>{{ $item->timestamp }}</td>
+                           <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td>
                            <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
                            <td>
                             @if ($item->estado  == 'active')
@@ -301,7 +301,7 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
-                "order": [[ 6, "desc"], [ 1, "asc"], [ 3, "desc"]]
+                "order": [[ 6, "desc"], [ 0, "asc"], [ 3, "desc"]]
             });
         });
     </script>

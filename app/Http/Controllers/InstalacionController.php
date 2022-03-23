@@ -165,7 +165,7 @@ class InstalacionController extends Controller
             'timestamp' => $request->timestamp,
             'horarios' => serialize($timestamps),
             'fecha' => date('Y/m/d', $request->timestamp),
-            'hora' => date('Hi', $request->timestamp),
+            'hora' => \Carbon\Carbon::createFromTimestamp($request->timestamp)->format('Hi'),
             'tarifa' => $request->tarifa,
             'minutos_totales' => $minutos_totales,
             'creado_por' => 'admin'
@@ -287,9 +287,9 @@ class InstalacionController extends Controller
                             strtotime(date('H:i', $hora)) >= strtotime($request->hora_inicio) && 
                             strtotime(date('H:i', $hora)) < strtotime($request->hora_fin)
                            ) { 
-                               if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
+                               /* if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
                                     $hora = $hora + 3600;
-                               }
+                               } */
                             Reserva::create([
                                 'id_pista' => $pista->id,
                                 'id_usuario' => $request->user_id,
@@ -309,6 +309,26 @@ class InstalacionController extends Controller
         }
 
         return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
+    }
+
+    public function arreglos_reservas()
+    {
+        $reservas = Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]], ['reserva_periodica', '!=', null])->get();
+
+        foreach ($reservas as $reserva) {
+            $res = Reserva::find($reserva->id);
+
+            $hora = $res->timestamp - 3600;
+
+            $res->timestamp = $hora;
+            $res->horarios = serialize([$hora]);
+            $res->hora = date('Hi', $hora);
+            $res->minutos_totales = $res->pista->get_minutos_given_timestamp($hora);
+
+            $res->save();
+        }
+
+        return Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]])->get();
     }
 
     public function borrar_reservas_periodicas(Request $request)

@@ -84,7 +84,7 @@
                                     <tr>
                                         <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a></td>
                                         <td>{{ date('d/m/Y', $item->timestamp) }}</td>
-                                        <td>{{ date('H:i', $item->timestamp) }} - {{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td>
                                         <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}</td>
                                         <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                         <td>
@@ -104,7 +104,7 @@
                                         </td>
                                         <td>
                                             @if ($item->estado  == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                                <a class="cancel btn btn-primary text-white btn-accion-reserva" data-intervalo="{{ date('H:i', $item->timestamp) }} - {{ date('H:i', strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes')) }}" data-reserva="{{ $item->id }}" data-user="{{ $item->user->name }}" title="Cancelar reserva">
+                                                <a class="cancel btn btn-primary text-white btn-accion-reserva" data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}" data-reserva="{{ $item->id }}" data-user="{{ $item->user->name }}" title="Cancelar reserva">
                                                     Acción
                                                 </a>
                                             @endif

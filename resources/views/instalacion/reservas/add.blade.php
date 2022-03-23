@@ -140,8 +140,8 @@
                                     <label class="col-sm-3 col-form-label py-0">Fecha:</label>
                                     <div class="col-sm-9">
                                         <div>{{ date('d/m/Y', $fecha) }} (<span
-                                                class="horario">{{ date('H:i', $fecha) }} a <span
-                                                    class="hfin">{{ date('H:i', strtotime(date('H:i', $fecha) . " +{$secuencia} minutes")) }}</span></span>)
+                                                class="horario">{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a <span
+                                                    class="hfin">{{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($secuencia)->format('H:i') }}</span></span>)
                                         </div>
                                     </div>
                                 </div>

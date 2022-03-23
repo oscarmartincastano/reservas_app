@@ -68,7 +68,7 @@
                                         @foreach ($user->reservas as $item)
                                             <tr>
                                                 <td>{{ date('d/m/Y', $item->timestamp) }}</td>
-                                                <td>{{ date('H:i', $item->timestamp) }} - {{ date('H:i', strtotime(date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</td>
+                                                <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td>
                                                 <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                                 <td>
                                                     @if ($item->estado  == 'active')

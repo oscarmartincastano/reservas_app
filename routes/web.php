@@ -19,6 +19,7 @@ require __DIR__.'/auth.php';
 |
 */
 
+Route::get('/arreglos-reservas', 'InstalacionController@arreglos_reservas');
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login_instalacion');
@@ -144,7 +145,6 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         });
     });
 });
-
 
 /* Route::get('/peticion', function($requestHttpMethod, $fechaHoraUTC, $requestUri, $param, $bodyParam, $idInstalacion) {
     $secretKey = "secret";
