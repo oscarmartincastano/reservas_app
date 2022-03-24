@@ -207,7 +207,7 @@ class InstalacionController extends Controller
         Excepciones_desactivaciones_periodicas::where([
             ['id_pista', $request->id_pista],
             ['timestamp', $request->timestamp]
-            ])->delete();
+        ])->delete();
 
         return redirect()->back();
     }

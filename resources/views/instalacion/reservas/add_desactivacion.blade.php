@@ -23,7 +23,7 @@
                                 <label for="espacio">Espacio</label>
                                 <select required class="full-width form-control" name="espacio">
                                     @foreach (auth()->user()->instalacion->pistas as $item)
-                                        <option value="{{ $item->id }}">{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->nombre }}</option>
+                                        <option value="{{ $item->id }}">{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->tipo . '.' : '' }} {{ $item->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
