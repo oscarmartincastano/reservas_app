@@ -19,6 +19,7 @@ use App\Models\Pistas_campos_relation;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Desactivaciones_periodicas;
 use App\Models\Reservas_periodicas;
+use App\Models\Excepciones_desactivaciones_periodicas;
 use Intervention\Image\ImageManagerStatic as Image;
 use DateTime;
 
@@ -203,6 +204,10 @@ class InstalacionController extends Controller
             'id_pista' => $request->id_pista,
             'timestamp' => $request->timestamp
         ]);
+        Excepciones_desactivaciones_periodicas::where([
+            ['id_pista', $request->id_pista],
+            ['timestamp', $request->timestamp]
+            ])->delete();
 
         return redirect()->back();
     }
@@ -210,7 +215,14 @@ class InstalacionController extends Controller
     public function activar_tramo(Request $request) {
         $instalacion = auth()->user()->instalacion;
 
-        Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $request->timestamp]])->delete();
+        if (isset($request->periodic)) {
+            Excepciones_desactivaciones_periodicas::create([
+                'id_pista' => $request->id_pista,
+                'timestamp' => $request->timestamp
+            ]);
+        } else {
+            Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $request->timestamp]])->delete();
+        }
 
         return redirect($request->slug_instalacion . '/admin');
     }

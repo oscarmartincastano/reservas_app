@@ -10,6 +10,7 @@ use App\Models\Instalacion;
 use App\Models\Desactivacion_reserva;
 use App\Models\Campos_personalizados;
 use App\Models\Desactivaciones_periodicas;
+use App\Models\Excepciones_desactivaciones_periodicas;
 
 class Pista extends Model
 {
@@ -150,7 +151,10 @@ class Pista extends Model
                         strtotime(date('H:i', $timestamp)) >= strtotime($desactivacion->hora_inicio) && 
                         strtotime(date('H:i', $timestamp)) < strtotime($desactivacion->hora_fin)
                     ) {
-                        return true;
+                        if (Excepciones_desactivaciones_periodicas::where([['id_pista', $this->id], ['timestamp', $timestamp]])->first()) {
+                            return false;
+                        }
+                        return 2;
                     }
                 /* } */
             }
