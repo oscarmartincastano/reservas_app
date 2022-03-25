@@ -505,8 +505,7 @@
             });
         });
     </script>
-    @if ((isset(request()->semana) && request()->semana != 0) || isset(request()->week))
-        <script>
+    @if ((isset(request()->semana) && request()->semana != 0) || isset(request()->week) && date('W') != \Carbon\Carbon::parse(iterator_to_array($period)[0])->format('W'))        <script>
             $(document).ready(function () {
                 $('.btn-dia')[0].click();
             });
