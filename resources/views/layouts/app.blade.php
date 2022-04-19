@@ -62,6 +62,16 @@
         .span-users{
             position: relative;
         }
+        .alert {
+			position: absolute;
+    		top: 20px;
+    		z-index: 2000;
+    		right: 0;
+		}
+		.alert-success {
+			background-color: #a1e991;
+    		color: #013700;
+		}
     </style>
     @yield('style')
 </head>
