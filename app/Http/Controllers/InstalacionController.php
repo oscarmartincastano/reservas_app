@@ -663,6 +663,11 @@ class InstalacionController extends Controller
     public function add_user(Request $request)
     {
         $data = $request->all();
+
+        if (User::where('email', $request->email)->first()) {
+            return redirect()->back()->with('error', 'Ya existe un usuario con ese email. Prueba otro email.');
+        }
+        
         $data['password'] = \Hash::make($request->password);
         $data['aprobado'] = date('Y-m-d H:i:s');
         $data['rol'] = 'user';

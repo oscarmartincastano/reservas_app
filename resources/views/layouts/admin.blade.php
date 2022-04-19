@@ -175,4 +175,16 @@
         </div>
         <!-- END Overlay Content !-->
     </div>
+    @if(Session::get('success'))
+    <div class="alert alert-success" role="alert">
+        <button aria-label="" class="close" data-dismiss="alert"></button>
+        {{Session::get('success')}}
+    </div>
+	@endif
+    @if(Session::get('error'))
+    <div class="alert alert-danger" role="alert">
+        <button aria-label="" class="close" data-dismiss="alert"></button>
+        {{Session::get('error')}}
+    </div>
+	@endif
 @endsection
