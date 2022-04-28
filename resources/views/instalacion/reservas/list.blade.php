@@ -67,7 +67,7 @@
                     <div class="card-body">
                         {{-- <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="btn btn-outline-primary mr-2">Añadir desactivación periódica</a> 
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="text-white btn btn-primary">Añadir reserva periódica</a> --}}
-                        <table class="table table-condensed table-hover" id="table-reservas">
+                        <table class="table table-hover" id="table-reservas">
                             <thead>
                                 <tr>
                                     <th>Cliente</th>
