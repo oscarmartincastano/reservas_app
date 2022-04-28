@@ -175,7 +175,7 @@ class UserController extends Controller
             }
         }
 
-        /* Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva)); */
+        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
 
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
