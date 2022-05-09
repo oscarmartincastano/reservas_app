@@ -280,33 +280,22 @@
           <div class="modal-body">
             <form role="form" method="POST" action="#">
                 @csrf
-              <div class="form-group-attached">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group form-group-default">
-                      <label>Observaciones <span></span></label>
-                      <textarea style="height: 50px" name="observaciones" rows="4" class="form-control"></textarea>
-                    </div>
-                    <span class="help">Puede quedarse vacío si no tiene.</span>
-                </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-7">
-                    {{-- <div class="p-t-20 clearfix p-l-10 p-r-10">
-                        <div class="pull-left">
-                        <p class="bold font-montserrat text-uppercase">TOTAL</p>
+                {{-- <div class="form-group-attached">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group form-group-default">
+                                <label>Observaciones <span></span></label>
+                                <textarea style="height: 50px" name="observaciones" rows="4" class="form-control"></textarea>
+                            </div>
+                            <span class="help">Puede quedarse vacío si no tiene.</span>
                         </div>
-                        <div class="pull-right">
-                        <p class="bold font-montserrat text-uppercase">$20.00</p>
-                        </div>
-                    </div> --}}
                     </div>
-                    <div class="col-md-5 m-t-10 sm-m-t-10 text-right">
-                        <input type="hidden" name="accion">
-                        <button type="submit" data-accion="canceled" class="submit-form-validar btn btn-danger m-t-5 mr-2">Cancelarla</button>
-                        <button type="submit" data-accion="pasado" class="submit-form-validar btn btn-success m-t-5">Validarla</button>
-                    </div>
+                </div> --}}
+                <div class="row text-right">
+                    <input type="hidden" name="accion">
+                    <button type="submit" data-accion="canceled" class="submit-form-validar btn btn-danger m-t-5 mr-2">Cancelarla</button>
+                    <button type="submit" data-accion="pasado" class="submit-form-validar btn btn-success m-t-5 mr-2">Validarla</button>
+                    <button type="submit" data-accion="desierta" class="submit-form-validar btn btn-warning m-t-5">Desierta</button>
                 </div>
               </div>
             </form>
@@ -369,8 +358,8 @@
                                     data-init-reponsive-tabs="dropdownfx">
                                     @foreach ($pistas as $i => $item)
                                         <li class="nav-item">
-                                            <a href="#" id="tab-espacio-{{ $item->id }}" class="{{ $i == 0 ? 'active' : '' }}" data-toggle="tab"
-                                                data-target="#espacio-{{ $item->id }}"><span>{{ $item->nombre }}</span><span class=""></span></a>
+                                            <a href="#" data-fecha="{{ date('Y-m-d') }}" data-pista="{{ $item->id }}" id="tab-espacio-{{ $item->id }}" class="{{ $i == 0 ? 'active' : '' }} tab-pista" data-toggle="tab"
+                                                data-target="#espacio-{{ $item->id }}"><span>{{ $item->nombre_corto ?? $item->nombre }}</span><span class=""></span></a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -403,6 +392,7 @@
 
             $('.dias').on('click', '.btn-dia', function(e) {
                 e.preventDefault();
+                
                 $('.loader-bg').show().next().hide();
                 $('.reservas-dia').show();
 
@@ -411,10 +401,28 @@
                 $('span.fecha').html($(this).data('fecha_long'));
                 $('.btn-off-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/desactivar-dia/${$(this).data('fecha')}`);
                 $('.btn-on-dia').attr('href', `/{{ request()->slug_instalacion }}/admin/reservas/{{ $pista->id }}/activar-dia/${$(this).data('fecha')}`);
+                $('.tab-pista').data('fecha', $(this).data('fecha'));
+                $(`.nav-item a span:last-child`).removeClass('num-reservas').html(``);
+                $('.nav-item:first-child a').click();
                 $.ajax({
-                    url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,
+                    url: `/{{ request()->slug_instalacion }}/admin/reservas/numero/${$(this).data('fecha')}/`,
                     success: data => {
                         /* console.log(data); */
+                        for (const index in data) {
+                            
+                            $(`#tab-espacio-${index} span:last-child`).addClass('num-reservas').html(`${data[index]}`);
+                            console.log(`#tab-espacio-${index} span:last-child`);
+                        }
+                        
+                        $('.loader-bg').hide().next().show();
+                    },
+                    error: data => {
+                        console.log(data)
+                    }
+                });
+                /* $.ajax({
+                    url: `/${$('.inst-name').data('slug')}/admin/reservas/${$(this).data('fecha')}`,
+                    success: data => {
                         data.forEach(pista => {
                             let string = '';
                             string += `<table class="table table-timeslots table-hover">
@@ -479,6 +487,86 @@
                         });
                         
                         $('.loader-bg').hide().next().show();
+                    },
+                    error: data => {
+                        console.log(data)
+                    }
+                }); */
+            });
+            $('.nav-tabs').on('click', '.tab-pista', function(e) {
+                e.preventDefault();
+                $('.loader-bg-pista').show().next().hide();
+                $.ajax({
+                    url: `/{{ request()->slug_instalacion }}/admin/reservas/${$(this).data('fecha')}/${$(this).data('pista')}`,
+                    success: data => {
+                        let string = '';
+                        string += `<table class="table table-timeslots table-hover">
+                                        <tbody>`;
+                        data.res_dia.forEach(item => {
+                            item.forEach(intervalo => {
+                                string += `<tr ${intervalo.desactivado ? 'class="desactivado"' : ''}>
+                                        <td class="timeslot-time"><div style="margin-bottom:20px;"><i class="far fa-clock"></i> ${intervalo.string}</div>`;
+
+                                if (intervalo.num_res < data.reservas_por_tramo) {
+                                    if (intervalo.desactivado) {
+                                        string += `<div><form class="inline-block" method="POST" action="/admin/reservas/${data.id}/activar/${intervalo.timestamp}${intervalo.desactivado == 2 ? '?periodic=1' : ''}">@csrf <button type="submit" class="btn btn-outline-success">Activar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                    }else{
+                                        string += `<div><form style="margin-bottom:7px" class="inline-block" method="POST" action="/admin/reservas/${data.id}/desactivar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-primary">Desactivar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                    }
+                                } else {
+                                    string += `</td><td class="timeslot-reserve">`;
+                                }
+                                
+                                if (intervalo.reservas.length > 0) {
+                                    intervalo.reservas.forEach(reserva => {
+                                        console.log(reserva);
+                                        string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
+                                                    <h4><a href="/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                        if (reserva.estado == 'active') {
+                                            string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
+                                        }else if (reserva.estado == 'canceled') {
+                                            string += `<h4 class="text-danger" style="font-weight:bold">Cancelado</h4></div>`;
+                                        }else if (reserva.estado == 'desierta') {
+                                            string += `<h4 class="text-warning" style="font-weight:bold">Desierta</h4></div>`;
+                                        }else{
+                                            string += `<h4 style="color:#28a745;font-weight:bold">Validada</h4></div>`;
+                                        }
+                                        $(reserva.valores_campos_pers).each(function (index, element) {
+                                            string += `<div class="mt-2"><strong><i class="fas fa-plus mr-1"></i> ${element.campo.label}: </strong>${element.valor}</div>`;
+                                        });
+                                        if (reserva.observaciones) {
+                                            string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
+                                        }
+                                        if (reserva.reserva_periodica) {
+                                            string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i> Reserva periódica</strong></div>`;
+                                        }
+                                        if (reserva.reserva_multiple) {
+                                            string += `<div class="mt-2"><strong><i class="fa-solid fa-calendar-plus"></i> Reserva múltiple: </strong>${reserva.numero_reservas} reservas</div>`;
+                                        }
+                                        if (reserva.creado_por == 'admin') {
+                                            string += `<div class="mt-2"><strong><i class="fas fa-user-shield mr-1"></i> Observaciones admin: </strong>creada por admin`;
+                                        }
+                                        if (reserva.observaciones_admin) {
+                                            string += `, ${reserva.observaciones_admin}`;
+                                        }
+                                        string += `</div></div>`;
+                                    });
+                                }else{
+                                    string += `No Reservado`;
+                                }
+                                string += `</td></tr>`;
+                            });
+                        });
+                        string += `</tbody></table></div>`;
+                        $(`#content-espacio-${data.id}`).html(`${string}`);
+                        /* if (data.num_reservas_dia > 0) {
+                            $(`#tab-espacio-${data.id} span:last-child`).addClass('num-reservas').html(`${data.num_reservas_dia}`);
+                        } else{
+                            $(`#tab-espacio-${data.id} span:last-child`).removeClass('num-reservas').html(``);
+                        } */
+                        
+                        
+                        $('.loader-bg-pista').hide().next().show();
                     },
                     error: data => {
                         console.log(data)

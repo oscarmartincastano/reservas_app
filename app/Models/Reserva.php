@@ -30,8 +30,6 @@ class Reserva extends Model
         'creado_por',
     ];
 
-    protected $appends = ['horarios_deserialized', 'formated_updated_at', 'valores_campos_pers'];
-
     public function pista()
     {
         return $this->hasOne(Pista::class, 'id', 'id_pista');

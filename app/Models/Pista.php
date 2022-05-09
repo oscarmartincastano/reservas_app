@@ -21,6 +21,7 @@ class Pista extends Model
     protected $fillable = [
         'id_instalacion',
         'nombre',
+        'nombre_corto',
         'tipo',
         'horario',
         'allow_cancel',
@@ -28,9 +29,8 @@ class Pista extends Model
         'allow_more_res',
         'reservas_por_tramo',
         'max_dias_antelacion',
+        'active',
     ];
-
-    protected $appends = ['horario_deserialized', 'all_campos_personalizados'];
 
     public function instalacion()
     {

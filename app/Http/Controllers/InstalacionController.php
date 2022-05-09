@@ -88,6 +88,32 @@ class InstalacionController extends Controller
         return $ret_pistas;
     }
 
+    public function reservas_dia_por_pista(Request $request)
+    {
+        $pista = Pista::find($request->id_pista);
+        $ret_pistas = $pista;
+        $ret_pistas['num_reservas_dia'] = count($pista->reservas_activas_por_dia($request->fecha));
+        $ret_pistas['res_dia'] = $pista->horario_con_reservas_por_dia_admin($request->fecha);
+
+        return $ret_pistas;
+    }
+
+    public function numero_reservas_dia_por_pista(Request $request)
+    {
+        $reservas = Reserva::where('estado', 'active')->where('fecha', $request->fecha)->get();
+
+        $retorno = [];
+        foreach ($reservas as $key => $value) {
+            if (isset($retorno[$value['id_pista']])) {
+                $retorno[$value['id_pista']] += 1;
+            } else {
+                $retorno[$value['id_pista']] = 1;
+            }
+        }
+
+        return $retorno;
+    }
+
     public function validar_reserva(Request $request)
     {
         $reserva = Reserva::find($request->id);
