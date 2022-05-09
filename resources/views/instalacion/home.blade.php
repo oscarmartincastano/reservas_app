@@ -248,7 +248,7 @@
             cursor: auto !important;
         }
                 
-        .loader-bg {
+        .loader-bg, .loader-bg-pista {
             width: 100%;
             height: 100%;
             background: #ffffff;
@@ -259,7 +259,7 @@
             z-index: 9999999999;
             display: none;
         }
-        .loader-bg svg{
+        .loader-bg svg, .loader-bg-pista svg{
             width: 10vw;
             opacity: .7;
         }
@@ -363,6 +363,9 @@
                                         </li>
                                     @endforeach
                                 </ul>
+                                <div class="loader-bg-pista" style="display: none">
+                                    @include('instalacion.loader.loader')
+                                </div>
                                 <div class="tab-content reservas-dia">
                                     @foreach ($pistas as $i => $pista)
                                         <div class="tab-pane {{ $i == 0 ? 'active' : '' }}" id="espacio-{{ $pista->id }}">
