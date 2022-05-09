@@ -26,6 +26,11 @@
                                     class="form-control col-md-10" required>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-2 control-label">Nombre corto</label>
+                                <input value="{{ $pista->nombre_corto }}" name="nombre_corto" type="text" placeholder="Nombre corto..."
+                                    class="form-control col-md-10" required>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-2 control-label">Tipo</label>
                                 <select class="form-control col-md-10" name="tipo">
                                     @if (auth()->user()->instalacion->id == 4)
