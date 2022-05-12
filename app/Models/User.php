@@ -160,4 +160,16 @@ class User extends Authenticatable
 
         return true;
     }
+
+    public function numero_reservas_perimitidas($tipo_espacio)
+    {
+        if (isset($this->max_reservas_tipo_espacio) && isset(unserialize($this->max_reservas_tipo_espacio)[$tipo_espacio])) {
+            return unserialize($this->max_reservas_tipo_espacio)[$tipo_espacio] - $this->numero_total_reservas_tipo($tipo_espacio);
+        }
+        if (isset($this->instalacion->configuracion->max_reservas_tipo_espacio) && isset(unserialize($this->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio])) {
+            return unserialize($this->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo_espacio] - $this->numero_total_reservas_tipo($tipo_espacio);
+        }
+
+        return 200;
+    }
 }

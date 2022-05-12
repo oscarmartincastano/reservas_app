@@ -5,11 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- Bulma Version 0.9.0-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -63,6 +62,12 @@
         nav.navbar{
             box-shadow: rgba(0, 0, 0, 0.1) 0px -4px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
         }
+        .footer {
+            padding: 0rem 1.5rem 2rem;
+        }
+        body>nav.navbar .container {
+            margin: 0;
+        }
         @media (max-width: 600px) {
             a.navbar-item {
                 padding: 0;
@@ -70,10 +75,38 @@
             a.navbar-item>img{
                 max-height: 32px !important;
             }
+            body>nav.navbar {
+                position: fixed;
+                top: 0;
+                width: 100%;
+            }
+            body>main{
+                margin-top: 73px;
+            }
+            h1.titulo-pagina {
+                margin-top: 103px !important;
+            }
         }
         @media (max-width: 1025px) {
             .navbar-end>a.navbar-item{
                 padding: 13px;
+            }
+            body>nav.navbar {
+                display: block;
+                padding: 0;
+            }
+            nav.navbar .navbar-brand{
+                justify-content: space-between;
+                width: 100%;
+            }
+            .navbar-end>a:first-child {
+                border-top: 1px solid #ccc;
+            }
+        }
+        @media (min-width: 1025px) {
+            .contenedor-navbar{
+                width: 100%;
+                display: flex;
             }
         }
     </style>
@@ -83,7 +116,7 @@
 
 <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="container">
+        <div class="contenedor-navbar">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/{{ request()->slug_instalacion }}" style="padding: 10px">
                     
@@ -104,9 +137,9 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item {{request()->is(request()->slug_instalacion) ? 'active' : '' }}"> Inicio </a>
-                    {{-- <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Reservar </a> --}}
-                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Normas </a>
+                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item {{request()->is('/') ? 'active' : '' }}"> Inicio </a>
+                    {{-- <a href="" class="navbar-item"> Reservar </a> --}}
+                    {{-- <a href="#" class="navbar-item"> Normas </a> --}}
                     @if (\Auth::check())
                         @if (auth()->user()->rol != 'admin')
                             <a href="/{{ request()->slug_instalacion }}/mis-reservas" class="navbar-item {{request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i class="fas fa-book-open mr-2"></i> Mis reservas </a>
@@ -143,6 +176,8 @@
             </div>
         </div> --}}
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script>
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', () => {

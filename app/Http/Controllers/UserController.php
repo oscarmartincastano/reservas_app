@@ -75,10 +75,14 @@ class UserController extends Controller
             }
         }
 
+        $date_for_valid = new DateTime();
+        $date_for_valid->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+
+        $valid_period = new \DatePeriod(new DateTime(), \DateInterval::createFromDateString('1 day'), $date_for_valid);
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
 
-        return view('pista.pista', compact('period', 'pistas', 'pista_selected'));
+        return view('pista.pista', compact('period', 'valid_period', 'pistas', 'pista_selected'));
     }
 
     public function reserva(Request $request)
@@ -175,14 +179,14 @@ class UserController extends Controller
             }
         }
 
-        Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva));
+        /* Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva)); */
 
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
 
     public function mis_reservas(Request $request)
     {
-        $reservas = auth()->user()->reservas;
+        $reservas = Reserva::where('id_usuario', auth()->user()->id)->orderBy('created_at', 'desc')->simplePaginate();
 
         return view('user.misreservas', compact('reservas'));
     }

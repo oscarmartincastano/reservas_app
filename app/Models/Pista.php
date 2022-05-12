@@ -89,11 +89,20 @@ class Pista extends Model
     public function get_reservas_fecha_hora($timestamp)
     {
         $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw("FIELD (estado, 'active', 'pasado', 'canceled') ASC")->get();
+        $jump = 0;
 
         $ret_reservas = [];
         foreach ($reservas as $key => $reserva) {
             if (in_array($timestamp, $reserva->horarios_deserialized)) {
+                if ($jump) {
+                    $jump=$jump-1;
+                    continue;
+                }
                 $reserva->usuario = User::find($reserva->id_usuario);
+                if ($reserva->reserva_multiple) {
+                    $reserva->numero_reservas = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count();
+                    $jump = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count()-1;
+                }
                 $reserva->string_intervalo = date('H:i', $timestamp) . ' - ' . date('H:i', strtotime("+{$reserva->minutos_totales} minutes", strtotime(date('H:i', $timestamp))));
                 array_push($ret_reservas, $reserva);
             }
@@ -168,11 +177,16 @@ class Pista extends Model
             strtotime(date('Y-m-d', $timestamp)) < strtotime(date('Y-m-d') . " +{$this->max_dias_antelacion} days") &&
             !$this->check_desactivado($timestamp) && 
             $this->reservas_por_tramo > count($this->get_reserva_activa_fecha_hora($timestamp)) && 
-            new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', $timestamp))
+            new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', strtotime(date('d-m-Y H:i', $timestamp) . " +{$this->get_minutos_given_timestamp($timestamp)} minutes" )))
             ) {
             return true;
         }
         return false;
+    }
+
+    public function reservas_permitidas_restantes($timestamp)
+    {
+        return $this->reservas_por_tramo - count($this->get_reserva_activa_fecha_hora($timestamp));
     }
 
     public function horario_tramos($fecha)
@@ -299,5 +313,10 @@ class Pista extends Model
                 }
             }
         }
+    }
+
+    public function maximo_reservas_para_usuario(User $user)
+    {
+        return $this->reservas_por_tramo < $user->numero_reservas_perimitidas($this->tipo) ? ($this->reservas_permitidas_restantes(request()->timestamp) < $this->reservas_por_tramo ? $this->reservas_permitidas_restantes(request()->timestamp) : $this->reservas_por_tramo) : ($this->reservas_permitidas_restantes(request()->timestamp) < $user->numero_reservas_perimitidas($this->tipo) ?  $this->reservas_permitidas_restantes(request()->timestamp) : $user->numero_reservas_perimitidas($this->tipo));
     }
 }

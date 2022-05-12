@@ -28,7 +28,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nombre corto</label>
                                 <input value="{{ $pista->nombre_corto }}" name="nombre_corto" type="text" placeholder="Nombre corto..."
-                                    class="form-control col-md-10" required>
+                                    class="form-control col-md-10">
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Tipo</label>
@@ -56,13 +56,13 @@
                                     @else
                                         <option {{ $pista->tipo == 'Tenis' ? 'selected' : '' }} value="Tenis">Tenis</option>
                                         <option {{ $pista->tipo == 'Pádel' ? 'selected' : '' }} value="Pádel">Pádel</option>
-                                        <option {{ $pista->tipo == 'Fútbol' ? 'selected' : '' }} value="Fútbol">Fútbol
-                                        </option>
-                                        <option {{ $pista->tipo == 'Ping pong' ? 'selected' : '' }} value="Ping pong">Ping
-                                            pong</option>
+                                        <option {{ $pista->tipo == 'Fútbol' ? 'selected' : '' }} value="Fútbol">Fútbol</option>
+                                        <option {{ $pista->tipo == 'Baloncesto' ? 'selected' : '' }} value="Baloncesto">Baloncesto</option>
+                                        <option {{ $pista->tipo == 'Ping pong' ? 'selected' : '' }} value="Ping pong">Ping pong</option>
                                         <option {{ $pista->tipo == 'Sala' ? 'selected' : '' }} value="Sala">Sala</option>
-                                        <option {{ $pista->tipo == 'Gimnasio' ? 'selected' : '' }} value="Gimnasio">Gimnasio
-                                        </option> 
+                                        <option {{ $pista->tipo == 'Gimnasio' ? 'selected' : '' }} value="Gimnasio">Gimnasio</option> 
+                                        <option {{ $pista->tipo == 'Atletismo' ? 'selected' : '' }} value="Atletismo">Atletismo</option>
+                                        <option {{ $pista->tipo == 'Piscina' ? 'selected' : '' }} value="Piscina">Piscina</option>
                                     @endif
                                 </select>
                             </div>
@@ -146,6 +146,7 @@
                                                                             @if ($intervalo['secuencia'] == $i * 15) selected @endif>
                                                                             {{ $i * 15 }}</option>
                                                                     @endfor
+                                                                    <option @if ($intervalo['secuencia'] > 120) selected @endif value="completo">Intervalo completo</option>
                                                                 </select>
                                                             </div>
                                                             @if ($loop->index != 0)
@@ -301,6 +302,7 @@
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
+                                                            <option value="completo">Intervalo completo</option>
                                                         </select>
                                                     </div>
                                                     
@@ -345,6 +347,7 @@
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
+                                                            <option value="completo">Intervalo completo</option>
                                                         </select>
                                                     </div>
                                                 </div>

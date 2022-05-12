@@ -45,6 +45,10 @@ class Instalacion extends Model
         return $this->hasOne(Configuracion::class, 'id_instalacion');
     }
 
+    public function getUsersValidosAttribute() {
+        return User::where('id_instalacion', $this->id)->whereNotNull('aprobado')->where('rol', 'user')->orderBy('name', 'asc')->get();
+    }
+    
     public function getDeportesAttribute() {
         return $this->deportes();
     }

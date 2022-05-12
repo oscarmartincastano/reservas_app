@@ -344,8 +344,8 @@
                                 <div class="col text-center">
                                     <div class="text-uppercase p-3 dia">
                                         {{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}</div>
-                                    <div><a data-fecha="{{ $fecha->format('Y-m-d') }}" data-fecha_long="{{  $fecha->format('d/m/Y') }}" @if(auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d'))) data-toggle="tooltip" data-placement="top" title="{{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) }} Reservas pendientes" @endif href="#" class="btn-dia w-100 h-100 d-block p-5 {{ $fecha->format('d/m/Y') == date('d/m/Y') ? 'active' :  ''}}"><span
-                                                class="numero {{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) ? 'reservas-activas' : '' }} {{ $fecha->format('Y-m-d')<date('Y-m-d') ? 'fecha-anterior' : ($fecha->format('Y-m-d')==date('Y-m-d') ? 'hoy' : '') }}">{{ $fecha->format('d') }}</span></a></div>
+                                    <div><a data-fecha="{{ $fecha->format('Y-m-d') }}" data-fecha_long="{{  $fecha->format('d/m/Y') }}" @if(auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d'))) data-toggle="tooltip" data-placement="top" title="{{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) }} Reservas pendientes" @endif href="#" class="btn-dia w-100 h-100 d-block p-5 @if(Session::get('dia_reserva_hecha')) {{ $fecha->format('Y-m-d') == Session::get('dia_reserva_hecha') ? 'active' : '' }} @else {{ $fecha->format('d/m/Y') == date('d/m/Y') ? 'active' :  ''}} @endif"><span
+                                        class="numero {{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) ? 'reservas-activas' : '' }} {{ $fecha->format('Y-m-d')<date('Y-m-d') ? 'fecha-anterior' : ($fecha->format('Y-m-d')==date('Y-m-d') ? 'hoy' : '') }}">{{ $fecha->format('d') }}</span></a></div>
                                 </div>
                             @endforeach
                         </div>
@@ -512,9 +512,9 @@
 
                                 if (intervalo.num_res < data.reservas_por_tramo) {
                                     if (intervalo.desactivado) {
-                                        string += `<div><form class="inline-block" method="POST" action="/admin/reservas/${data.id}/activar/${intervalo.timestamp}${intervalo.desactivado == 2 ? '?periodic=1' : ''}">@csrf <button type="submit" class="btn btn-outline-success">Activar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                        string += `<div><form class="inline-block" method="POST" action="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/activar/${intervalo.timestamp}${intervalo.desactivado == 2 ? '?periodic=1' : ''}">@csrf <button type="submit" class="btn btn-outline-success">Activar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
                                     }else{
-                                        string += `<div><form style="margin-bottom:7px" class="inline-block" method="POST" action="/admin/reservas/${data.id}/desactivar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-primary">Desactivar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
+                                        string += `<div><form style="margin-bottom:7px" class="inline-block" method="POST" action="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/desactivar/${intervalo.timestamp}">@csrf <button type="submit" class="btn btn-outline-primary">Desactivar</button> </form> <a href="/{{ request()->slug_instalacion }}/admin/reservas/${data.id}/reservar/${intervalo.timestamp}" class="btn btn-primary" style="padding: 0 14px;">Reservar</a></div></td><td class="timeslot-reserve">`;
                                     }
                                 } else {
                                     string += `</td><td class="timeslot-reserve">`;
@@ -524,7 +524,7 @@
                                     intervalo.reservas.forEach(reserva => {
                                         console.log(reserva);
                                         string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
-                                                    <h4><a href="/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                                    <h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
                                         if (reserva.estado == 'active') {
                                             string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
                                         }else if (reserva.estado == 'canceled') {
@@ -596,10 +596,13 @@
             });
         });
     </script>
-    @if ((isset(request()->semana) && request()->semana != 0) || isset(request()->week) && date('W') != \Carbon\Carbon::parse(iterator_to_array($period)[0])->format('W'))        <script>
-            $(document).ready(function () {
-                $('.btn-dia')[0].click();
-            });
-        </script>
+    @if (!Session::get('dia_reserva_hecha'))
+        @if ((isset(request()->semana) && request()->semana != 0) || isset(request()->week) && date('W') != \Carbon\Carbon::parse(iterator_to_array($period)[0])->format('W'))
+            <script>
+                $(document).ready(function () {
+                    $('.btn-dia')[0].click();
+                });
+            </script>
+        @endif
     @endif
 @endsection

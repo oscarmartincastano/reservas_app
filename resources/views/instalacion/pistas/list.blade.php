@@ -29,9 +29,10 @@
                     </div>
                     <div class="card-body">
                         <a href="/{{ request()->slug_instalacion }}/admin/pistas/add" class="text-white btn btn-primary">Añadir nueva</a>
-                        <table class="table table-condensed table-hover">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nombre corto</th>
                                     <th>Nombre</th>
                                     <th>Tipo</th>
                                     <th>Horario</th>
@@ -39,10 +40,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($instalacion->pistas as $item)
+                                @foreach ($pistas as $item)
                                     <tr>
+                                        <td>{{ $item->nombre_corto }}</td>
                                         <td>{{ $item->nombre }}</td>
-                                        <td>{{ $item->tipo }}</td>
+                                        <td>{{ $item->tipo }}. {{ $item->subtipo ?? '' }}</td>
                                         <td>
                                             @foreach ($item->horario_deserialized as $horario)
                                                @if (count($horario['dias']) == 7)
@@ -115,7 +117,10 @@
                                                     @endforeach
                                             @endforeach
                                         </td>
-                                        <td><a href="/{{ $instalacion->slug }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                        <td>
+                                            <a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a>
+                                            <a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/desactivar" class="btn btn-secondary" style="@if ($item->active) background: grey;color:white @else background: green;color:white @endif">@if (!$item->active) <i data-feather="eye-off"></i> @else <i data-feather="eye"></i> @endif</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

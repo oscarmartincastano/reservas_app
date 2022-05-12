@@ -94,7 +94,7 @@
 @endsection
 
 @section('content')
-<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. strtolower($pista->tipo) .'.jpg')), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg) @endif;
+<div id="app"  style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. lcfirst($pista->tipo) .'.jpg')), url(/img/deportes/reserva-{{ lcfirst($pista->tipo) }}.jpg) @endif;
     background-size:cover;background-position:bottom">
     <section class="hero is-medium">
         <div class="has-text-centered title-div title-reserva-section" style="padding-top:4.5rem;padding-bottom:3.5rem;margin-bottom:0">
@@ -140,8 +140,8 @@
                                     <label class="col-sm-3 col-form-label py-0">Fecha:</label>
                                     <div class="col-sm-9">
                                         <div>{{ date('d/m/Y', $fecha) }} (<span
-                                                class="horario">{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a <span
-                                                    class="hfin">{{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($secuencia)->format('H:i') }}</span></span>)
+                                            class="horario">{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a <span
+                                                class="hfin">{{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($secuencia)->format('H:i') }}</span></span>)
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                         <select required class="full-width select2 select-cliente" data-init-plugin="select2" name="user_id" id="user_id">
                                             <option></option>
                                             <option value="new_user">+ NUEVO CLIENTE</option>
-                                            @foreach (auth()->user()->instalacion->users as $item)
+                                            @foreach (auth()->user()->instalacion->users_validos as $item)
                                                 @if ($item->id != auth()->user()->id)
                                                     <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->email }})</option>
                                                 @endif
@@ -178,6 +178,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                {{-- @if ($pista->reservas_por_tramo > 1)
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label py-0">Nº de reservas:</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" name="numero_reservas" class="form-control" placeholder="Nº de reservas" value="1" max="{{ $pista->maximo_reservas_para_usuario(auth()->user()) }}" min="1" required>
+                                        </div>
+                                    </div>
+                                @endif --}}
                                 @if (auth()->user()->instalacion->configuracion->observaciones)
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label py-0">Observaciones:</label>

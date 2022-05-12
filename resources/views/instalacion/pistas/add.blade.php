@@ -54,9 +54,12 @@
                                         <option value="Tenis">Tenis</option>
                                         <option value="Pádel">Pádel</option>
                                         <option value="Fútbol">Fútbol</option>
+                                        <option value="Baloncesto">Baloncesto</option>
                                         <option value="Ping pong">Ping pong</option>
                                         <option value="Sala">Sala</option>
                                         <option value="Gimnasio">Gimnasio</option>
+                                        <option value="Atletismo">Atletismo</option>
+                                        <option value="Piscina">Piscina</option>
                                     @endif
                                 </select>
                             </div>
@@ -96,6 +99,7 @@
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
+                                                            <option value="completo">Intervalo completo</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -184,6 +188,7 @@
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
+                                                            <option value="completo">Intervalo completo</option>
                                                         </select>
                                                     </div>
                                                     
@@ -228,6 +233,7 @@
                                                             @for ($i = 1; $i < 9; $i++)
                                                                 <option value="{{ $i * 15 }}">{{ $i * 15 }}</option>
                                                             @endfor
+                                                            <option value="completo">Intervalo completo</option>
                                                         </select>
                                                     </div>
                                                 </div>

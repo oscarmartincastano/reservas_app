@@ -118,8 +118,12 @@ class InstalacionController extends Controller
     {
         $reserva = Reserva::find($request->id);
         if ($reserva->estado == 'active') {
+            if ($reserva->reserva_multiple) {
+                Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['id_usuario', $reserva->id_usuario]])->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
+                return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
+            }
             $reserva->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
-            return redirect()->back();
+            return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
         }
 
         return redirect()->back()->with('error', 'true');
@@ -185,30 +189,63 @@ class InstalacionController extends Controller
                 $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
             }
         }
-        
-        $reserva = Reserva::create([
-            'id_pista' => $request->id_pista,
-            'id_usuario' => $request->user_id,
-            'timestamp' => $request->timestamp,
-            'horarios' => serialize($timestamps),
-            'fecha' => date('Y/m/d', $request->timestamp),
-            'hora' => \Carbon\Carbon::createFromTimestamp($request->timestamp)->format('Hi'),
-            'tarifa' => $request->tarifa,
-            'minutos_totales' => $minutos_totales,
-            'creado_por' => 'admin'
-        ]);
-
-        if (isset($request->observaciones)) {
-            $reserva->update(['observaciones' => $request->observaciones]);
-        }
-
-        if (isset($request->campo_adicional)) {
-            foreach ($request->campo_adicional as $id_campo => $valor) {
-                Valor_campo_personalizado::create([
-                    'id_reserva' => $reserva->id,
-                    'id_campo' => $id_campo,
-                    'valor' => $valor
+        $reserva_multiple_id = null;
+        if (isset($request->numero_reservas) && $request->numero_reservas>1) {
+            for ($i=0; $i < $request->numero_reservas; $i++) { 
+                $reserva = Reserva::create([
+                    'id_pista' => $request->id_pista,
+                    'id_usuario' => $request->user_id,
+                    'timestamp' => $request->timestamp,
+                    'horarios' => serialize($timestamps),
+                    'fecha' => date('Y/m/d', $request->timestamp),
+                    'hora' => \Carbon\Carbon::createFromTimestamp($request->timestamp)->format('Hi'),
+                    'tarifa' => $request->tarifa,
+                    'minutos_totales' => $minutos_totales,
+                    'creado_por' => 'admin'
                 ]);
+
+                $reserva_multiple_id = $i==0 ? $reserva->id : $reserva_multiple_id;
+                $reserva->update(['reserva_multiple' => $reserva_multiple_id]);
+
+                if (isset($request->observaciones)) {
+                    $reserva->update(['observaciones' => $request->observaciones]);
+                }
+                
+                if (isset($request->campo_adicional)) {
+                    foreach ($request->campo_adicional as $id_campo => $valor) {
+                        Valor_campo_personalizado::create([
+                            'id_reserva' => $reserva->id,
+                            'id_campo' => $id_campo,
+                            'valor' => $valor
+                        ]);
+                    }
+                }
+            }
+        } else {
+            $reserva = Reserva::create([
+                'id_pista' => $request->id_pista,
+                'id_usuario' => $request->user_id,
+                'timestamp' => $request->timestamp,
+                'horarios' => serialize($timestamps),
+                'fecha' => date('Y/m/d', $request->timestamp),
+                'hora' => \Carbon\Carbon::createFromTimestamp($request->timestamp)->format('Hi'),
+                'tarifa' => $request->tarifa,
+                'minutos_totales' => $minutos_totales,
+                'creado_por' => 'admin'
+            ]);
+
+            if (isset($request->observaciones)) {
+                $reserva->update(['observaciones' => $request->observaciones]);
+            }
+
+            if (isset($request->campo_adicional)) {
+                foreach ($request->campo_adicional as $id_campo => $valor) {
+                    Valor_campo_personalizado::create([
+                        'id_reserva' => $reserva->id,
+                        'id_campo' => $id_campo,
+                        'valor' => $valor
+                    ]);
+                }
             }
         }
 
@@ -220,7 +257,7 @@ class InstalacionController extends Controller
         $date = new DateTime(date('Y-m-d', $request->timestamp));
         $week = $date->format("Y") . '-' . 'W' . $date->format("W");
         
-        return redirect($request->slug_instalacion . '/admin/reservas?week='. $week);
+        return redirect($request->slug_instalacion . '/admin/reservas?week='. $week)->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
     public function desactivar_tramo(Request $request) {
@@ -235,7 +272,7 @@ class InstalacionController extends Controller
             ['timestamp', $request->timestamp]
         ])->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
     public function activar_tramo(Request $request) {
@@ -250,7 +287,7 @@ class InstalacionController extends Controller
             Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $request->timestamp]])->delete();
         }
 
-        return redirect($request->slug_instalacion . '/admin');
+        return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
     public function desactivar_dia(Request $request) {
@@ -450,7 +487,8 @@ class InstalacionController extends Controller
 
     public function pistas() {
         $instalacion = auth()->user()->instalacion;
-        return view('instalacion.pistas.list', compact('instalacion'));
+        $pistas = $instalacion->pistas;
+        return view('instalacion.pistas.list', compact('instalacion', 'pistas'));
     }
 
     public function add_pista_view() {
@@ -472,6 +510,9 @@ class InstalacionController extends Controller
                 $interval = $a->diff($b);
                 $diff_minutes = $interval->format("%h") * 60;
                 $diff_minutes += $interval->format("%i");
+
+                $intervalo['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
+
                 $numero_veces = $diff_minutes/$intervalo['secuencia'];
 
                 if (!is_int($diff_minutes/$intervalo['secuencia'])) {
@@ -483,10 +524,12 @@ class InstalacionController extends Controller
                     $horario[$indexhor]['intervalo'][$indexinterval]['hfin'] = $hora->format('H:i');
                 }
 
+                //si es intervalo completo
+                $horario[$indexhor]['intervalo'][$indexinterval]['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
             }
         }
         
-        $data['horario'] = serialize($request->horario);
+        $data['horario'] = serialize($horario);
 
         $pista = Pista::create($data);
 
@@ -512,6 +555,9 @@ class InstalacionController extends Controller
                 $interval = $a->diff($b);
                 $diff_minutes = $interval->format("%h") * 60;
                 $diff_minutes += $interval->format("%i");
+                
+                $intervalo['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
+
                 $numero_veces = $diff_minutes/$intervalo['secuencia'];
 
                 if (!is_int($diff_minutes/$intervalo['secuencia'])) {
@@ -523,13 +569,16 @@ class InstalacionController extends Controller
                     $horario[$indexhor]['intervalo'][$indexinterval]['hfin'] = $hora->format('H:i');
                 }
 
+                //si es intervalo completo
+                $horario[$indexhor]['intervalo'][$indexinterval]['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
             }
         }
+        
         $data['horario'] = serialize($horario);
         /* return $data; */
         Pista::where('id', $request->id)->update($data);
         
-        return redirect('/' . auth()->user()->instalacion->slug . '/admin/pistas');
+        return redirect("/" . auth()->user()->instalacion->slug . '/admin/pistas');
     }
 
     public function configuracion_pistas_reservas(Request $request) {

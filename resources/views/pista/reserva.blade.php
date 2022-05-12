@@ -140,27 +140,87 @@
             a.navbar-item>img{
                 max-height: 32px !important;
             }
-            .navbar-end{
-                display: none;
-            }
             .navbar-burger{
                 display: block;
             }
         }
+        input.form-control{
+            height: calc(1em + 0.75rem + 2px)
+        }
+        .navbar {
+            z-index: 2;
+        }
+        .navbar-end{
+            display: block;
+        }
+        @media (max-width: 600px) {
+            a.navbar-item {
+                padding: 0;
+            }
+            a.navbar-item>img{
+                max-height: 32px !important;
+            }
+            body>nav.navbar {
+                position: fixed;
+                top: 0;
+                width: 100%;
+            }
+            body>main{
+                margin-top: 73px;
+            }
+            h1.titulo-pagina {
+                margin-top: 103px !important;
+            }
+        }
+        @media (max-width: 1025px) {
+            .navbar-menu{
+                display: none;
+            }
+            .navbar-end>a.navbar-item{
+                padding: 13px;
+            }
+            body>nav.navbar {
+                display: block;
+                padding: 0;
+            }
+            nav.navbar .navbar-brand{
+                justify-content: space-between;
+                width: 100%;
+            }
+            .navbar-end>a:first-child {
+                border-top: 1px solid #ccc;
+            }
+            .navbar-menu.is-active {
+                display: block;
+            }
+            .navbar-item{
+                display: block
+            }
+        }
+        @media (min-width: 1025px) {
+            .contenedor-navbar{
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
     </style>
 </head>
 
-<body style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. strtolower($pista->tipo) .'.jpg')), url(/img/deportes/reserva-{{ strtolower($pista->tipo) }}.jpg) @endif;
+<body style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. lcfirst($pista->tipo) .'.jpg')), url(/img/deportes/reserva-{{ lcfirst($pista->tipo) }}.jpg) @endif;
     background-size:cover;background-position:bottom">
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="container">
+        <div class="contenedor-navbar">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/{{ request()->slug_instalacion }}">
-                    @if (file_exists(public_path() . '/img/'. request()->slug_instalacion .'.png'))
-                        <img src="{{ asset('img/'.request()->slug_instalacion.'.png') }}" height="50" />
+                <a class="navbar-item" href="/{{ request()->slug_instalacion }}" style="padding: 10px">
+                    
+                    @if (file_exists(public_path() . '/img/ceco.png'))
+                        <img src="{{ asset('img/'.request()->slug_instalacion.'.png') }}" style="max-height: 50px" />
                     @else
-                        <img src="/img/tallerempresarial.png" height="50" />
+                        <img src="/img/tallerempresarial.png" style="max-height: 50px" />
                     @endif
                 </a>
 
@@ -174,29 +234,24 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a href="/{{ request()->slug_instalacion }}"
-                        class="navbar-item {{ request()->is(request()->slug_instalacion) ? 'active' : '' }}"> Inicio
-                    </a>
-                    {{-- <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Reservar </a> --}}
-                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item"> Normas </a>
+                    <a href="/" class="navbar-item {{request()->is('/') ? 'active' : '' }}"> Inicio </a>
+                    {{-- <a href="" class="navbar-item"> Reservar </a> --}}
+                    {{-- <a href="#" class="navbar-item"> Normas </a> --}}
                     @if (\Auth::check())
-                        <a href="/{{ request()->slug_instalacion }}/mis-reservas"
-                            class="navbar-item {{ request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i
-                                class="fas fa-book-open mr-2"></i> Mis reservas </a>
-                        <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i
-                                class="fas fa-user mr-2"></i> Mi perfil </a>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="navbar-item">
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
+                        @if (auth()->user()->rol != 'admin')
+                            <a href="/{{ request()->slug_instalacion }}/mis-reservas" class="navbar-item {{request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i class="fas fa-book-open mr-2"></i> Mis reservas </a>
+                            <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i class="fas fa-user mr-2"></i> Mi perfil </a>
+                        @else
+                            <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i class="fas fa-unlock-alt mr-2"></i> Administración </a>
+                        @endif
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="navbar-item">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                             <i class="fas fa-power-off mr-2"></i> Cerrar sesión
                         </a>
                     @else
-                        <a href="{{ route('login_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}"
-                            class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i> Acceder</a>
+                        <a href="{{ route('login_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i> Acceder</a>
 
                     @endif
                 </div>
@@ -229,6 +284,11 @@
                                     Estás reservando para <em>{{ $pista->nombre }}</em>. Por favor, revise y confirme
                                     los datos siguientes.
                                 </p>
+                                @if(session()->has('error_reservas_maximas'))
+                                    <p class="descripcion" style="color: red">
+                                        No se ha podido realizar la reserva porque el número de reservas sobrepasa al número máximo reservas permitido.
+                                    </p>
+                                @endif
                                 <form method="POST"
                                     action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}/{{ request()->timestamp }}/reserva">
                                     @csrf
@@ -249,8 +309,8 @@
                                         <label class="col-sm-3 col-form-label py-0">Fecha:</label>
                                         <div class="col-sm-9">
                                             <div>{{ date('d/m/Y', $fecha) }} (<span
-                                                    class="horario">{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a <span
-                                                        class="hfin">{{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($secuencia)->format('H:i') }}</span></span>)
+                                                class="horario">{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a <span
+                                                    class="hfin">{{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($secuencia)->format('H:i') }}</span></span>)
                                             </div>
                                         </div>
                                     </div>{{-- {{ dd($number) }} --}}
@@ -262,16 +322,24 @@
                                                     @for ($i = 1; $i < $number+1; $i++)
                                                         <option
                                                             data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia * $i . ' minutes')) }}"
-                                                            value="{{ $i }}">RESERVA {{ $secuencia * $i }} MINUTOS</option>
+                                                            value="{{ $i }}">RESERVA {{floor(($secuencia*$i)/60) ? floor(($secuencia*$i)/60) . ' HORAS ' : ''  }} {{(($secuencia*$i)%60) ? (($secuencia*$i)%60)  . ' MINUTOS' : '' }}</option>
                                                     @endfor
                                                 @else
                                                     <option
                                                         data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia  . ' minutes')) }}"
-                                                        value="1">RESERVA {{ $secuencia }} MINUTOS</option>
+                                                        value="1">{{floor(($secuencia)/60) ? floor(($secuencia)/60) . ' HORAS ' : ''  }} {{(($secuencia)%60) ? (($secuencia)%60)  . ' MINUTOS' : '' }}</option>
                                                 @endif
                                             </select>
                                         </div>
                                     </div>
+                                    {{-- @if ($pista->reservas_por_tramo > 1)
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label py-0">Nº de reservas:</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" name="numero_reservas" class="form-control" placeholder="Nº de reservas" value="1" max="{{ $pista->maximo_reservas_para_usuario(auth()->user()) }}" min="1" required>
+                                            </div>
+                                        </div>
+                                    @endif --}}
                                     @if (auth()->user()->instalacion->configuracion->observaciones)
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label py-0">Observaciones:</label>
@@ -325,6 +393,11 @@
             $('#tarifa').change(function(e) {
                 e.preventDefault();
                 $('.hfin').html($(this).find(`[value="${$(this).val()}"]`).data('hfin'));
+            });
+
+            $('.navbar-burger').click(function (e) {
+                $(this).toggleClass('is-active');
+                $(`#${$(this).data('target')}`).toggleClass('is-active');
             });
         });
     </script>
