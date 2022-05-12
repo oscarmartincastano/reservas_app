@@ -119,7 +119,7 @@
                                         </td>
                                         <td>
                                             <a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/edit" class="btn btn-primary"><i data-feather="edit"></i></a>
-                                            <a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/desactivar" class="btn btn-secondary" style="@if ($item->active) background: grey;color:white @else background: green;color:white @endif">@if (!$item->active) <i data-feather="eye-off"></i> @else <i data-feather="eye"></i> @endif</a>
+                                            {{-- <a href="/{{ request()->slug_instalacion }}/admin/pistas/{{ $item->id }}/desactivar" class="btn btn-secondary" style="@if ($item->active) background: grey;color:white @else background: green;color:white @endif">@if (!$item->active) <i data-feather="eye-off"></i> @else <i data-feather="eye"></i> @endif</a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
