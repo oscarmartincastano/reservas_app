@@ -269,7 +269,7 @@ h2{
         padding: 0;
     }
     .navbar .navbar-end .navbar-item{
-        border-top: 1px solid #9999998a;
+        padding-left: 22px;
     }
     .navbar .navbar-menu{
         padding: 0;

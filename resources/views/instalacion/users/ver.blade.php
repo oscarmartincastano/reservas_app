@@ -61,7 +61,7 @@
                                             <th>Horas</th>
                                             <th>Espacio</th>
                                             <th>Estado de la reserva</th>
-                                            <th>#</th>
+                                            {{-- <th>#</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,13 +85,13 @@
                                                         Pasado
                                                     @endif
                                                 </td>
-                                                <td>
+                                                {{-- <td>
                                                     @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                                         <a class="cancel btn btn-primary text-white" title="Cancelar reserva">
                                                             Acción
                                                         </a>
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
