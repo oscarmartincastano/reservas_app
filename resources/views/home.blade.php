@@ -6,15 +6,15 @@
 
 
 <div class="container">
-    <h1 class="title text-center mt-5">Selecciona espacio</h1>
+    <h1 class="title text-center mt-5 titulo-pagina">Selecciona espacio</h1>
     <div class="divider mb-5">
         <div></div>
     </div>
-    <div class="row">
-        @foreach ($instalacion->deportes as $item)
-            <div class="col">
-                @if ($instalacion->id == 4)
-                    <a style="    min-height: 200px;
+    <div class="row" style="place-content: center">
+        @foreach ($instalacion->deportes as $index => $item)
+            <div class="col-md-4" style="padding: calc(var(--bs-gutter-x) * .5)">
+                @if (!file_exists(public_path() . '/img/deportes/'.lcfirst($item).'.jpg'))
+                    <a style="
                     display: flex;
                     align-content: center;
                     align-items: center;
@@ -24,9 +24,12 @@
                     text-transform: uppercase;
                     font-weight: bold;
                     color: white;
-                    font-size:2em" href="/{{ request()->slug_instalacion }}/{{ $item }}">{{ $item }}</a>
+                    font-size:2em" href="/{{ request()->slug_instalacion }}/{{ $item }}">
+                        <img style="visibility: hidden" src="{{ asset('img/deportes/piscina.jpg') }}">
+                        <span style="position: absolute">{{ $item }}</span>
+                    </a>
                 @else
-                    <a href="/{{ request()->slug_instalacion }}/{{ $item }}"><img src="{{ asset('img/deportes/'.strtolower($item).'.jpg') }}"></a> --}}
+                    <a href="/{{ request()->slug_instalacion }}/{{ $item }}"><img src="{{ asset('img/deportes/'.lcfirst($item).'.jpg') }}"></a>
                 @endif
             </div>
         @endforeach

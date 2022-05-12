@@ -49,14 +49,14 @@
         }
         
     </style>
-    @if (count($pistas) > 4)
+    @if (count($pistas) > 1)
         <style>
             .pistas {
                 padding-top: 50px;
             }
         </style>
     @endif
-    @if (file_exists(public_path('/img/planos/'.strtolower(request()->deporte) . '.png')))
+    @if (count($pistas) > 4)
         <style>
             .seleccionar-pista-label{
                 top: 60px !important;

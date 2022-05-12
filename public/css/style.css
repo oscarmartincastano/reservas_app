@@ -47,6 +47,10 @@ body {
     border-left: 1px solid #ccc;
 }
 
+.seleccionar-pista-label + div {
+    border-left: none !important;
+}
+
 .div-reservas .calendario-horarios {
     padding: 20px;
 }
