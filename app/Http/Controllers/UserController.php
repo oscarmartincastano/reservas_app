@@ -224,4 +224,13 @@ class UserController extends Controller
         }
         return redirect()->back()->with('success', 'true');
     }
+
+    public function normas_instalacion(Request $request) {
+        
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
+        if (!$instalacion->html_normas) {
+            return redirect("/{$instalacion->slug}");
+        }
+        return view("normas", compact('instalacion'));
+    }
 }

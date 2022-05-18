@@ -41,6 +41,11 @@
                                     <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/tlfno" class="btn btn-primary"><i data-feather="edit"></i></a></td>
                                 </tr>
                                 <tr>
+                                    <th>Html normas</th>
+                                    <td>{{ $instalacion->html_normas }}</td>
+                                    <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/html_normas" class="btn btn-primary"><i data-feather="edit"></i></a></td>
+                                </tr>
+                                <tr>
                                     <th>Slug</th>
                                     <td>{{ $instalacion->slug }}</td>
                                     <td><a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion/edit/slug" class="btn btn-primary"><i data-feather="edit"></i></a></td>

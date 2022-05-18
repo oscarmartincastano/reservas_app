@@ -139,7 +139,9 @@
                 <div class="navbar-end">
                     <a href="/{{ request()->slug_instalacion }}" class="navbar-item {{request()->is('/') ? 'active' : '' }}"> Inicio </a>
                     {{-- <a href="" class="navbar-item"> Reservar </a> --}}
-                    {{-- <a href="#" class="navbar-item"> Normas </a> --}}
+                    @if (App\Models\Instalacion::where('slug', request()->slug_instalacion)->first()->html_normas)
+                        <a href="/{{ request()->slug_instalacion }}/normas" class="navbar-item"> Normas </a>
+                    @endif
                     @if (\Auth::check())
                         @if (auth()->user()->rol != 'admin')
                             <a href="/{{ request()->slug_instalacion }}/mis-reservas" class="navbar-item {{request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i class="fas fa-book-open mr-2"></i> Mis reservas </a>

@@ -21,6 +21,8 @@ require __DIR__.'/auth.php';
 /* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
+    Route::get('/normas', 'UserController@normas_instalacion');
+
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login_instalacion');
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest')->middleware('login_instalacion');
 

@@ -20,6 +20,7 @@ class Instalacion extends Model
         'nombre',
         'direccion',
         'tlfno',
+        'html_normas',
         'slug',
     ];
 

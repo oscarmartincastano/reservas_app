@@ -16,12 +16,21 @@
                         <div class="card-title">{{ request()->tipo == 'tlfno' ? 'Teléfono' : request()->tipo }}</div>
                     </div>
                     <div class="card-body">
-                        <form action="#" method="post" role="form" enctype="multipart/form-data">
+                        <form action="#" method="post" role="form" id="form-normas" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
                                 <label>{{ request()->tipo == 'tlfno' ? 'Teléfono' : ucfirst(request()->tipo) }}</label>
                                 @if (request()->tipo == 'logo')
                                     <input name="{{ request()->tipo }}" type="file" placeholder="Logo..." class="form-control" required>
+                                @elseif(request()->tipo == 'html_normas')
+                                    <div class="form-group">
+                                        <div class="quill-wrapper">
+                                            <div id="quill">
+                                                {!! $instalacion[request()->tipo] ?? '' !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="html_normas" class="html_normas">
                                 @else
                                     <input value="{{ $instalacion[request()->tipo] }}" name="{{ request()->tipo }}" type="text" placeholder="{{ request()->tipo == 'tlfno' ? 'Teléfono' : ucfirst(request()->tipo) }}..." class="form-control" required>
                                 @endif
@@ -36,4 +45,44 @@
 
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            var toolbarOptions = [
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+
+                [{ 'header': 1 }, { 'header': 2 }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+
+                [{ 'size': ['small', false, 'large', 'huge'] }]
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+
+                ['clean']
+            ];
+
+            var quill = new Quill('#quill', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                placeholder: 'Html de normas...',
+                theme: 'snow'
+            });
+
+            if ($('.html_normas').length) {
+                $('#form-normas').submit(function (e) { 
+                    $('.html_normas').val(quill.root.innerHTML);
+                });
+            }
+        });
+    </script>
 @endsection

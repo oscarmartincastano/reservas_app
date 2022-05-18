@@ -40,6 +40,7 @@
     <link href="/simply_white/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" rel="stylesheet" type="text/css" />
     <link href="/simply_white/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
     <link class="main-stylesheet" href="/simply_white/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         .mark {
             border-radius: 20px;
@@ -130,6 +131,7 @@
     <script src="/simply_white/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js" type="text/javascript"></script>
     <script type="text/javascript" src="/simply_white/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
     <script type="text/javascript" src="/simply_white/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <!-- END PAGE LEVEL JS -->
     @yield('script')
 
