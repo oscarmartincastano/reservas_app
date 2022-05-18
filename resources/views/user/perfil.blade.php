@@ -35,16 +35,24 @@
                     <h2><i class="fas fa-edit mr-1"></i> Editar perfil</h2>
                     <form action="/{{ request()->slug_instalacion }}/perfil/edit" method="post">
                         @csrf
-                        <div class="form-group">
-                            <label for="name">Nombre</label>
-                            <input type="text" class="form-control" name="name" id="name"
-                                value="{{ auth()->user()->name }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email"
-                                value="{{ auth()->user()->email }}">
-                        </div>
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" class="form-control" id="name"
+                                    value="{{ auth()->user()->name }}" disabled>
+                            </div>
+                        @if (auth()->user()->instalacion->id == 5)
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email"
+                                    value="{{ auth()->user()->email }}" disabled>
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    value="{{ auth()->user()->email }}">
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="tlfno">Teléfono</label>
                             <input type="text" class="form-control" name="tlfno" id="tlfno"
