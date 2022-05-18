@@ -67,7 +67,7 @@
                                     placeholder="Repetir contraseña...">
                             </div>
                         </div>
-                        <input type="submit" value="Cambiar" class="btn btn-primary">
+                        <input type="submit" value="Cambiar" class="btn btn-primary mt-2 w-100">
                     </form>
                 </div>
             </div>
