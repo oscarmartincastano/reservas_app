@@ -165,6 +165,25 @@
     </nav>
     <main>
         @yield('content')
+        @if (auth()->user() && auth()->user()->instalacion->id == 5 && Cookie::get('modal') == null)
+            @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
+            <div class="modal" id="myModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content m-0" style="top:25vh">
+                    <div class="modal-header">
+                    <h4 class="h4 mb-0">Aviso</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body p-4">
+                    <p class="mb-4 text-center" style="font-size: 17px">El sistema está en modo de prueba hasta el día 19 de mayo a las 16h, por lo que no se contabilizarán las reservas.</p>
+                    <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        @endif
     </main>
     <footer class="footer">
         {{-- <div class="container">
@@ -181,6 +200,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script>
+        $("#myModal").modal('show');
         // Hamburger menu functionality
         document.addEventListener('DOMContentLoaded', () => {
             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
