@@ -52,21 +52,21 @@
                                 <input type="email" class="form-control" name="email" id="email"
                                     value="{{ auth()->user()->email }}">
                             </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="tlfno">Teléfono</label>
-                            <input type="text" class="form-control" name="tlfno" id="tlfno"
-                                value="{{ auth()->user()->tlfno }}" placeholder="Teléfono">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Cambiar contraseña</label>
-                            <div class="row m-0 gap-3">
-                                <input value="" type="password" class="form-control col" name="password" id="password"
-                                    placeholder="Contraseña...">
-                                <input value="" type="password" class="form-control col" name="password_rep" id="password"
-                                    placeholder="Repetir contraseña...">
+                            <div class="form-group">
+                                <label for="tlfno">Teléfono</label>
+                                <input type="text" class="form-control" name="tlfno" id="tlfno"
+                                    value="{{ auth()->user()->tlfno }}" placeholder="Teléfono">
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="password">Cambiar contraseña</label>
+                                <div class="row m-0 gap-3">
+                                    <input value="" type="password" class="form-control col" name="password" id="password"
+                                        placeholder="Contraseña...">
+                                    <input value="" type="password" class="form-control col" name="password_rep" id="password"
+                                        placeholder="Repetir contraseña...">
+                                </div>
+                            </div>
+                        @endif
                         <input type="submit" value="Cambiar" class="btn btn-primary mt-2 w-100">
                     </form>
                 </div>
