@@ -123,10 +123,11 @@
                                             <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
                                                 @csrf
                                             </form>
-                                            
-                                            <a class="cancel btn btn-danger" title="Cancelar reserva" onclick="if(confirm('¿Estás seguro que quieres cancelar esta reserva?')){$(this).prev().submit()}">
-                                                <i class="fas fa-times"></i>
-                                            </a>
+                                            @if(strtotime(date('Y-m-d H:i')) < $item->timestamp) 
+                                                <a class="cancel btn btn-danger" title="Cancelar reserva" onclick="if(confirm('¿Estás seguro que quieres cancelar esta reserva?')){$(this).prev().submit()}">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            @endif
                                         @endif
                                 </td>
                             </tr>
