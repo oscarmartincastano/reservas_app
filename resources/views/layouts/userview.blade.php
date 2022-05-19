@@ -165,7 +165,7 @@
     </nav>
     <main>
         @yield('content')
-        @if (auth()->user() && auth()->user()->instalacion->id == 5 && Cookie::get('modal') == null)
+        {{-- @if (auth()->user() && auth()->user()->instalacion->id == 5 && Cookie::get('modal') == null)
             @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
             <div class="modal" id="myModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -183,7 +183,7 @@
                 </div>
                 </div>
             </div>
-        @endif
+        @endif --}}
     </main>
     <footer class="footer">
         {{-- <div class="container">
