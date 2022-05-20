@@ -68,7 +68,9 @@
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
-                                        <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a>
+                                        <td><a data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
+                                            data-reserva="{{ $item->id }}"
+                                            data-user="{{ $item->user->name }}" href="#" class="btn-accion-reserva">{{ $item->user->name }}</a>
                                         </td>
                                         <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
@@ -98,7 +100,7 @@
                                                 <a class="cancel btn btn-primary text-white btn-accion-reserva"
                                                     data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                                     data-reserva="{{ $item->id }}"
-                                                    data-user="{{ $item->user->name }}" title="Cancelar reserva">
+                                                    data-user="{{ $item->user->name }}">
                                                     Acción
                                                 </a>
                                             @endif
