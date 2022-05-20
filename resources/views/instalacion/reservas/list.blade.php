@@ -10,8 +10,8 @@
                         <button aria-label="" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
                                 class="pg-icon">close</i>
                         </button>
-                        <h5>Reserva <span></span></h5>
-                        <p class="p-b-10 user"><strong>Usuario: </strong><span></span></p>
+                        <h5>Reserva <span class="text-capitalize"></span></h5>
+                        <p class="p-b-10 user"><strong>Usuario: </strong><span class="text-capitalize"></span></p>
                     </div>
                     <div class="modal-body">
                         <form role="form" method="POST" action="#">
@@ -68,7 +68,7 @@
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
-                                        <td><a data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
+                                        <td><a data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                             data-reserva="{{ $item->id }}"
                                             data-user="{{ $item->user->name }}" href="#" class="btn-accion-reserva">{{ $item->user->name }}</a>
                                         </td>
