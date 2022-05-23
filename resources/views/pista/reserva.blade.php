@@ -234,7 +234,7 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a href="/" class="navbar-item {{request()->is('/') ? 'active' : '' }}"> Inicio </a>
+                    <a href="/{{ request()->slug_instalacion }}" class="navbar-item {{request()->is('/') ? 'active' : '' }}"> Inicio </a>
                     {{-- <a href="" class="navbar-item"> Reservar </a> --}}
                     {{-- <a href="#" class="navbar-item"> Normas </a> --}}
                     @if (\Auth::check())
