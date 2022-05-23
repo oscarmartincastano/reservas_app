@@ -739,7 +739,7 @@ class InstalacionController extends Controller
     {
         $data = $request->all();
 
-        if (User::where('email', $request->email)->first()) {
+        if (User::where([['email', $request->email], ['id_instalacion', auth()->user()->instalacion->id]])->first()) {
             return redirect()->back()->with('error', 'Ya existe un usuario con ese email. Prueba otro email.');
         }
         
@@ -778,6 +778,18 @@ class InstalacionController extends Controller
         $user = User::find($request->id);
 
         array_shift($data);
+
+        if (isset($request->email)) {
+            $emails = User::withTrashed()->where([['email', $request->email], ['id_instalacion', auth()->user()->instalacion->id]])->get();
+            foreach ($emails as $value) {
+                if ($value->id != $user->id) {
+                    if ($value->deleted_at) {
+                        return redirect()->back()->with('error', 'Un usuario desactivado está usando ese mail. Reactiva ese usuario o elige otro email.');
+                    }
+                    return redirect()->back()->with('error', 'No se puede usar ese email porque ya está siendo usado por otro usuario. Por favor, elige otro email.');
+                }
+            }
+        }
 
         if (isset($request->max_reservas_tipo_espacio)) {
             $max_reservas_tipo_espacio = $request->max_reservas_tipo_espacio;
