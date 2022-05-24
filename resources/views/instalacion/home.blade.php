@@ -263,6 +263,46 @@
             width: 10vw;
             opacity: .7;
         }
+
+        @media (max-width: 700px) {
+            .dias .col.text-center{
+                padding: 0;
+                font-size: 13px;
+            }
+            .btn-dia {
+                padding: 1rem !important;
+            }
+            .reservas-dia>div{
+                padding: 0;
+            }
+            .table-timeslots tr {
+                display: block;
+            }
+            .table-timeslots tr>td:first-child{
+                border-top: 2px solid rgba(220, 222, 224, 0.7);
+                border-right: 2px solid rgba(220, 222, 224, 0.7);
+                border-left: 2px solid rgba(220, 222, 224, 0.7);
+                border-bottom: 0 !important;
+            }
+            .table-timeslots tr>td:not(:first-child){
+                border-right: 2px solid rgba(220, 222, 224, 0.7);
+                border-left: 2px solid rgba(220, 222, 224, 0.7);
+            }
+            .table-timeslots td{
+                display: block;
+                width: 100% !important;
+                border-right: 0;
+            }
+            .table-timeslots td.timeslot-time{
+                text-align: center;
+            }
+            .reserva-card>div{
+                flex-direction: column;
+            }
+            .reserva-card>div>h4{
+                margin-bottom: 12px;
+            }
+        }
     </style>
 @endsection
 
@@ -295,7 +335,7 @@
                     <input type="hidden" name="accion">
                     <button type="submit" data-accion="canceled" class="submit-form-validar btn btn-danger m-t-5 mr-2">Cancelarla</button>
                     <button type="submit" data-accion="pasado" class="submit-form-validar btn btn-success m-t-5 mr-2">Validarla</button>
-                    <button type="submit" data-accion="desierta" class="submit-form-validar btn btn-warning m-t-5">Desierta</button>
+                    {{-- <button type="submit" data-accion="desierta" class="submit-form-validar btn btn-warning m-t-5">Desierta</button> --}}
                 </div>
               </div>
             </form>
@@ -523,8 +563,12 @@
                                 if (intervalo.reservas.length > 0) {
                                     intervalo.reservas.forEach(reserva => {
                                         console.log(reserva);
-                                        string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
-                                                    <h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                        string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">`;
+                                        if (reserva.estado == 'active') {
+                                            string += `<h4><a href="#" class="btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                        } else {
+                                            string += `<h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                        }
                                         if (reserva.estado == 'active') {
                                             string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
                                         }else if (reserva.estado == 'canceled') {

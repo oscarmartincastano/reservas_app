@@ -319,7 +319,7 @@ class InstalacionController extends Controller
 
     public function listado_todas_reservas(Request $request)
     {
-        $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->get();
+        $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->where('fecha', date('Y-m-d'))->get();
 
         return view('instalacion.reservas.list', compact('reservas'));
     }

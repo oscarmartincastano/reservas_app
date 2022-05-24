@@ -41,7 +41,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Reservas</h3>
+                    <h3 class="text-primary no-margin">Reservas del día de hoy</h3>
                 </div>
             </div>
 
@@ -68,9 +68,9 @@
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
-                                        <td><a data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
+                                        <td><a @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                             data-reserva="{{ $item->id }}"
-                                            data-user="{{ $item->user->name }}" href="#" class="btn-accion-reserva">{{ $item->user->name }}</a>
+                                            data-user="{{ $item->user->name }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name }}</a>
                                         </td>
                                         <td>{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
