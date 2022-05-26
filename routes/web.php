@@ -19,6 +19,25 @@ require __DIR__.'/auth.php';
 |
 */
 /* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
+
+Route::get('validar/{id}', function($id) {
+    $now = \Carbon\Carbon::now();
+    $reserva = App\Models\Reserva::where('id_usuario', $id)->where('fecha', $now->format('Y-m-d'))->first();
+    if($reserva != null) {
+        if($reserva->estado == 'in') {
+            //$reserva->update(['estado' => 'out']);
+            return 'out';
+        } elseif($reserva->estado == 'out') {
+            return null;
+        } else {
+            //$reserva->update(['estado' => 'in']);
+            return 'in';
+        }
+    } else {
+        return 'no existe';
+    }
+});
+
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/normas', 'UserController@normas_instalacion');
