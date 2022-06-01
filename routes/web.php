@@ -36,7 +36,7 @@ Route::get('prueba', function() {
 Route::get('validar/{code}', function($code) {
     $now = \Carbon\Carbon::now();
     $user = \App\Models\User::where('codigo_aforos', $code)->first();
-    if($user != null && $user->codigo_aforos == '0803') { // Check user
+    if($user != null) { // Check user
         $reservas_activas = App\Models\Reserva::where('id_usuario', $user->id)->where('fecha', $now->format('Y-m-d'))->get();
         if($reservas_activas != '[]') {
             foreach($reservas_activas as $reserva) {
