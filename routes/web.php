@@ -20,9 +20,42 @@ require __DIR__.'/auth.php';
 */
 /* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
 
-Route::get('validar/{id}', function($id) {
+Route::get('prueba', function() {
+    $json_string = file_get_contents('vincular/lasislas.json');
+    $data = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $json_string) );
+    $users = $data->Hoja1;
+    //$user = \App\Models\User::find($users[0]->id);
+    foreach($users as $user) {
+        $u = App\Models\User::find($user->id);
+        //$u->update(['codigo_aforos' => $user->codigo]);
+    }
+    
+    //return \App\Models\User::where('id_instalacion', 5)->get();
+});
+
+Route::get('validar/{code}', function($code) {
     $now = \Carbon\Carbon::now();
-    $reserva = App\Models\Reserva::where('id_usuario', $id)->where('fecha', $now->format('Y-m-d'))->first();
+    $user = \App\Models\User::where('codigo_aforos', $code)->first();
+    if($user != null && $user->codigo_aforos == '0803') { // Check user
+        $reservas_activas = App\Models\Reserva::where('id_usuario', $user->id)->where('fecha', $now->format('Y-m-d'))->get();
+        if($reservas_activas != '[]') {
+            foreach($reservas_activas as $reserva) {
+                $inicio = \Carbon\Carbon::createFromTimestamp($reserva->timestamp)->format('Hi');
+                $fin = \Carbon\Carbon::createFromTimestamp($reserva->timestamp)->addMinutes($reserva->minutos_totales)->format('Hi');
+                $actual = $now->format('Hi');
+                if($actual >= $inicio && $actual <= $fin) {
+                    if($reserva->estado == 'pasado') {
+                        \App\Models\Reserva::find($reserva->id)->update(['estado' => 'canceled']);
+                    } else {
+                        \App\Models\Reserva::find($reserva->id)->update(['estado' => 'pasado']);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    /*$reserva = App\Models\Reserva::where('id_usuario', $id)->where('fecha', $now->format('Y-m-d'))->first();
     if($reserva != null) {
         if($reserva->estado == 'in') {
             //$reserva->update(['estado' => 'out']);
@@ -35,7 +68,7 @@ Route::get('validar/{id}', function($id) {
         }
     } else {
         return 'no existe';
-    }
+    }*/
 });
 
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {

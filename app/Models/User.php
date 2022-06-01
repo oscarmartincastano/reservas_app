@@ -34,6 +34,7 @@ class User extends Authenticatable
         'cuota',
         'rol',
         'aprobado',
+        'codigo_aforos',
         'tlfno',
         'date_birth',
         'max_reservas_tipo_espacio',
