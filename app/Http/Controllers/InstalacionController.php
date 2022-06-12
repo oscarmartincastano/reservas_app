@@ -29,7 +29,7 @@ class InstalacionController extends Controller
         $dt = strtotime ($date);
         return array (
           "start" => date ('N', $dt) == 1 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('last monday', $dt)),
-          "end" => date('N', $dt) == 7 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('next monday', $dt))
+          "end" => date ('Y-m-d', strtotime ('next monday', $dt))
         );
     }
 
