@@ -548,7 +548,7 @@
                         data.res_dia.forEach(item => {
                             item.forEach(intervalo => {
                                 string += `<tr ${intervalo.desactivado ? 'class="desactivado"' : ''}>
-                                        <td class="timeslot-time"><div style="margin-bottom:20px;"><i class="far fa-clock"></i> ${intervalo.string}<br>${intervalo.num_res ? "(Total: " + intervalo.num_res + ' res)' : ''}</div>`;
+                                        <td class="timeslot-time"><div style="margin-bottom:20px;"><i class="far fa-clock"></i> ${intervalo.string}<br>${intervalo.num_res ? "(Total: " + intervalo.num_res + ' res.)' : ''}</div>`;
 
                                 if (intervalo.num_res < data.reservas_por_tramo) {
                                     if (intervalo.desactivado) {
