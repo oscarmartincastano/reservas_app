@@ -73,6 +73,9 @@
 			background-color: #a1e991;
     		color: #013700;
 		}
+        body > div.page-container > div.page-content-wrapper > div > div.row {
+            margin: 0;
+        }
     </style>
     @yield('style')
 </head>

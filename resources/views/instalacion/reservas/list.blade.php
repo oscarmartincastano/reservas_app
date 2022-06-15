@@ -41,7 +41,36 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Reservas del día de hoy</h3>
+                    <h3 class="text-primary no-margin">
+                        @if (request()->fecha)
+                            @switch(request()->fecha)
+                                @case('all')
+                                    Todas las reservas
+                                    @break
+                                @case('today')
+                                    Reservas del día de hoy: {{ date('d/m/Y', strtotime(date('Y-m-d'))) }}
+                                    @break
+                                @case('week')
+                                    Reservas de esta semana: {{ date('d/m/Y', strtotime("monday -1 week")) }} - {{ date('d/m/Y', strtotime("sunday 0 week")) }}
+                                    @break
+                                @case('month')
+                                    Reservas de este mes: {{ date('d/m/Y', strtotime(date("Y-m", strtotime(date('Y-m-d'))) . '-01')) }} - {{ date('d/m/Y', strtotime(date("Y-m-t", strtotime(date('Y-m-d'))))) }}
+                                    @break
+                                @default
+                                    @if(auth()->user()->instalacion->id == 2)
+                                        Todas las reservas
+                                    @else
+                                        Reservas del día de hoy
+                                    @endif
+                            @endswitch
+                        @else
+                            @if(auth()->user()->instalacion->id == 2)
+                                Todas las reservas
+                            @else
+                                Reservas del día de hoy
+                            @endif
+                        @endif
+                    </h3>
                 </div>
             </div>
 
@@ -51,6 +80,7 @@
                         <div class="card-title">Listado de reservas</div>
                     </div>
                     <div class="card-body table-responsive">
+                        @if(request()->fecha != 'all')<a href="?fecha=all">Todas</a> -@endif @if(request()->fecha != 'today')<a href="?fecha=today">Hoy</a> -@endif @if(request()->fecha != 'week')<a href="?fecha=week">Semana</a> -@endif @if(request()->fecha != 'month')<a href="?fecha=month">Mes</a>@endif
                         {{-- <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="btn btn-outline-primary mr-2">Añadir desactivación periódica</a> 
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="text-white btn btn-primary">Añadir reserva periódica</a> --}}
                         <table class="table table-hover" id="table-reservas">
@@ -60,7 +90,7 @@
                                     <th>Fecha de alquiler</th>
                                     <th>Horas</th>
                                     {{-- <th>Día de la semana</th> --}}
-                                    @if(count(auth()->user()->instalacion->deportes) > 1)<th>Espacio</th>@endif
+                                    {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<th>Espacio</th>{{-- @endif --}}
                                     <th>Estado reserva</th>
                                     <th>#</th>
                                 </tr>
@@ -78,9 +108,9 @@
                                         </td>
                                         {{-- <td style="text-transform:capitalize">
                                             {{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}</td> --}}
-                                        @if(count(auth()->user()->instalacion->deportes) > 1)<td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }}
-                                            {{ $item->pista->nombre }}</td> @endif
-                                        <td>
+                                        {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }}
+                                            {{ $item->pista->nombre }}</td> {{-- @endif --}}
+                                        <td class="text-uppercase">
                                             @if ($item->estado == 'active')
                                                 @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                                     Pendiente
@@ -92,7 +122,7 @@
                                                 <span class="text-danger">Cancelada</span>
                                             @endif
                                             @if ($item->estado == 'pasado')
-                                                Pasado
+                                                <span style="color: green">Validada</span>
                                             @endif
                                         </td>
                                         <td>

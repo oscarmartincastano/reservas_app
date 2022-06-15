@@ -140,8 +140,15 @@ class UserController extends Controller
     public function reservar(Request $request)
     {
         $pista = Pista::find($request->id_pista);
+        $user = User::find(auth()->user()->id);
+        
         if (!$pista->check_reserva_valida($request->timestamp)) {
             return redirect()->back();
+        }
+
+        if (!$user->check_maximo_reservas_espacio($pista->tipo)) {
+            $max_reservas = true;
+            return view('pista.reservanodisponible', compact('max_reservas'));
         }
 
         $minutos_totales = $request->secuencia * $request->tarifa;

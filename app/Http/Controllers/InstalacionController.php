@@ -319,7 +319,31 @@ class InstalacionController extends Controller
 
     public function listado_todas_reservas(Request $request)
     {
-        $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id'))->where('fecha', date('Y-m-d'))->get();
+        $ids_pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id');
+        if ($request->fecha) {
+            switch ($request->fecha) {
+                case 'all':
+                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->get();
+                    break;
+                case 'today':
+                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'))->get();
+                    break;
+                case 'week':
+                    $week = $this->rangeWeek(date('Y-m-d'));
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['reserva_periodica', null], ['timestamp', '>=', strtotime($week['start'])], ['timestamp', '<=', strtotime($week['end'])]])->get();
+                    break;
+                case 'month':
+                    $month_start = date("Y-m", strtotime(date('Y-m-d'))) . '-01';
+                    $month_end = date("Y-m-t", strtotime(date('Y-m-d')));
+                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where([['timestamp', '>=', strtotime($month_start)], ['timestamp', '<=', strtotime($month_end)]])->get();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $reservas = auth()->user()->instalacion->id == 2 ? Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->get() : Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'))->get();
+        }
+        /* return $request->fecha; */
 
         return view('instalacion.reservas.list', compact('reservas'));
     }
