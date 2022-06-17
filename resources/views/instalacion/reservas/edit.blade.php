@@ -20,7 +20,7 @@
                             @csrf
                             <div class="form-group">
                                 <label class="form-label">Cliente:</label>
-                                <input type="text" class="form-control" value="{{ $reserva->user->name }}" disabled>
+                                <input type="text" class="form-control" value="{{ $reserva->user->name ?? '' }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Fecha:</label>
