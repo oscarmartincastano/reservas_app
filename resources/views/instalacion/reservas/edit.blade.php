@@ -31,6 +31,14 @@
                                 <input type="text" class="form-control" value="{{ \Carbon\Carbon::createFromTimestamp($fecha)->format('H:i') }} a {{ \Carbon\Carbon::createFromTimestamp($fecha)->addMinutes($reserva->minutos_totales)->format('H:i') }}" disabled>
                             </div>
                             <div class="form-group">
+                                <label class="form-label">Espacio</label>
+                                <select name="id_pista" id="id_pista" class="form-control">
+                                    @foreach ($pistas as $item)
+                                        <option value="{{ $item->id }}">{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->tipo . ' - ' : '' }} {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Duración:</label>
                                 <select class="form-control full-width" name="tarifa" id="tarifa">
                                     @if ($reserva->pista->allow_more_res)
@@ -84,4 +92,12 @@
 
         </div>
     </div>
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#id_pista').select2();
+    });
+</script>
 @endsection

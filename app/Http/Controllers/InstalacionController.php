@@ -320,6 +320,7 @@ class InstalacionController extends Controller
     public function edit_reserva_view(Request $request)
     {
         $reserva = Reserva::find($request->id);
+        $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
         $pista = $reserva->pista;
         $fecha = $reserva->timestamp;
         foreach ($pista->horario_deserialized as $item){
@@ -345,7 +346,7 @@ class InstalacionController extends Controller
             }
         }
 
-        return view('instalacion.reservas.edit', compact('reserva', 'number', 'fecha', 'secuencia'));
+        return view('instalacion.reservas.edit', compact('reserva', 'number', 'fecha', 'secuencia', 'pistas'));
     }
 
     public function edit_reserva(Request $request)
@@ -363,7 +364,7 @@ class InstalacionController extends Controller
             }
         }
 
-        $reserva->update(['horarios' => serialize($timestamps), 'tarifa' => $request->tarifa, 'minutos_totales' => $minutos_totales]);
+        $reserva->update(['horarios' => serialize($timestamps), 'tarifa' => $request->tarifa, 'id_pista' => $request->id_pista, 'minutos_totales' => $minutos_totales]);
             
 
         if (isset($request->observaciones)) {

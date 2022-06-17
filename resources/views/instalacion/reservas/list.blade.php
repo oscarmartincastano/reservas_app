@@ -104,7 +104,7 @@
                                             data-reserva="{{ $item->id }}"
                                             data-user="{{ $item->user->name ?? '' }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name ?? '' }}</a>
                                         </td>
-                                        <td>{{ date('d/m/Y', $item->timestamp) }}</td>
+                                        <td data-order="{{ $item->timestamp }}">{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
                                             {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}
                                         </td>
@@ -168,7 +168,7 @@
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
                 "order": [
-                    [4, "desc"]
+                    [2, "desc"]
                 ]
             });
 
