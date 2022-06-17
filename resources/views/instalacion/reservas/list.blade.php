@@ -128,19 +128,21 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                                <a class="cancel btn btn-primary text-white btn-accion-reserva"
-                                                    data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
-                                                    data-reserva="{{ $item->id }}"
-                                                    data-user="{{ $item->user->name ?? '' }}">
-                                                    Acción
-                                                </a>
-                                            @endif
-                                            @if(auth()->user()->instalacion->id == 2)
-                                                <a href="{{ route('reserva.edit', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-success">
-                                                    <i class="fa-solid fa-edit"></i>
-                                                </a>
-                                            @endif
+                                            <div class="d-flex" style="gap:5px">
+                                                @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
+                                                    <a class="cancel btn btn-primary text-white btn-accion-reserva"
+                                                        data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
+                                                        data-reserva="{{ $item->id }}"
+                                                        data-user="{{ $item->user->name ?? '' }}">
+                                                        Acción
+                                                    </a>
+                                                @endif
+                                                @if(auth()->user()->instalacion->id == 2)
+                                                    <a href="{{ route('reserva.edit', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-success">
+                                                        <i class="fa-solid fa-edit"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
