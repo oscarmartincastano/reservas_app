@@ -394,6 +394,14 @@
                                 @include('instalacion.loader.loader')
                             </div>
                             <div class="col">
+                                <div class="pb-3">
+                                    <div class="input-group">
+                                        <div class="input-group-append ">
+                                            <span class="input-group-text" style="border-left: 1px solid #06122324 !important;"><i class="fas fa-search"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="searcher-reservas" placeholder="Buscar reservas...">
+                                    </div>
+                                </div>
                                 <ul class="nav nav-tabs nav-tabs-fillup d-none d-md-flex d-lg-flex d-xl-flex"
                                     data-init-reponsive-tabs="dropdownfx">
                                     @foreach ($pistas as $i => $item)
@@ -637,6 +645,13 @@
             $('input#week').change(function (e) { 
                 /* console.log(value); */
                 $(this).parent().submit();
+            });
+
+            $('.reservas-dia').on('keyup', '#searcher-reservas', function (e) {
+                let filter = $(this).val().toUpperCase();
+                $('table.table-timeslots .timeslot-reserve .reserva-card').filter(function () { 
+                    $(this).toggle($(this).text().toUpperCase().indexOf(filter) > -1)
+                 });
             });
         });
     </script>
