@@ -86,6 +86,7 @@
                         <table class="table table-hover" id="table-reservas">
                             <thead>
                                 <tr>
+                                    <th>id</th>
                                     <th>Cliente</th>
                                     <th>Fecha de alquiler</th>
                                     <th>Horas</th>
@@ -98,6 +99,7 @@
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
+                                        <td>#{{ $item->id }}</td>
                                         <td><a @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                             data-reserva="{{ $item->id }}"
                                             data-user="{{ $item->user->name }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name }}</a>
@@ -132,6 +134,11 @@
                                                     data-reserva="{{ $item->id }}"
                                                     data-user="{{ $item->user->name }}">
                                                     Acción
+                                                </a>
+                                            @endif
+                                            @if(auth()->user()->instalacion->id == 2)
+                                                <a href="{{ route('reserva.edit', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-success">
+                                                    <i class="fa-solid fa-edit"></i>
                                                 </a>
                                             @endif
                                         </td>

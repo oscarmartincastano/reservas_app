@@ -161,19 +161,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label py-0">Tarifa:</label>
+                                    <label class="col-sm-3 col-form-label py-0">Duración:</label>
                                     <div class="col-sm-9">
                                         <select class="form-control full-width" name="tarifa" id="tarifa">
                                             @if ($pista->allow_more_res)
                                                 @for ($i = 1; $i < $number+1; $i++)
                                                     <option
                                                         data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia * $i . ' minutes')) }}"
-                                                        value="{{ $i }}">RESERVA {{ $secuencia * $i }} MINUTOS</option>
+                                                        value="{{ $i }}">RESERVA {{floor(($secuencia*$i)/60) ? floor(($secuencia*$i)/60) . ' HORAS ' : ''  }} {{(($secuencia*$i)%60) ? (($secuencia*$i)%60)  . ' MINUTOS' : '' }}</option>
                                                 @endfor
                                             @else
                                                 <option
                                                     data-hfin="{{ date('H:i', strtotime(date('H:i', $fecha) . ' +' . $secuencia  . ' minutes')) }}"
-                                                    value="1">RESERVA {{ $secuencia }} MINUTOS</option>
+                                                    value="1">{{floor(($secuencia)/60) ? floor(($secuencia)/60) . ' HORAS ' : ''  }} {{(($secuencia)%60) ? (($secuencia)%60)  . ' MINUTOS' : '' }}</option>
                                             @endif
                                         </select>
                                     </div>

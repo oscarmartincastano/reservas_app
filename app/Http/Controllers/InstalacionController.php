@@ -317,6 +317,74 @@ class InstalacionController extends Controller
         return redirect()->back();
     }
 
+    public function edit_reserva_view(Request $request)
+    {
+        $reserva = Reserva::find($request->id);
+        $pista = $reserva->pista;
+        $fecha = $reserva->timestamp;
+        foreach ($pista->horario_deserialized as $item){
+            if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
+                foreach ($item['intervalo'] as $index => $intervalo){
+                    $a = new \DateTime($intervalo['hfin']);
+                    $b = new \DateTime($intervalo['hinicio']);
+                    $interval = $a->diff($b);
+                    $diff_minutes = $interval->format("%h") * 60;
+                    $diff_minutes += $interval->format("%i");
+                    $numero_veces = $diff_minutes/$intervalo['secuencia'];
+
+                    $hora = new \DateTime($intervalo['hinicio']);
+                    for ($i=0; $i < floor($numero_veces); $i++) { 
+                        if ($hora->format('h:i') == date(date('h:i', $fecha))) {
+                            $secuencia = $intervalo['secuencia'];
+                            $number = $numero_veces - $i;
+                            /* $hfin = date('h:i',strtotime (date('h:i', $fecha) . " +{$intervalo['secuencia']} minutes")); */
+                        }
+                        $hora->modify("+{$intervalo['secuencia']} minutes");
+                    }
+                }
+            }
+        }
+
+        return view('instalacion.reservas.edit', compact('reserva', 'number', 'fecha', 'secuencia'));
+    }
+
+    public function edit_reserva(Request $request)
+    {
+        $reserva = Reserva::find($request->id);
+        $pista = $reserva->pista;
+
+        $minutos_totales = $request->secuencia * $request->tarifa;
+
+        $timestamps[0] = (int)$request->timestamp;
+        
+        if ($request->tarifa > 1) {
+            for ($i=1; $i < $request->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+            }
+        }
+
+        $reserva->update(['horarios' => serialize($timestamps), 'tarifa' => $request->tarifa, 'minutos_totales' => $minutos_totales]);
+            
+
+        if (isset($request->observaciones)) {
+            $reserva->update(['observaciones' => $request->observaciones]);
+        }
+
+        if (isset($request->campo_adicional)) {
+            Valor_campo_personalizado::where('id_reserva', $request->id)->delete();
+            foreach ($request->campo_adicional as $id_campo => $valor) {
+                Valor_campo_personalizado::create([
+                    'id_reserva' => $reserva->id,
+                    'id_campo' => $id_campo,
+                    'valor' => $valor
+                ]);
+            }
+        }
+        
+        return redirect("/{$request->slug_instalacion}/admin/reservas/list");
+    }
+
+
     public function listado_todas_reservas(Request $request)
     {
         $ids_pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id');
