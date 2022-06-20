@@ -92,8 +92,8 @@ class ResetPasswordNotification extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
-
-        $user = User::where('email', $notifiable->getEmailForPasswordReset())->first();
+        $instalacion = Instalacion::where('slug', request()->slug_instalacion)->first();
+        $user = User::where([['email', $notifiable->getEmailForPasswordReset()], ['id_instalacion', $instalacion->id]])->first();
 
         return url(route('password.reset_user_instalacion', [
             'token' => $this->token,
