@@ -103,7 +103,7 @@
                                 <td>
                                     @if ($item->estado  == 'active')
                                         @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                            Pendiente
+                                            Confirmada
                                         @else
                                             Pasado
                                         @endif
