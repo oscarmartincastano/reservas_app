@@ -1034,11 +1034,10 @@ class InstalacionController extends Controller
         return $data;
     }
 
-    public function import_users(Request $request)
+    /* public function import_users(Request $request)
     {
         $users = $this->csvToArray('export-users.csv');
         
-        /* return $users; */
 
         foreach ($users as $key => $value) {
             User::create(['name' => str_replace('"', '', str_replace("'", '', str_replace('\"', '', $value["'display_name'"]))),
@@ -1050,5 +1049,5 @@ class InstalacionController extends Controller
         }
 
         return true;
-    }
+    } */
 }
