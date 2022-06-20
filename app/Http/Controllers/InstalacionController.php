@@ -1034,7 +1034,7 @@ class InstalacionController extends Controller
         return $data;
     }
 
-    public function import_users(Request $request)
+    /* public function import_users(Request $request)
     {
         $users = $this->csvToArray('export-users.csv');
         
@@ -1049,5 +1049,5 @@ class InstalacionController extends Controller
         }
 
         return true;
-    }
+    } */
 }
