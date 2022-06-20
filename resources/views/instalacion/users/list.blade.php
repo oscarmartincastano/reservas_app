@@ -46,8 +46,10 @@
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->rol }}</td>
                                             <td>
+                                                <div class="d-flex" style="gap:5px">
                                                 <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a>
                                                 @if ($item->id != auth()->user()->id) <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar" class="btn-activate btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}" onclick="return confirm('¿Estás seguro que quieres {{ !$item->deleted_at ? 'desactivar' : 'activar' }} este usuario?');" title="{{ !$item->deleted_at ? 'Desactivar' : 'Activar' }} usuario"><i data-feather="power"></i></a>@endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endif
