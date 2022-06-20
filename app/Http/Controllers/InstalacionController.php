@@ -1011,4 +1011,44 @@ class InstalacionController extends Controller
 
         return redirect()->back();
     }
+
+    function csvToArray($filename = '', $delimiter = ';')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
+    public function import_users(Request $request)
+    {
+        $users = $this->csvToArray('export-users.csv');
+        
+        /* return $users; */
+
+        foreach ($users as $key => $value) {
+            User::create(['name' => str_replace('"', '', str_replace("'", '', str_replace('\"', '', $value["'display_name'"]))),
+                          'id_instalacion' => 7,
+                          'email' => str_replace("'", '', $value["'user_email'"]),
+                          'password' => \Hash::make('adfasdfasd433wsd'),
+                          'rol'=> 'user',
+                          'aprobado' => date('Y-m-d H:i:s')]);
+        }
+
+        return true;
+    }
 }

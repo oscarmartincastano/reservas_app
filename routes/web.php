@@ -71,6 +71,8 @@ Route::get('validar/{code}', function($code) {
     }*/
 });
 
+Route::get('/test-import', 'InstalacionController@import_users');
+
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/normas', 'UserController@normas_instalacion');
