@@ -165,7 +165,7 @@
     </nav>
     <main>
         @yield('content')
-        {{-- @if (auth()->user() && auth()->user()->instalacion->id == 5 && Cookie::get('modal') == null)
+        @if (!auth()->user() && request()->slug_instalacion == 'alminar')
             @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
             <div class="modal" id="myModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -177,13 +177,14 @@
                     </button>
                     </div>
                     <div class="modal-body p-4">
-                    <p class="mb-4 text-center" style="font-size: 17px">El sistema está en modo de prueba hasta el día 19 de mayo a las 16h, por lo que no se contabilizarán las reservas.</p>
-                    <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p>
+                    <p class="mb-4 text-center" style="font-size: 17px">El sistema ha cambiado y todos los usuarios tienen que recuperar su contraseña. Puedes hacerlo desde este link: </p>
+                    <p class="text-center pt-2"><a href="{{ route('forgot_password_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="btn btn-success">Recuperar contraseña</a></p>
+                    {{-- <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p> --}}
                     </div>
                 </div>
                 </div>
             </div>
-        @endif --}}
+        @endif
     </main>
     <footer class="footer">
         {{-- <div class="container">
