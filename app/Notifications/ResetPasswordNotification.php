@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Instalacion;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
@@ -63,7 +64,8 @@ class ResetPasswordNotification extends Notification
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $this->token);
         }
-        $user = User::where('email', $notifiable->getEmailForPasswordReset())->first();
+        $instalacion = Instalacion::where('slug', request()->slug_instalacion)->first();
+        $user = User::where([['email', $notifiable->getEmailForPasswordReset()], ['id_instalacion', $instalacion->id]])->first();
 
         return $this->buildMailMessage($this->resetUrl($notifiable), $user);
     }
