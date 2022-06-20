@@ -29,12 +29,11 @@
                             <a href="/{{ request()->slug_instalacion }}/admin/users/novalid" class="btn btn-info" style="padding-right: 40px">Usuarios no aprobados @if (count(auth()->user()->instalacion->users_sin_validar))<mark class="mark" style="border: 0; top:2px;left:172px;">{{ count(auth()->user()->instalacion->users_sin_validar) }}</mark>@endif</a>
                         @endif
                         <a href="/{{ request()->slug_instalacion }}/admin/users/add" class="text-white btn btn-primary">Añadir nuevo</a>
-                        <table class="table table-condensed table-hover" id="table-users">
+                        <table class="table table-hover" id="table-users">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
-                                    <th>Tlfno</th>
                                     <th>Rol</th>
                                     <th>Acción</th>
                                 </tr>
@@ -45,7 +44,6 @@
                                         <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
-                                            <td>{{ $item->tlfno }}</td>
                                             <td>{{ $item->rol }}</td>
                                             <td>
                                                 <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}" class="btn btn-primary"><i data-feather="edit"></i></a>
