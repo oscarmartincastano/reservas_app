@@ -52,10 +52,17 @@
                                 <input type="email" class="form-control" name="email" id="email"
                                     value="{{ auth()->user()->email }}">
                             </div>
-                            <div class="form-group">
-                                <label for="tlfno">Teléfono</label>
-                                <input type="text" class="form-control" name="tlfno" id="tlfno"
-                                    value="{{ auth()->user()->tlfno }}" placeholder="Teléfono">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" id="direccion"
+                                        value="{{ auth()->user()->direccion }}" placeholder="Direccion" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="tlfno">Teléfono</label>
+                                    <input type="text" class="form-control" name="tlfno" id="tlfno"
+                                        value="{{ auth()->user()->tlfno }}" placeholder="Teléfono">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="password">Cambiar contraseña</label>

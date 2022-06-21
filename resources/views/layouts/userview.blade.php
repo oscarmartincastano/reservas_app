@@ -167,7 +167,7 @@
         @yield('content')
         @if (!auth()->user() && request()->slug_instalacion == 'alminar')
             @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
-            <div class="modal" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
                 <div class="modal-dialog" role="document">
                 <div class="modal-content m-0" style="top:25vh">
                     <div class="modal-header">
@@ -179,6 +179,30 @@
                     <div class="modal-body p-4">
                     <p class="mb-4 text-center" style="font-size: 17px">El sistema ha cambiado y todos los usuarios tienen que recuperar su contraseña. Puedes hacerlo desde este link: </p>
                     <p class="text-center pt-2"><a href="{{ route('forgot_password_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="btn btn-success">Recuperar contraseña</a></p>
+                    {{-- <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p> --}}
+                    </div>
+                </div>
+                </div>
+            </div>
+        @endif
+        @if (auth()->user() && request()->slug_instalacion == 'alminar' && !auth()->user()->direccion)
+            {{-- @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp --}}
+            <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content m-0" style="top:25vh">
+                    <div class="modal-header">
+                    <h4 class="h4 mb-0">Introduce dirección</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body p-4">
+                    <p class="mb-4 text-center" style="font-size: 17px">Nos falta el dato de tu <b>DIRECCIÓN</b> para el funcionamiento de la aplicación. Añade tu dirección desde aquí: </p>
+                    <form method="POST" action="/{{ request()->slug_instalacion }}/perfil/edit">
+                        @csrf
+                        <p class="text-center py-2"><input type="text" class="form-control" name="direccion" placeholder="Dirección..." required></p>
+                        <p class="text-center pt-3"><button type="submit" class="btn btn-primary">Añadir dirección</button></p>
+                    </form>
                     {{-- <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p> --}}
                     </div>
                 </div>
