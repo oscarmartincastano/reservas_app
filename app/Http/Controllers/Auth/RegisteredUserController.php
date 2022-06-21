@@ -82,6 +82,8 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'tlfno' => $request->tlfno,
                 'rol' => 'user',
+                'direccion' => $request->direccion,
+                'aprobado' => date('Y-m-d H:i:s'),
                 'id_instalacion' => $instalacion->id
             ]);
         } else {
@@ -90,6 +92,8 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'rol' => 'user',
+                'direccion' => $request->direccion,
+                'aprobado' => date('Y-m-d H:i:s'),
                 'id_instalacion' => $instalacion->id
             ]);
         }
@@ -98,7 +102,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        Mail::to('manuel@tallerempresarial.es')->send(new Newuser($user));
+        /* Mail::to('manuel@tallerempresarial.es')->send(new Newuser($user)); */
         return redirect('/'.$request->slug_instalacion);
     }
 }

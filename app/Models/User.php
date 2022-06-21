@@ -30,6 +30,7 @@ class User extends Authenticatable
         'id_instalacion',
         'name',
         'email',
+        'direccion',
         'password',
         'cuota',
         'rol',

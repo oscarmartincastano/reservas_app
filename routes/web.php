@@ -84,7 +84,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('forgot_password_instalacion');
 
     Route::get('/register', [RegisteredUserController::class, 'create_user_instalacion'])
-                ->middleware('guest');
+                ->middleware('guest')->name('register_user_instalacion');
 
     Route::post('/register', [RegisteredUserController::class, 'store_instalacion'])
                 ->middleware('guest');

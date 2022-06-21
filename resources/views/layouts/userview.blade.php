@@ -157,7 +157,7 @@
                         </a>
                     @else
                         <a href="{{ route('login_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i> Acceder</a>
-
+                        @if(request()->slug_instalacion == 'alminar')<a href="{{ route('register_user_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="navbar-item"><i class="fa-solid fa-user-plus mr-2"></i> Registrarse</a>@endif
                     @endif
                 </div>
             </div>

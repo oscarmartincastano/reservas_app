@@ -15,37 +15,37 @@
             
             <!-- Name -->
             <div>
-                <x-label for="name" :value="__('Nombre y apellidos')" />
+                <x-label for="name" :value="__('Nombre y apellidos*')" />
 
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
             </div>
 
             <!-- Email Address -->
             <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
+                <x-label for="email" :value="__('Email*')" />
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
 
             <div class="mt-4">
-                <x-label for="tlfno" :value="__('Teléfono (opcional)')" />
+                <x-label for="tlfno" :value="__('Dirección completa*')" />
 
-                <x-input id="tlfno" class="block mt-1 w-full" type="number" name="tlfno" autofocus />
+                <x-input id="tlfno" class="block mt-1 w-full" type="text" name="direccion" autofocus required />
             </div>
 
             <!-- Password -->
             <div class="mt-4">
-                <x-label for="password" :value="__('Contraseña')" />
+                <x-label for="password" :value="__('Contraseña*')" />
 
                 <x-input id="password" class="block mt-1 w-full"
                                 type="password"
                                 name="password"
-                                required autocomplete="new-password" />
+                                required autocomplete="new-password" required />
             </div>
 
             <!-- Confirm Password -->
             <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirma Contraseña')" />
+                <x-label for="password_confirmation" :value="__('Confirma Contraseña*')" />
 
                 <x-input id="password_confirmation" class="block mt-1 w-full"
                                 type="password"
