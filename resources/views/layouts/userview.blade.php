@@ -200,7 +200,7 @@
                     </button>
                     </div>
                     <div class="modal-body p-4">
-                    <p class="mb-4 text-center" style="font-size: 17px">Nos falta el dato de tu <b>DIRECCIÓN</b> para el funcionamiento de la aplicación. Añade tu dirección desde aquí: </p>
+                    <p class="mb-4 text-center" style="font-size: 17px">Nos falta el dato de tu <b>DIRECCIÓN COMPLETA</b> para el funcionamiento de la aplicación. Añade tu dirección desde aquí o tu cuenta puede ser bloqueada: </p>
                     <form method="POST" action="/{{ request()->slug_instalacion }}/perfil/edit">
                         @csrf
                         <p class="text-center py-2"><input type="text" class="form-control" name="direccion" placeholder="Dirección..." required></p>
