@@ -50,6 +50,11 @@ class LoginRequest extends FormRequest
         
         $instalacion = Instalacion::where('slug', $this->slug_instalacion)->first();
         $user = User::where([['email', $this->email], ['id_instalacion', $instalacion->id]])->first(); 
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);
+        }
         if (Hash::check($this->password, $user->password ?? '')) {
             Auth::login($user);
         } else {
