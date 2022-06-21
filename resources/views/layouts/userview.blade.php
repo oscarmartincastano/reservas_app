@@ -109,6 +109,9 @@
                 display: flex;
             }
         }
+        .modal-open {
+            padding-right: 0 !important;
+        }
     </style>
 
     <title>Instalación - @yield('pagename')</title>
