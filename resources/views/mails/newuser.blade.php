@@ -4,7 +4,8 @@
     <ul>
         <li><strong>Nombre: </strong>{{ $user->name }}</li>
         <li><strong>Email: </strong>{{ $user->email }}</li>
-        <li><strong>Fecha de registro: </strong>{{ $user->created_at }}</li>
+        <li><strong>Dirección: </strong>{{ $user->direccion }}</li>
+        <li><strong>Fecha de registro: </strong>{{ date('d/m/Y H:i', strtotime($user->created_at)) }}</li>
     </ul>
 </div>
 

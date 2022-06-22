@@ -34,6 +34,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
+                                    <th>Direccion</th>
                                     <th>Rol</th>
                                     <th>Acción</th>
                                 </tr>
@@ -44,6 +45,7 @@
                                         <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
+                                            <td>{{ $item->direccion }}</td>
                                             <td>{{ $item->rol }}</td>
                                             <td>
                                                 <div class="d-flex" style="gap:5px">

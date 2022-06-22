@@ -83,7 +83,7 @@ class RegisteredUserController extends Controller
                 'tlfno' => $request->tlfno,
                 'rol' => 'user',
                 'direccion' => $request->direccion,
-                /* 'aprobado' => date('Y-m-d H:i:s'), */
+                'aprobado' => date('Y-m-d H:i:s'),
                 'id_instalacion' => $instalacion->id
             ]);
         } else {
@@ -93,7 +93,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'rol' => 'user',
                 'direccion' => $request->direccion,
-                /* 'aprobado' => date('Y-m-d H:i:s'), */
+                'aprobado' => date('Y-m-d H:i:s'),
                 'id_instalacion' => $instalacion->id
             ]);
         }

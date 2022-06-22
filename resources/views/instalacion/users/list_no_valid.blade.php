@@ -29,7 +29,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
-                                    <th>Tlfno</th>
+                                    <th>Direccion</th>
                                     <th>Rol</th>
                                     <th>Acción</th>
                                 </tr>
@@ -39,7 +39,7 @@
                                     <tr class="clickable" data-href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->id }}/ver">
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->email }}</td>
-                                        <td>{{ $item->tlfno }}</td>
+                                        <td>{{ $item->direccion }}</td>
                                         <td>{{ $item->rol }}</td>
                                         <td>
                                             <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/validar" class="btn-activate btn btn-success" onclick="return confirm('¿Estás seguro que quieres validar este usuario?');" title="Validar usuario">Validar</a>
