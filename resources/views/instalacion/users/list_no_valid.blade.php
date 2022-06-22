@@ -24,7 +24,7 @@
                         <div class="card-title">Listado de usuarios sin validar</div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-condensed table-hover" id="table-users">
+                        <table class="table table-hover" id="table-users">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
