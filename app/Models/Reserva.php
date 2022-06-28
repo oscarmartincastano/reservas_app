@@ -24,6 +24,7 @@ class Reserva extends Model
         'hora',
         'minutos_totales',
         'estado',
+        'salida',
         'observaciones',
         'observaciones_admin',
         'reserva_periodica',

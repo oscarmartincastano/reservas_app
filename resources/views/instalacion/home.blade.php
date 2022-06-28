@@ -580,7 +580,11 @@
                                         if (reserva.estado == 'active') {
                                             string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
                                         }else if (reserva.estado == 'canceled') {
-                                            string += `<h4 class="text-danger" style="font-weight:bold">Cancelado</h4></div>`;
+                                            if (reserva.salida != null) {
+                                                string += `<h4 class="text-danger" style="font-weight:bold">Salida (${reserva.salida})</h4></div>`;
+                                            } else {
+                                                string += `<h4 class="text-danger" style="font-weight:bold">Cancelado</h4></div>`;
+                                            }
                                         }else if (reserva.estado == 'desierta') {
                                             string += `<h4 class="text-warning" style="font-weight:bold">Desierta</h4></div>`;
                                         }else{

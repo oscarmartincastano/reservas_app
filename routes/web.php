@@ -45,7 +45,7 @@ Route::get('validar/{code}', function($code) {
                 $actual = $now->format('Hi');
                 if($actual >= $inicio && $actual <= $fin) {
                     if($reserva->estado == 'pasado') {
-                        \App\Models\Reserva::find($reserva->id)->update(['estado' => 'canceled']);
+                        \App\Models\Reserva::find($reserva->id)->update(['estado' => 'canceled', 'salida', date('Y-m-d H:i:s')]);
                     } else {
                         \App\Models\Reserva::find($reserva->id)->update(['estado' => 'pasado']);
                     }
