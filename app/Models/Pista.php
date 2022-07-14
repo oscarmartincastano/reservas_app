@@ -26,6 +26,7 @@ class Pista extends Model
         'horario',
         'allow_cancel',
         'atenlacion_reserva',
+        'antelacion_cancelacion',
         'allow_more_res',
         'reservas_por_tramo',
         'max_dias_antelacion',

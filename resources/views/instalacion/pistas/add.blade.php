@@ -152,6 +152,10 @@
                                 </select>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-2 control-label">Antelación de la cancelación (horas)</label>
+                                <input class="form-control col-md-10" type="number" name="antelacion_cancelacion" id="antelacion_cancelacion" placeholder="Antelación de la cancelación (horas)...">
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-2 control-label">Permite reservar varios tramos</label>
                                 <select class="form-control col-md-10" name="allow_more_res" id="allow_more_res">
                                     <option value="1" >Sí</option>

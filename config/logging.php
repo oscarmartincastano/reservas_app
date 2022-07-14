@@ -100,6 +100,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'actividadreserva' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/actividad_reserva.log'),
+        ],
     ],
 
 ];

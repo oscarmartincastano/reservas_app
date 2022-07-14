@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\NewReserva;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Instalacion;
@@ -142,11 +143,15 @@ class UserController extends Controller
         $pista = Pista::find($request->id_pista);
         $user = User::find(auth()->user()->id);
         
+        Log::channel('actividadreserva')->info("#{$user->id}: realiza reserva.");
+
         if (!$pista->check_reserva_valida($request->timestamp)) {
+            Log::channel('actividadreserva')->info("#{$user->id}: reserva no válida (tramo de reserva no disponible)");
             return redirect()->back();
         }
 
         if (!$user->check_maximo_reservas_espacio($pista->tipo)) {
+            Log::channel('actividadreserva')->info("#{$user->id}: reserva no válida (máximo de reservas del usuario).");
             $max_reservas = true;
             return view('pista.reservanodisponible', compact('max_reservas'));
         }
@@ -171,6 +176,8 @@ class UserController extends Controller
             'tarifa' => $request->tarifa,
             'minutos_totales' => $minutos_totales
         ]);
+        
+        Log::channel('actividadreserva')->info("#{$user->id}: reserva realizada (#{$reserva->id}).");
 
         if (isset($request->observaciones)) {
             $reserva->update(['observaciones' => $request->observaciones]);

@@ -250,6 +250,10 @@
                                 </select>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-2 control-label">Antelación de la cancelación (horas)</label>
+                                <input class="form-control col-md-10" value="{{ $pista->antelacion_cancelacion }}" type="number" name="antelacion_cancelacion" id="antelacion_cancelacion" placeholder="Antelación de la cancelación (horas)...">
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-2 control-label">Días de antelación</label>
                                 <input name="max_dias_antelacion" type="text" placeholder="Días máximos de antelación..." class="form-control col-md-10" value="{{ $pista->max_dias_antelacion }}" required>
                             </div>
