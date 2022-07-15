@@ -114,7 +114,12 @@ class Pista extends Model
 
     public function get_reserva_activa_fecha_hora($timestamp)
     {
-        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw('estado ASC')->get();
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw('estado ASC')->get()->filter(function($reserva) use ($timestamp) {
+            return in_array($timestamp, $reserva->horarios_deserialized) && $reserva->estado != 'canceled';
+        });
+        return $reservas;
+
+        /* $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw('estado ASC')->get();
 
         $ret_reservas = [];
         foreach ($reservas as $key => $reserva) {
@@ -124,7 +129,7 @@ class Pista extends Model
             }
         }
 
-        return $ret_reservas;
+        return $ret_reservas; */
     }
 
     public function check_desactivacion_periodica($fecha)
@@ -283,10 +288,12 @@ class Pista extends Model
                         $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
                         $timestamp = \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp;
 
-                        $horario[$index][$i]['reservado'] = $this->get_reservas_fecha_hora($timestamp) ? true : false;
+						$all_reservas = $this->get_reservas_fecha_hora($timestamp);
+
+                        $horario[$index][$i]['reservado'] = $all_reservas ? true : false;
                         $horario[$index][$i]['string'] = $string_hora;
                         $horario[$index][$i]['tramos'] = 1;
-                        $horario[$index][$i]['reservas'] = $this->get_reservas_fecha_hora($timestamp);
+                        $horario[$index][$i]['reservas'] = $all_reservas;
                         $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
                         $horario[$index][$i]['timestamp'] = $timestamp;
                         $horario[$index][$i]['desactivado'] = $this->check_desactivado($timestamp);

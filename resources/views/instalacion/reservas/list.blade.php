@@ -86,24 +86,32 @@
                         <table class="table table-hover" id="table-reservas">
                             <thead>
                                 <tr>
+                                    @if(auth()->user()->id_instalacion != 2)
                                     <th>id</th>
                                     <th>Cliente</th>
+                                    @else
+                                    <th>Nombre reunión</th>
+                                    @endif
                                     <th>Fecha de alquiler</th>
                                     <th>Horas</th>
                                     {{-- <th>Día de la semana</th> --}}
                                     {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<th>Espacio</th>{{-- @endif --}}
-                                    <th>Estado reserva</th>
+                                    @if(auth()->user()->id_instalacion != 2)<th>Estado reserva</th>@endif
                                     <th>#</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($reservas as $item)
                                     <tr>
+                                        @if(auth()->user()->id_instalacion != 2)
                                         <td>#{{ $item->id }}</td>
                                         <td><a @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                             data-reserva="{{ $item->id }}"
                                             data-user="{{ $item->user->name ?? '' }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name ?? '' }}</a>
                                         </td>
+                                        @else
+                                        <td>{{ $item->valor_nombre_reunion }}</td>
+                                        @endif
                                         <td data-order="{{ $item->timestamp }}">{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
                                             {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}
@@ -112,7 +120,7 @@
                                             {{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}</td> --}}
                                         {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }}
                                             {{ $item->pista->nombre }}</td> {{-- @endif --}}
-                                        <td class="text-uppercase">
+                                        @if(auth()->user()->id_instalacion != 2)<td class="text-uppercase">
                                             @if ($item->estado == 'active')
                                                 @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                                     Pendiente
@@ -126,16 +134,16 @@
                                             @if ($item->estado == 'pasado')
                                                 <span style="color: green">Validada</span>
                                             @endif
-                                        </td>
+                                        </td>@endif
                                         <td>
                                             <div class="d-flex" style="gap:5px">
                                                 @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                                    <a class="cancel btn btn-primary text-white btn-accion-reserva"
+                                                    @if(auth()->user()->id_instalacion != 2)<a class="cancel btn btn-primary text-white btn-accion-reserva"
                                                         data-intervalo="{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                                         data-reserva="{{ $item->id }}"
                                                         data-user="{{ $item->user->name ?? '' }}">
                                                         Acción
-                                                    </a>
+                                                    </a>@endif
                                                 @endif
                                                 @if(auth()->user()->instalacion->id == 2)
                                                     <a href="{{ route('reserva.edit', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-success">

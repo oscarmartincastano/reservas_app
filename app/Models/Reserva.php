@@ -46,6 +46,10 @@ class Reserva extends Model
         return $this->hasMany(Valor_campo_personalizado::class, 'id_reserva', 'id');
     }
 
+    public function getValorNombreReunionAttribute() {
+        return self::valores_campos_personalizados()->where('id_campo', 14)->first()->valor;
+    }
+
     public function getHorariosDeserializedAttribute() {
         return $this->horariosDeserializado();
     }
