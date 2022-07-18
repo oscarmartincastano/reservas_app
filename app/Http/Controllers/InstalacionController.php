@@ -458,7 +458,7 @@ class InstalacionController extends Controller
                                /* if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
                                     $hora = $hora + 3600;
                                } */
-                            Reserva::create([
+                            $reserva = Reserva::create([
                                 'id_pista' => $pista->id,
                                 'id_usuario' => $request->user_id,
                                 'timestamp' => $hora,
@@ -470,6 +470,16 @@ class InstalacionController extends Controller
                                 'reserva_periodica' => $reserva_periodica->id,
                                 'creado_por' => 'admin'
                             ]);
+
+                            if (isset($request->campo_adicional)) {
+                                foreach ($request->campo_adicional as $id_campo => $valor) {
+                                    Valor_campo_personalizado::create([
+                                        'id_reserva' => $reserva->id,
+                                        'id_campo' => $id_campo,
+                                        'valor' => $valor
+                                    ]);
+                                }
+                            }
                         }
                     }
                 }

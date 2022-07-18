@@ -21,7 +21,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="espacio">Espacio</label>
-                                <select required class="full-width form-control" name="espacio">
+                                <select required class="full-width form-control" name="espacio" id="select_espacio">
                                     @foreach (auth()->user()->instalacion->pistas as $item)
                                         <option value="{{ $item->id }}">{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->tipo . '.' : '' }} {{ $item->nombre }}</option>
                                     @endforeach
@@ -30,8 +30,7 @@
                             <div class="form-group">
                                 <label for="espacio">Usuario</label>
                                 <select required class="full-width select-user" name="user_id" id="user_id">
-                                    <option></option>
-                                    @foreach (auth()->user()->instalacion->users as $item)
+                                    @foreach (auth()->user()->instalacion->users_validos as $item)
                                         @if ($item->id != auth()->user()->id)
                                             <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->email }})</option>
                                         @endif
@@ -67,6 +66,27 @@
                                 <label for="hora_fin">Hora fin</label>
                                 <input type="time" class="form-control" placeholder="Hora fin" name="hora_fin" required>
                             </div>
+                            @if (auth()->user()->id_instalacion == 2)
+                            <div class="border p-2">
+                                @foreach (\App\Models\Pista::find(24)->all_campos_personalizados as $item)
+                                    <div class="form-group">
+                                        <label>{{ $item->label }}:</label>
+                                            @if ($item->tipo == 'textarea')
+                                                <textarea class="form-control" name="campo_adicional[{{ $item->id }}]" rows="3" {{ $item->required ? 'required' : '' }}></textarea>
+                                            @elseif($item->tipo == 'select')
+                                                <select class="form-control" name="campo_adicional[{{ $item->id }}]">
+                                                    @foreach (unserialize($item->opciones) as $option)
+                                                        <option value="{{ $option }}">{{ $option }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <input type="{{ $item->tipo }}" name="campo_adicional[{{ $item->id }}]" class="form-control" placeholder="{{ $item->label }}" {{ $item->required ? 'required' : '' }}>
+                                            @endif
+                                        </div>
+                                @endforeach
+                            </div>
+                            @endif
+                            
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Añadir</button>
                         </form>
                     </div>
@@ -87,9 +107,9 @@
                 placeholder: "Selecciona días..."
             });
 
-            $(".select-user").select2({
-                placeholder: "Selecciona un usuario"
-            });
+            $(".select-user").select2();
+
+            $("#select_espacio").select2();
         });
     </script>
 @endsection

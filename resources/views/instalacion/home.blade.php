@@ -127,6 +127,7 @@
             margin-bottom: 20px;
             padding: 15px;
             background: white;
+            position: relative;
         }
         .reserva-card h4{
             font-size: 17px;
@@ -334,7 +335,9 @@
                 <div class="row text-right">
                     <input type="hidden" name="accion">
                     <button type="submit" data-accion="canceled" class="submit-form-validar btn btn-danger m-t-5 mr-2">Cancelarla</button>
+                    @if(auth()->user()->id_instalacion != 2)
                     <button type="submit" data-accion="pasado" class="submit-form-validar btn btn-success m-t-5 mr-2">Validarla</button>
+                    @endif
                     {{-- <button type="submit" data-accion="desierta" class="submit-form-validar btn btn-warning m-t-5">Desierta</button> --}}
                 </div>
               </div>
@@ -497,9 +500,9 @@
                                         intervalo.reservas.forEach(reserva => {
                                             console.log(reserva);
                                             string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">
-                                                        <h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.usuario.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
+                                                        <h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.user.id}/ver">#${reserva.id} ${reserva.user.name}</a> <span class="capitalize text-${reserva.estado}">(${reserva.estado == 'active' ? 'Activo' : (reserva.estado == 'pasado' ? 'Pasado' : 'Cancelado')})</span></h4>`;
                                             if (reserva.estado == 'active') {
-                                                string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
+                                                string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-user="${reserva.user.name}">Acciones</a></div></div>`;
                                             }else if (reserva.estado == 'canceled') {
                                                 string += `<div> <a href="#" class="btn btn-info">(${reserva.formated_updated_at}) Cancelado</a></div></div>`;
                                             }else{
@@ -573,12 +576,16 @@
                                         console.log(reserva);
                                         string += `<div class="reserva-card"><div class="d-flex justify-content-between align-items-center">`;
                                         if (reserva.estado == 'active') {
-                                            string += `<h4><a href="#" class="btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                            string += `<h4><a href="#" class="btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.user.name}">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.user.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
                                         } else {
-                                            string += `<h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.usuario.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.usuario.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                            string += `<h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.user.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.user.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
                                         }
                                         if (reserva.estado == 'active') {
-                                            string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.usuario.name}">Acciones</a></div></div>`;
+                                            if (reserva.user.id_instalacion != 2) {
+                                                string += `<div><a href="#" class="btn btn-primary btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.user.name}">Acciones</a></div></div>`;
+                                            } else {
+                                                string += `<div><a href="#" class="btn btn-danger btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.user.name}">Cancelar la reserva</a></div></div>`;
+                                            }
                                         }else if (reserva.estado == 'canceled') {
                                             if (reserva.salida != null) {
                                                 string += `<h4 class="text-danger" style="font-weight:bold">Salida (${reserva.salida})</h4></div>`;
@@ -590,8 +597,11 @@
                                         }else{
                                             string += `<h4 style="color:#28a745;font-weight:bold">Validada</h4></div>`;
                                         }
+                                        if (reserva.estado != 'canceled') {
+                                            string += `<a href="/{{ request()->slug_instalacion }}/admin/reservas/${reserva.id}/edit" style="position:absolute;right:0;bottom:0;padding-right:3px" href="#" data-toggle="tooltip" data-placement="top" title="Editar la reserva" class="btn btn-primary" data-piscina="1" data-fecha="${reserva.fecha}" data-hora="${reserva.string_intervalo}" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas-1) : reserva.id}" data-user="${reserva.user.name}"><i class="fa-solid fa-edit"></i></a>`;
+                                        }
                                         $(reserva.valores_campos_pers).each(function (index, element) {
-                                            string += `<div class="mt-2"><strong><i class="fas fa-plus mr-1"></i> ${element.campo.label}: </strong>${element.valor}</div>`;
+                                            string += `<div class="mt-2"><strong><i class="fas fa-plus mr-1"></i> ${element.campo.label}: </strong>${element.valor ?? '---'}</div>`;
                                         });
                                         if (reserva.observaciones) {
                                             string += `<div class="mt-2"><strong><i class="far fa-comment-dots mr-1"></i> Observaciones reserva: </strong>${reserva.observaciones}</div>`;
@@ -626,6 +636,7 @@
                         
                         
                         $('.loader-bg-pista').hide().next().show();
+                        $("[data-toggle=tooltip").tooltip();
                     },
                     error: data => {
                         console.log(data)

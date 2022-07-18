@@ -96,7 +96,12 @@
                                     <th>Horas</th>
                                     {{-- <th>Día de la semana</th> --}}
                                     {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<th>Espacio</th>{{-- @endif --}}
-                                    @if(auth()->user()->id_instalacion != 2)<th>Estado reserva</th>@endif
+                                    @if(auth()->user()->id_instalacion != 2)
+                                    <th>Estado reserva</th>
+                                    @else
+                                    <th>Organización</th>
+                                    <th>Presupuesto</th>
+                                    @endif
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -120,7 +125,8 @@
                                             {{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}</td> --}}
                                         {{-- @if(count(auth()->user()->instalacion->deportes) > 1) --}}<td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }}
                                             {{ $item->pista->nombre }}</td> {{-- @endif --}}
-                                        @if(auth()->user()->id_instalacion != 2)<td class="text-uppercase">
+                                        @if(auth()->user()->id_instalacion != 2)
+                                        <td class="text-uppercase">
                                             @if ($item->estado == 'active')
                                                 @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                                     Pendiente
@@ -134,7 +140,11 @@
                                             @if ($item->estado == 'pasado')
                                                 <span style="color: green">Validada</span>
                                             @endif
-                                        </td>@endif
+                                        </td>
+                                        @else
+                                        <td>{{ $item->valor_organizacion }}</td>
+                                        <td>{{ $item->valor_presupuesto }}</td>
+                                        @endif
                                         <td>
                                             <div class="d-flex" style="gap:5px">
                                                 @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))

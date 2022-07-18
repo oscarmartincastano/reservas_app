@@ -89,24 +89,27 @@ class Pista extends Model
 
     public function get_reservas_fecha_hora($timestamp)
     {
-        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw("FIELD (estado, 'active', 'pasado', 'canceled') ASC")->get();
+        $reservas = Reserva::with('user')->where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw("FIELD (estado, 'active', 'pasado', 'canceled') ASC")->get()->filter(function($reserva) use ($timestamp) {
+            return in_array($timestamp, $reserva->horarios_deserialized);
+        });
         $jump = 0;
 
         $ret_reservas = [];
         foreach ($reservas as $key => $reserva) {
-            if (in_array($timestamp, $reserva->horarios_deserialized)) {
+            /* if (in_array($timestamp, $reserva->horarios_deserialized)) { */
                 if ($jump) {
                     $jump=$jump-1;
                     continue;
                 }
-                $reserva->usuario = User::find($reserva->id_usuario);
+                $reserva->valores_campos_pers = $reserva->valores_campos_pers;
+                /* $reserva->usuario = User::find($reserva->id_usuario); */
                 if ($reserva->reserva_multiple) {
                     $reserva->numero_reservas = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count();
                     $jump = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count()-1;
                 }
                 $reserva->string_intervalo = date('H:i', $timestamp) . ' - ' . date('H:i', strtotime("+{$reserva->minutos_totales} minutes", strtotime(date('H:i', $timestamp))));
                 array_push($ret_reservas, $reserva);
-            }
+            /* } */
         }
 
         return $ret_reservas;
