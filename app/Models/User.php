@@ -60,7 +60,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['reservas_activas', 'reservas_pasadas', 'reservas_canceladas'];
+    /* protected $appends = ['reservas_activas', 'reservas_pasadas', 'reservas_canceladas']; */
 
     public function instalacion()
     {
