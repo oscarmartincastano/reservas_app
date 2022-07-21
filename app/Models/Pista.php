@@ -92,8 +92,8 @@ class Pista extends Model
         $reservas = Reserva::with('user')->where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw("FIELD (estado, 'active', 'pasado', 'canceled') ASC")->get()->filter(function($reserva) use ($timestamp) {
             return in_array($timestamp, $reserva->horarios_deserialized);
         });
-        $jump = 0;
 
+        $jump = 0;
         $ret_reservas = [];
         foreach ($reservas as $key => $reserva) {
             /* if (in_array($timestamp, $reserva->horarios_deserialized)) { */
@@ -101,7 +101,7 @@ class Pista extends Model
                     $jump=$jump-1;
                     continue;
                 }
-                $reserva->valores_campos_pers = $reserva->valores_campos_pers;
+                /* $reserva->valores_campos_pers = $reserva->valores_campos_pers; */
                 /* $reserva->usuario = User::find($reserva->id_usuario); */
                 if ($reserva->reserva_multiple) {
                     $reserva->numero_reservas = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count();
@@ -297,7 +297,7 @@ class Pista extends Model
                         $horario[$index][$i]['string'] = $string_hora;
                         $horario[$index][$i]['tramos'] = 1;
                         $horario[$index][$i]['reservas'] = $all_reservas;
-                        $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
+                        $horario[$index][$i]['num_res'] = $this->get_reserva_activa_fecha_hora($timestamp)->count();
                         $horario[$index][$i]['timestamp'] = $timestamp;
                         $horario[$index][$i]['desactivado'] = $this->check_desactivado($timestamp);
 
