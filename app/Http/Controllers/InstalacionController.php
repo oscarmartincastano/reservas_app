@@ -45,7 +45,7 @@ class InstalacionController extends Controller
       
     public function index(Request $request) {
         $instalacion = auth()->user()->instalacion;
-        
+
         if (isset($request->semana)) {
             if (isset($request->week)) {
                 $semana = $request->week;
@@ -70,7 +70,6 @@ class InstalacionController extends Controller
 
         $period = new \DatePeriod(new DateTime($semana['start']), new \DateInterval('P1D'), new DateTime($semana['end']));
         $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
-
 
         return view('instalacion.home', compact('instalacion', 'period', 'pistas'));
     }
