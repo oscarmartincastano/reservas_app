@@ -101,7 +101,7 @@ class Pista extends Model
                     $jump=$jump-1;
                     continue;
                 }
-                /* $reserva->valores_campos_pers = $reserva->valores_campos_pers; */
+                $reserva->valores_campos_pers = $reserva->valores_campos_pers;
                 /* $reserva->usuario = User::find($reserva->id_usuario); */
                 if ($reserva->reserva_multiple) {
                     $reserva->numero_reservas = Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['estado', $reserva->estado], ['id_usuario', $reserva->id_usuario]])->count();
