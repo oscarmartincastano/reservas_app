@@ -259,6 +259,7 @@ class Pista extends Model
                         $horario[$index][$i]['timestamp'] = $timestamp;
                         $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
                         $horario[$index][$i]['valida'] = $this->check_reserva_valida($timestamp);
+                        $horario[$index][$i]['organizacion'] = $this->id_instalacion == 2 ? ($this->get_reservas_fecha_hora($timestamp)[0] ?? null) : null;
 
                         if ($hora->format('H:i') == $intervalo['hfin']) {
                             break;

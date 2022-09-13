@@ -152,6 +152,7 @@
                             <div class="th">21:00 - 22:00</div>
                             <div class="th">22:00 - 23:00</div>
                         </div> --}}
+                        
                         @foreach ($period as $fecha)
                             <div class="th" style="text-transform: capitalize">
                                 <div style="height:4rem">
@@ -161,8 +162,15 @@
                                     @foreach ($item as $intervalo)
                                         <div @if($intervalo['height'] < 17) style="height:{{ $intervalo['height']/2 }}rem" @else style="height:{{ $intervalo['height']/4 }}rem" @endif>
                                             <a @if (!$intervalo['valida']) href="#" class="btn-no-disponible" @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
-                                                {{ $intervalo['string'] }}@if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])<br>
-                                                (Libres: {{ $pista_selected->reservas_por_tramo-$intervalo['num_res'] }})@endif
+                                                @if(!$intervalo['organizacion'])
+                                                    {{ $intervalo['string'] }}
+                                                @else
+                                                    <span style="max-width:150px;">{!! strlen($intervalo['organizacion']->valor_organizacion)>17 ?  strrev(implode(strrev('<br>'), explode(strrev(" "), strrev($intervalo['organizacion']->valor_organizacion), 2))) : $intervalo['organizacion']->valor_organizacion !!}</span>
+                                                @endif
+                                                @if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])
+                                                    <br>
+                                                    (Libres: {{ $pista_selected->reservas_por_tramo-$intervalo['num_res'] }})
+                                                @endif
                                             </a>
                                         </div>
                                     @endforeach

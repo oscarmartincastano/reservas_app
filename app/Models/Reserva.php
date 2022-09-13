@@ -49,15 +49,15 @@ class Reserva extends Model
     }
 
     public function getValorNombreReunionAttribute() {
-        return self::valores_campos_personalizados()->where('id_campo', 18)->first()->valor;
+        return self::valores_campos_personalizados()->where('id_campo', 18)->first()->valor ?? '---';
     }
 
     public function getValorOrganizacionAttribute() {
-        return self::valores_campos_personalizados()->where('id_campo', 14)->first()->valor;
+        return self::valores_campos_personalizados()->where('id_campo', 14)->first()->valor ?? '---';
     }
 
     public function getValorPresupuestoAttribute() {
-        return self::valores_campos_personalizados()->where('id_campo', 17)->first()->valor;
+        return self::valores_campos_personalizados()->where('id_campo', 17)->first()->valor ?? '---';
     }
 
     public function getHorariosDeserializedAttribute() {

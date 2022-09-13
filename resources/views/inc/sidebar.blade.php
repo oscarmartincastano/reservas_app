@@ -32,6 +32,10 @@
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/periodicas">Reservas periódicas</a>
                         <span class="icon-thumbnail">rp</span>
                     </li>
+                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/reservas/list/periodicas') ? 'active' : '' }}">
+                        <a href="/{{ request()->slug_instalacion }}/admin/reservas/list/periodicas">Listado reservas periodicas</a>
+                        <span class="icon-thumbnail">lr</span>
+                    </li>
                     <li class="{{ request()->is(request()->slug_instalacion . '/admin/reservas/desactivaciones') ? 'active' : '' }}">
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/desactivaciones">Desactivaciones periódicas</a>
                         <span class="icon-thumbnail">dp</span>

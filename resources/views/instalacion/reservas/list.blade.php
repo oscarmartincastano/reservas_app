@@ -45,29 +45,29 @@
                         @if (request()->fecha)
                             @switch(request()->fecha)
                                 @case('all')
-                                    Todas las reservas
+                                    Todas las reservas @if(request()->periodicas) periódicas @endif
                                     @break
                                 @case('today')
-                                    Reservas del día de hoy: {{ date('d/m/Y', strtotime(date('Y-m-d'))) }}
+                                    Reservas @if(request()->periodicas) periódicas @endif del día de hoy: {{ date('d/m/Y', strtotime(date('Y-m-d'))) }}
                                     @break
                                 @case('week')
-                                    Reservas de esta semana: {{ date('d/m/Y', strtotime("monday -1 week")) }} - {{ date('d/m/Y', strtotime("sunday 0 week")) }}
+                                    Reservas @if(request()->periodicas) periódicas @endif de esta semana: {{ date('d/m/Y', strtotime("monday -1 week")) }} - {{ date('d/m/Y', strtotime("sunday 0 week")) }}
                                     @break
                                 @case('month')
-                                    Reservas de este mes: {{ date('d/m/Y', strtotime(date("Y-m", strtotime(date('Y-m-d'))) . '-01')) }} - {{ date('d/m/Y', strtotime(date("Y-m-t", strtotime(date('Y-m-d'))))) }}
+                                    Reservas @if(request()->periodicas) periódicas @endif de este mes: {{ date('d/m/Y', strtotime(date("Y-m", strtotime(date('Y-m-d'))) . '-01')) }} - {{ date('d/m/Y', strtotime(date("Y-m-t", strtotime(date('Y-m-d'))))) }}
                                     @break
                                 @default
                                     @if(auth()->user()->instalacion->id == 2)
-                                        Todas las reservas
+                                        Próximas reservas @if(request()->periodicas) periódicas @endif
                                     @else
-                                        Reservas del día de hoy
+                                        Reservas @if(request()->periodicas) periódicas @endif del día de hoy
                                     @endif
                             @endswitch
                         @else
                             @if(auth()->user()->instalacion->id == 2)
-                                Todas las reservas
+                                Próximas reservas @if(request()->periodicas) periódicas @endif
                             @else
-                                Reservas del día de hoy
+                                Reservas @if(request()->periodicas) periódicas @endif del día de hoy
                             @endif
                         @endif
                     </h3>
@@ -109,13 +109,13 @@
                                 @foreach ($reservas as $item)
                                     <tr>
                                         @if(auth()->user()->id_instalacion != 2)
-                                        <td>#{{ $item->id }}</td>
+                                        <td data-order="{{ $item->timestamp }}">#{{ $item->id }}</td>
                                         <td><a @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) data-intervalo="{{ \Carbon\Carbon::parse($item->timestamp)->formatLocalized('%A') }}, {{ date('d/m/Y', $item->timestamp) }} <br> {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}"
                                             data-reserva="{{ $item->id }}"
                                             data-user="{{ $item->user->name ?? '' }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name ?? '' }}</a>
                                         </td>
                                         @else
-                                        <td>{{ $item->valor_nombre_reunion }}</td>
+                                        <td data-order="{{ $item->timestamp }}"><i class="fa-solid fa-repeat mr-2"></i> {{ $item->valor_nombre_reunion }}@if($item->reserva_periodica)@endif</td>
                                         @endif
                                         <td data-order="{{ $item->timestamp }}">{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
@@ -186,7 +186,7 @@
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
                 "order": [
-                    [2, "desc"]
+                    [0, "asc"]
                 ]
             });
 

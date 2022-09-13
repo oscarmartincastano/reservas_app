@@ -109,6 +109,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         Route::prefix('reservas')->group(function () {
             Route::get('/', 'InstalacionController@index');
             Route::get('/list', 'InstalacionController@listado_todas_reservas');
+            Route::get('/list/{periodicas}', 'InstalacionController@listado_todas_reservas');
             Route::get('/periodicas', 'InstalacionController@reservas_periodicas');
             Route::get('/periodicas/add', 'InstalacionController@add_reservas_periodicas_view');
             Route::post('/periodicas/add', 'InstalacionController@add_reservas_periodicas')->name('add_reserva_periodica');

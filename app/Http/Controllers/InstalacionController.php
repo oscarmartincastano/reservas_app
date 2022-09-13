@@ -391,25 +391,34 @@ class InstalacionController extends Controller
         if ($request->fecha) {
             switch ($request->fecha) {
                 case 'all':
-                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->get();
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas);
                     break;
                 case 'today':
-                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'))->get();
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'));
                     break;
                 case 'week':
                     $week = $this->rangeWeek(date('Y-m-d'));
-                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['reserva_periodica', null], ['timestamp', '>=', strtotime($week['start'])], ['timestamp', '<=', strtotime($week['end'])]])->get();
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['reserva_periodica', null], ['timestamp', '>=', strtotime($week['start'])], ['timestamp', '<=', strtotime($week['end'])]]);
                     break;
                 case 'month':
                     $month_start = date("Y-m", strtotime(date('Y-m-d'))) . '-01';
                     $month_end = date("Y-m-t", strtotime(date('Y-m-d')));
-                    $reservas = Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where([['timestamp', '>=', strtotime($month_start)], ['timestamp', '<=', strtotime($month_end)]])->get();
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['timestamp', '>=', strtotime($month_start)], ['timestamp', '<=', strtotime($month_end)]]);
                     break;
                 default:
                     break;
             }
         } else {
-            $reservas = auth()->user()->instalacion->id == 2 ? Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->get() : Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'))->get();
+            $reservas = auth()->user()->instalacion->id == 2 ? Reserva::where('fecha', '>=', date('Y-m-d'))->whereIn('id_pista', $ids_pistas) : Reserva::where('reserva_periodica', null)->whereIn('id_pista', $ids_pistas)->where('fecha', date('Y-m-d'));
+        }
+        if ($request->periodicas) {
+            if ($request->periodicas == 'periodicas') {
+                $reservas = $reservas->where('reserva_periodica', '!=', null)->get();
+            } else {
+                abort(404);
+            }
+        } else {
+            $reservas = $reservas->get();
         }
         /* return $request->fecha; */
 
