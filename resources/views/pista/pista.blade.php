@@ -47,6 +47,20 @@
         .picker__box{
             padding-top: 18px;
         }
+
+        .span-num-res {
+            background: #0d6efd;
+            width: 31px;
+            display: inline-flex;
+            justify-content: center;
+            border-radius: 17px;
+            color: white;
+        }
+
+        .active .span-num-res {
+            background: white;
+            color: #0d6efd;
+        }
         
     </style>
     @if (count($pistas) > 1)
@@ -85,16 +99,26 @@
         <div class="columns">
             <div class="column is-full">
                 <div class="div-reservas">
-                    <div class="pistas">
+                    <div class="pistas" @if ($pista_selected->id_instalacion == 2) style="padding-top:10px" @endif>
                         @if (count($pistas) > 1)
-                            <div class="seleccionar-pista-label" style="position: absolute; color: white;top:11px;font-size: 18px">Selecciona espacio: </div>
+                            <div class="seleccionar-pista-label" style="position: absolute; color: white;top:11px;font-size: 18px;@if ($pista_selected->id_instalacion == 2) display:none; @endif">Selecciona espacio: </div>
                         @endif
                         @if (count($pistas) > 4)
+                            @if ($pista_selected->id_instalacion != 2)
                             <select name="pista" class="form-select" id="pista-select2">
                                 @foreach ($pistas as $pista)
                                     <option value="{{ $pista->id }}" @if (request()->id_pista == $pista->id) selected @endif>{{ $pista->nombre }}</option>
                                 @endforeach
                             </select>
+                            @else
+                            <ul class="nav nav-pills justify-content-center">
+                                @foreach ($pistas as $pista)
+                                    <li class="nav-item">
+                                        <a class="nav-link @if (request()->id_pista == $pista->id) active @endif" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}"><span>{{ $pista->nombre }}</span>@if($pista->reservas_given_date(date('Y-m-d'))->count()) <span class="span-num-res ml-2">{{ $pista->reservas_given_date(date('Y-m-d'))->count() }}</span> @endif</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            @endif
                         @else
                             @foreach ($pistas as $index => $pista)
                                 <div class="@if ($pista->id == $pista_selected->id) active @endif"><a class=" select-pista"

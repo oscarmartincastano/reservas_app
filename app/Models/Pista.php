@@ -331,4 +331,10 @@ class Pista extends Model
     {
         return $this->reservas_por_tramo < $user->numero_reservas_perimitidas($this->tipo) ? ($this->reservas_permitidas_restantes(request()->timestamp) < $this->reservas_por_tramo ? $this->reservas_permitidas_restantes(request()->timestamp) : $this->reservas_por_tramo) : ($this->reservas_permitidas_restantes(request()->timestamp) < $user->numero_reservas_perimitidas($this->tipo) ?  $this->reservas_permitidas_restantes(request()->timestamp) : $user->numero_reservas_perimitidas($this->tipo));
     }
+
+    public function reservas_given_date($date)
+    {
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', $date], ['estado', '!=', 'canceled']])->orderByRaw('estado ASC')->get();
+        return $reservas;
+    }
 }
