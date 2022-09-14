@@ -17,10 +17,14 @@
                     </div>
                     <div class="card-body">
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/periodicas/add" class="btn btn-primary text-white mb-2">Añadir reserva periódica</a> 
-                        <table class="table table-condensed table-hover" id="table-reservas">
+                        <table class="table table-hover" id="table-reservas">
                             <thead>
                                 <tr>
-                                    <th>Usuario</th>
+                                    @if(auth()->user()->id_instalacion != 2)
+                                        <th>Usuario</th>
+                                    @else
+                                        <th>Organización</th>
+                                    @endif
                                     <th>Espacio</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
@@ -33,7 +37,11 @@
                                 @foreach ($reservas_periodicas as $item)
                                     @if (strtotime(date('Y-m-d')) < strtotime($item->fecha_fin))
                                         <tr>
+                                            @if(auth()->user()->id_instalacion != 2)
                                             <td><a href="/{{ request()->slug_instalacion }}/admin/users/{{ $item->user->id }}/ver">{{ $item->user->name }}</a></td>
+                                            @else
+                                            <td>{{ \App\Models\Reserva::where('reserva_periodica', $item->id)->first()->valor_nombre_reunion }}</td>
+                                            @endif
                                             <td>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->pista->tipo . '.' : '' }} {{ $item->pista->nombre }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->fecha_inicio)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->fecha_fin)) }}</td>
