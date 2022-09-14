@@ -115,7 +115,7 @@
                                             data-user="{{ $item->user->name ?? '' }}" @endif href="#" @if ($item->estado == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i'))) class="btn-accion-reserva" @endif>{{ $item->user->name ?? '' }}</a>
                                         </td>
                                         @else
-                                        <td data-order="{{ $item->timestamp }}"><i class="fa-solid fa-repeat mr-2"></i> {{ $item->valor_nombre_reunion }}@if($item->reserva_periodica)@endif</td>
+                                        <td data-order="{{ $item->timestamp }}">@if($item->reserva_periodica)<i class="fa-solid fa-repeat mr-2"></i> @endif {{ $item->valor_nombre_reunion }}</td>
                                         @endif
                                         <td data-order="{{ $item->timestamp }}">{{ date('d/m/Y', $item->timestamp) }}</td>
                                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -

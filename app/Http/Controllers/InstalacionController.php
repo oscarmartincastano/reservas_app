@@ -398,7 +398,7 @@ class InstalacionController extends Controller
                     break;
                 case 'week':
                     $week = $this->rangeWeek(date('Y-m-d'));
-                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['reserva_periodica', null], ['timestamp', '>=', strtotime($week['start'])], ['timestamp', '<=', strtotime($week['end'])]]);
+                    $reservas = Reserva::whereIn('id_pista', $ids_pistas)->where([['timestamp', '>=', strtotime($week['start'])], ['timestamp', '<=', strtotime($week['end'])]]);
                     break;
                 case 'month':
                     $month_start = date("Y-m", strtotime(date('Y-m-d'))) . '-01';
