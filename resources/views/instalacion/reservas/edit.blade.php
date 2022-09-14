@@ -34,7 +34,7 @@
                                 <label class="form-label">Espacio</label>
                                 <select name="id_pista" id="id_pista" class="form-control">
                                     @foreach ($pistas as $item)
-                                        <option value="{{ $item->id }}">{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->tipo . ' - ' : '' }} {{ $item->nombre }}</option>
+                                        <option value="{{ $item->id }}" @if($item->id == $reserva->id_pista) selected @endif>{{ count(auth()->user()->instalacion->deportes) > 1 ? $item->tipo . ' - ' : '' }} {{ $item->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>

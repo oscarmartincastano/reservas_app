@@ -353,17 +353,17 @@ class InstalacionController extends Controller
         $reserva = Reserva::find($request->id);
         $pista = $reserva->pista;
 
-        $minutos_totales = $request->secuencia * $request->tarifa;
+        $minutos_totales = $request->secuencia * $reserva->tarifa;
 
-        $timestamps[0] = (int)$request->timestamp;
+        $timestamps[0] = (int)$reserva->timestamp;
         
-        if ($request->tarifa > 1) {
-            for ($i=1; $i < $request->tarifa; $i++) {
-                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+        if ($reserva->tarifa > 1) {
+            for ($i=1; $i < $reserva->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $reserva->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
             }
         }
-
-        $reserva->update(['horarios' => serialize($timestamps), 'tarifa' => $request->tarifa, 'id_pista' => $request->id_pista, 'minutos_totales' => $minutos_totales]);
+        /* return $timestamps; */
+        $reserva->update(['horarios' => serialize($timestamps), 'tarifa' => $reserva->tarifa, 'id_pista' => $request->id_pista, 'minutos_totales' => $minutos_totales]);
             
 
         if (isset($request->observaciones)) {
