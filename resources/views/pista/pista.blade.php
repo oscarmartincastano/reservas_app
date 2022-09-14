@@ -107,14 +107,14 @@
                             @if ($pista_selected->id_instalacion != 2)
                             <select name="pista" class="form-select" id="pista-select2">
                                 @foreach ($pistas as $pista)
-                                    <option value="{{ $pista->id }}" @if (request()->id_pista == $pista->id) selected @endif>{{ $pista->nombre }}</option>
+                                    <option value="{{ $pista->id }}" @if ($pista_selected->id == $pista->id) selected @endif>{{ $pista->nombre }}</option>
                                 @endforeach
                             </select>
                             @else
                             <ul class="nav nav-pills justify-content-center">
                                 @foreach ($pistas as $pista)
                                     <li class="nav-item">
-                                        <a class="nav-link @if (request()->id_pista == $pista->id) active @endif" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}"><span>{{ $pista->nombre }}</span>@if($pista->reservas_given_date(date('Y-m-d'))->count()) <span class="span-num-res ml-2">{{ $pista->reservas_given_date(date('Y-m-d'))->count() }}</span> @endif</a>
+                                        <a class="nav-link @if ($pista_selected->id == $pista->id) active @endif" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}"><span>{{ $pista->nombre }}</span>@if($pista->reservas_given_two_dates(date('Y-m-d'), iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count()) <span class="span-num-res ml-2">{{ $pista->reservas_given_two_dates(date('Y-m-d'), iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count() }}</span> @endif</a>
                                     </li>
                                 @endforeach
                             </ul>

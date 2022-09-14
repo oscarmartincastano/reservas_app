@@ -337,4 +337,9 @@ class Pista extends Model
         $reservas = Reserva::where([['id_pista', $this->id], ['fecha', $date], ['estado', '!=', 'canceled']])->orderByRaw('estado ASC')->get();
         return $reservas;
     }
+    public function reservas_given_two_dates($date_inicio, $date_fin)
+    {
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', '>=',  $date_inicio], ['fecha', '<=',  $date_fin], ['estado', '!=', 'canceled']])->orderByRaw('estado ASC')->get();
+        return $reservas;
+    }
 }
