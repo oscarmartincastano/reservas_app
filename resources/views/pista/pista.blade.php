@@ -186,10 +186,10 @@
                                     @foreach ($item as $intervalo)
                                         <div @if($intervalo['height'] < 17) style="height:{{ $intervalo['height']/2 }}rem" @else style="height:{{ $intervalo['height']/4 }}rem" @endif>
                                             <a @if (!$intervalo['valida']) href="#" class="btn-no-disponible" @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
-                                                @if(!$intervalo['organizacion'])
+                                                @if(!$intervalo['reunion'])
                                                     {{ $intervalo['string'] }}
                                                 @else
-                                                    <span style="max-width:150px;">{!! strlen($intervalo['organizacion']->valor_organizacion)>17 ?  strrev(implode(strrev('<br>'), explode(strrev(" "), strrev($intervalo['organizacion']->valor_organizacion), 2))) : $intervalo['organizacion']->valor_organizacion !!}</span>
+                                                    <span style="max-width:150px;">{!! strlen($intervalo['reunion']->valor_nombre_reunion)>17 ?  strrev(implode(strrev('<br>'), explode(strrev(" "), strrev($intervalo['reunion']->valor_nombre_reunion), 2))) : $intervalo['reunion']->valor_nombre_reunion !!}</span>
                                                 @endif
                                                 @if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])
                                                     <br>
