@@ -19,7 +19,7 @@ require __DIR__.'/auth.php';
 |
 */
 /* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
-
+/*
 Route::get('prueba', function() {
     $json_string = file_get_contents('vincular/lasislas.json');
     $data = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $json_string) );
@@ -29,10 +29,10 @@ Route::get('prueba', function() {
         $u = App\Models\User::find($user->id);
         //$u->update(['codigo_aforos' => $user->codigo]);
     }
-    
+
     //return \App\Models\User::where('id_instalacion', 5)->get();
 });
-
+*/
 Route::get('validar/{code}', function($code) {
     $now = \Carbon\Carbon::now();
     $user = \App\Models\User::where('codigo_aforos', $code)->first();
@@ -54,7 +54,7 @@ Route::get('validar/{code}', function($code) {
             }
         }
     }
-    
+
     /*$reserva = App\Models\Reserva::where('id_usuario', $id)->where('fecha', $now->format('Y-m-d'))->first();
     if($reserva != null) {
         if($reserva->estado == 'in') {
@@ -70,9 +70,10 @@ Route::get('validar/{code}', function($code) {
         return 'no existe';
     }*/
 });
-
+/**
 Route::get('/test-import', 'InstalacionController@import_users');
-
+*/
+Route::get('/','InstalacionController@home');
 Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
     Route::get('/', 'UserController@index');
     Route::get('/normas', 'UserController@normas_instalacion');
@@ -120,7 +121,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::post('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas')->name('add_desactivacion');
             Route::get('/desactivaciones/{id}/borrar', 'InstalacionController@borrar_desactivaciones_periodicas');
 
-            
+
             Route::get('/{id}/edit', 'InstalacionController@edit_reserva_view')->name('reserva.edit');
             Route::post('/{id}/edit', 'InstalacionController@edit_reserva')->name('reserva.edit');
 
@@ -135,7 +136,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
             Route::get('/{id_pista}/desactivar-dia/{dia}', 'InstalacionController@desactivar_dia');
             Route::get('/{id_pista}/activar-dia/{dia}', 'InstalacionController@activar_dia');
         });
-    
+
         Route::prefix('pistas')->group(function () {
             Route::get('/', 'InstalacionController@pistas');
             Route::get('add', 'InstalacionController@add_pista_view');
@@ -145,7 +146,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
                 Route::post('edit/annadir', 'InstalacionController@edit_pista')->name('edit_pista');
             });
         });
-    
+
         Route::prefix('users')->group(function () {
             Route::get('/', 'InstalacionController@users');
             Route::get('/novalid', 'InstalacionController@users_no_valid');
