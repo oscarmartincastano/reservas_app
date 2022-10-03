@@ -168,7 +168,7 @@
     </nav>
     <main>
         @yield('content')
-        @if (!auth()->user() && request()->slug_instalacion == 'alminar')
+        {{-- @if (!auth()->user() && request()->slug_instalacion == 'alminar')
             @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
             <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
                 <div class="modal-dialog" role="document">
@@ -182,12 +182,11 @@
                     <div class="modal-body p-4">
                     <p class="mb-4 text-center" style="font-size: 17px">El sistema ha cambiado y todos los usuarios tienen que recuperar su contraseña. Puedes hacerlo desde este link: </p>
                     <p class="text-center pt-2"><a href="{{ route('forgot_password_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="btn btn-success">Recuperar contraseña</a></p>
-                    {{-- <p class="text-center mt-2"><a href="#"data-dismiss="modal" aria-label="Close" class="btn btn-primary">Entendido</a></p> --}}
                     </div>
                 </div>
                 </div>
             </div>
-        @endif
+        @endif --}}
         @if (auth()->user() && request()->slug_instalacion == 'alminar' && !auth()->user()->direccion)
             {{-- @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp --}}
             <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
