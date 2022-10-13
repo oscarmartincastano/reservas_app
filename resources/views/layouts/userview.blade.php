@@ -112,6 +112,30 @@
         .modal-open {
             padding-right: 0 !important;
         }
+        @media (max-width: 600px) {
+            .thead {
+                display: flex;
+                justify-content: flex-start;
+                padding: 20px;
+                flex-direction: row;
+                flex-grow: revert;
+                overflow: auto;
+            }
+            .thead {
+                display: flex;
+                justify-content: flex-start;
+                padding: 20px;
+                flex-direction: row;
+                flex-grow: revert;
+                overflow: auto;
+            }
+            .thead>div.th:not(:first-child) {
+                display: block;
+            }
+            .thead>div {
+                min-width: 145px;
+            }
+        }
     </style>
 
     <title>Instalación - @yield('pagename')</title>

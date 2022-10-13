@@ -174,4 +174,9 @@ class User extends Authenticatable
 
         return 200;
     }
+
+    public function reservas_en_espera()
+    {
+        return $this->reservas->where('fecha', '>=', date('Y-m-d'))->where('estado', 'espera');
+    }
 }

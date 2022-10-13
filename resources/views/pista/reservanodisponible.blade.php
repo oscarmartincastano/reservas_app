@@ -64,14 +64,18 @@
                                     <h1><i class="far fa-calendar-check mr-2"></i> Reserva no disponible</h1>
                                 </div>
                                 <p class="descripcion">
-                                    @if (isset($max_reservas) || isset($user_no_valid))
-                                        @if (isset($max_reservas))
-                                            Tienes el número máximo de reservas activas para este tipo de espacio. Espera a que se cumplan o <a href="/{{ request()->slug_instalacion }}/mis-reservas">cancelalas</a>.
-                                        @else
-                                            Tu usuario no ha sido validado todavía. Contacta con los administradores para tu validación y para que empices a realizar reservas.
-                                        @endif
+                                    @if(isset($error))
+                                        {{ $error }}
                                     @else
-                                        Esta reserva no está disponible, elija en otro tramo horario.
+                                        @if (isset($max_reservas) || isset($user_no_valid))
+                                            @if (isset($max_reservas))
+                                                Tienes el número máximo de reservas activas para este tipo de espacio. Espera a que se cumplan o <a href="/{{ request()->slug_instalacion }}/mis-reservas">cancelalas</a>.
+                                            @else
+                                                Tu usuario no ha sido validado todavía. Contacta con los administradores para tu validación y para que empices a realizar reservas.
+                                            @endif
+                                        @else
+                                            Este intervalo no está disponible, elija en otro tramo horario.
+                                        @endif
                                     @endif
                                 </p>
                                 <div><a href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ request()->id_pista }}{{ isset(request()->semana) ? "?semana{request()->semana}" : '' }}" class="btn btn-info text-white"><i class="fas fa-long-arrow-alt-left"></i> Volver</a></div>

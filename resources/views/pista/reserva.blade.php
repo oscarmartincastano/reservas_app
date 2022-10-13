@@ -207,6 +207,17 @@
         }
         
     </style>
+    @if($pista->siguiente_reserva_lista_espera(request()->timestamp))
+    <style>
+        h1 {
+            color: #ff9800;
+        }
+
+        .fecha-title {
+            color: #ff9800;
+        }
+    </style>
+    @endif
 </head>
 
 <body style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/reserva-'. lcfirst($pista->tipo) .'.jpg')), url(/img/deportes/reserva-{{ lcfirst($pista->tipo) }}.jpg) @endif;
@@ -271,7 +282,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
+                                    @if($pista->siguiente_reserva_lista_espera(request()->timestamp))
+                                    <h1><i class="far fa-calendar-check mr-2"></i> Apuntar a lista de espera</h1>
+                                    @else
                                     <h1><i class="far fa-calendar-check mr-2"></i> Confirmar reserva</h1>
+                                    @endif
                                     <div class="fecha-title">{{ date('d-m-Y', $fecha) }}</div>
                                 </div>
                                 {{-- <div class="row">
@@ -281,8 +296,12 @@
                                     </div>
                                 </div> --}}
                                 <p class="descripcion">
+                                    @if($pista->siguiente_reserva_lista_espera(request()->timestamp))
+                                    Te estás apuntando a la lista de espera para <em>{{ $pista->nombre }}</em>. Si alguna reserva se cancela, se te avisará y se asignará una plaza de forma automática.
+                                    @else
                                     Estás reservando para <em>{{ $pista->nombre }}</em>. Por favor, revise y confirme
                                     los datos siguientes.
+                                    @endif
                                 </p>
                                 @if(session()->has('error_reservas_maximas'))
                                     <p class="descripcion" style="color: red">
@@ -366,6 +385,14 @@
                                                 </div>
                                             </div>
                                     @endforeach
+                                    @if($pista->siguiente_reserva_lista_espera(request()->timestamp))
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="check-entiendo" required>
+                                        <label class="form-check-label" for="check-entiendo" style="font-weight: 400">
+                                            Entiendo que esta reserva es para la lista de espera. Se me reservará automáticamente si queda una plaza libre
+                                        </label>
+                                    </div>
+                                    @endif
                                     <div class="form-group row mt-4">
                                         <label class="col-sm-3 col-form-label py-0"></label>
                                         <div class="col-sm-9 text-right d-flex justify-content-end" style="gap: 14px">

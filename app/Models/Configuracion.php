@@ -19,6 +19,7 @@ class Configuracion extends Model
         'block_today',
         'hide_weekends',
         'observaciones',
+        'reservas_lista_espera',
     ];
 
     public function instalacion()

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\NewReserva;
+use App\Mail\ReservaEspera;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Instalacion;
 use App\Models\Pista;
@@ -93,12 +94,17 @@ class UserController extends Controller
         $pista = Pista::find($request->id_pista);
         $user = User::find(auth()->user()->id);
         $fecha = $request->timestamp;
+        $res_siguiente_espera = $pista->siguiente_reserva_lista_espera($request->timestamp);
 
         /* return dd($user->numero_total_reservas_tipo($pista->tipo)); */
-        if (!$pista->check_reserva_valida($request->timestamp)) {
+        if (!$pista->check_reserva_valida($request->timestamp) && !$res_siguiente_espera) {
             return view('pista.reservanodisponible');
         }
-        if (!$user->check_maximo_reservas_espacio($pista->tipo)) {
+        if ($res_siguiente_espera && $user->reservas_en_espera()->count() >= 1) {
+            $error = 'No puedes apuntarte a la lista de espera porque ya estás en lista de espera de otro intervalo horario.';
+            return view('pista.reservanodisponible', compact('error'));
+        }
+        if (!$user->check_maximo_reservas_espacio($pista->tipo) && !$res_siguiente_espera) {
             $max_reservas = true;
             return view('pista.reservanodisponible', compact('max_reservas'));
         }
@@ -106,6 +112,7 @@ class UserController extends Controller
             $user_no_valid = true;
             return view('pista.reservanodisponible', compact('user_no_valid'));
         }
+        
         
         foreach ($pista->horario_deserialized as $item){
             if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
@@ -142,15 +149,20 @@ class UserController extends Controller
     {
         $pista = Pista::find($request->id_pista);
         $user = User::find(auth()->user()->id);
+        $reserva_espera = $pista->siguiente_reserva_lista_espera($request->timestamp);
         
         Log::channel('actividadreserva')->info("#{$user->id}: realiza reserva.");
 
-        if (!$pista->check_reserva_valida($request->timestamp)) {
+        if ($reserva_espera && $user->reservas_en_espera()->count() >= 1) {
+            return redirect()->back();
+        }
+
+        if (!$pista->check_reserva_valida($request->timestamp) && !$reserva_espera) {
             Log::channel('actividadreserva')->info("#{$user->id}: reserva no válida (tramo de reserva no disponible)");
             return redirect()->back();
         }
 
-        if (!$user->check_maximo_reservas_espacio($pista->tipo)) {
+        if (!$user->check_maximo_reservas_espacio($pista->tipo) && !$reserva_espera) {
             Log::channel('actividadreserva')->info("#{$user->id}: reserva no válida (máximo de reservas del usuario).");
             $max_reservas = true;
             return view('pista.reservanodisponible', compact('max_reservas'));
@@ -166,6 +178,7 @@ class UserController extends Controller
             }
         }
         
+        
         $reserva = Reserva::create([
             'id_pista' => $request->id_pista,
             'id_usuario' => auth()->user()->id,
@@ -174,7 +187,9 @@ class UserController extends Controller
             'fecha' => date('Y/m/d', $request->timestamp),
             'hora' => date('Hi', $request->timestamp),
             'tarifa' => $request->tarifa,
-            'minutos_totales' => $minutos_totales
+            'minutos_totales' => $minutos_totales,
+            'lista_espera' => $reserva_espera,
+            'estado' => $reserva_espera ? 'espera' : 'active'
         ]);
         
         Log::channel('actividadreserva')->info("#{$user->id}: reserva realizada (#{$reserva->id}).");
@@ -207,8 +222,19 @@ class UserController extends Controller
 
     public function cancel_reservas(Request $request)
     {
-        Reserva::find($request->id)->update(['estado' => 'canceled']);
+        $reserva = Reserva::find($request->id);
+        $estado_actual = $reserva->estado;
+        $reserva->update(['estado' => 'canceled']);
 
+        if ($estado_actual == 'active') {
+            $new_reserva = Reserva::where('id_pista', $reserva->id_pista)->where('timestamp', $reserva->timestamp)->where('estado', 'espera')->orderBy('created_at')->first();
+
+            if ($new_reserva) {
+                $new_reserva->update(['estado' => 'active']);
+                Mail::to($new_reserva->user->email)->send(new ReservaEspera($new_reserva->user, $new_reserva));
+            }
+        }
+        
         return redirect()->back();
     }
 

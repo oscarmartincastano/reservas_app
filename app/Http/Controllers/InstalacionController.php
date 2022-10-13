@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewReserva;
 use App\Mail\ReservaAdmin;
+use App\Mail\ReservaEspera;
 use App\Models\Pista;
 use App\Models\Instalacion;
 use App\Models\User;
@@ -119,7 +120,15 @@ class InstalacionController extends Controller
     public function validar_reserva(Request $request)
     {
         $reserva = Reserva::find($request->id);
+        
         if ($reserva->estado == 'active') {
+            $new_reserva = Reserva::where('id_pista', $reserva->id_pista)->where('timestamp', $reserva->timestamp)->where('estado', 'espera')->orderBy('created_at')->first();
+
+            if ($new_reserva) {
+                $new_reserva->update(['estado' => 'active']);
+                Mail::to($new_reserva->user->email)->send(new ReservaEspera($new_reserva->user, $new_reserva));
+            }
+            
             if ($reserva->reserva_multiple) {
                 Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['id_usuario', $reserva->id_usuario]])->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
                 return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));

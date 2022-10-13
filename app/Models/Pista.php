@@ -198,6 +198,23 @@ class Pista extends Model
         return $this->reservas_por_tramo - count($this->get_reserva_activa_fecha_hora($timestamp));
     }
 
+    public function siguiente_reserva_lista_espera($timestamp)
+    {
+        return strtotime(date('Y-m-d', $timestamp)) < strtotime(date('Y-m-d') . " +{$this->max_dias_antelacion} days") &&
+                !$this->check_desactivado($timestamp) && 
+                new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', strtotime(date('d-m-Y H:i', $timestamp) . " +{$this->get_minutos_given_timestamp($timestamp)} minutes" ))) && 
+                $this->reservas_permitidas_restantes($timestamp) <= 0 && $this->instalacion->configuracion->reservas_lista_espera > 0 && 
+                $this->reservas_espera_fecha_hora($timestamp)->count() < $this->instalacion->configuracion->reservas_lista_espera;
+    }
+
+    public function reservas_espera_fecha_hora($timestamp)
+    {
+        $reservas = Reserva::where([['id_pista', $this->id], ['fecha', date('Y-m-d', $timestamp)]])->orderByRaw('estado ASC')->get()->filter(function($reserva) use ($timestamp) {
+            return in_array($timestamp, $reserva->horarios_deserialized) && $reserva->estado == 'espera';
+        });
+        return $reservas;
+    }
+
     public function horario_tramos($fecha)
     {
         $fecha = new \DateTime($fecha);
@@ -259,6 +276,7 @@ class Pista extends Model
                         $horario[$index][$i]['timestamp'] = $timestamp;
                         $horario[$index][$i]['num_res'] = count($this->get_reserva_activa_fecha_hora($timestamp));
                         $horario[$index][$i]['valida'] = $this->check_reserva_valida($timestamp);
+                        $horario[$index][$i]['siguiente_reserva_lista_espera'] = $this->siguiente_reserva_lista_espera($timestamp);
                         $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($this->get_reservas_fecha_hora($timestamp)[0] ?? null) : null;
 
                         if ($hora->format('H:i') == $intervalo['hfin']) {

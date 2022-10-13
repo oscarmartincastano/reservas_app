@@ -28,6 +28,7 @@ class Reserva extends Model
         'observaciones',
         'observaciones_admin',
         'reserva_periodica',
+        'lista_espera',
         'creado_por',
     ];
 

@@ -108,6 +108,9 @@
                                             Pasado
                                         @endif
                                     @endif
+                                    @if ($item->estado  == 'espera')
+                                        <span style="color: #ff9800">En lista de espera</span>
+                                    @endif
                                     @if($item->estado == 'desierta')
                                         <span class="text-warning">Desierta</span>
                                     @endif
@@ -119,7 +122,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                        @if ($item->estado  == 'active' && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
+                                        @if (($item->estado  == 'active' || $item->estado == 'espera') && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
                                             <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
                                                 @csrf
                                             </form>

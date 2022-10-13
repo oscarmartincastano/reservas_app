@@ -64,6 +64,11 @@
                                 </label>
                             </div>
                             <div class="form-group mb-4">
+                                <label for="reservas_lista_espera">Nº de reservas permitidas de lista de espera</label>
+                                <input type="number" class="form-control" name="reservas_lista_espera" id="reservas_lista_espera"
+                                    value="{{ $instalacion->configuracion->reservas_lista_espera }}">
+                            </div>
+                            <div class="form-group mb-4">
                                 <label for="max_reservas_tipo_espacio">Reservas máximas por usuario para cada tipo de espacio</label>
                                 <div class="border p-3">
                                     @foreach ($instalacion->deportes as $tipo_espacio)

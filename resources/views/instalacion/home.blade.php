@@ -594,6 +594,8 @@
                                             }
                                         }else if (reserva.estado == 'desierta') {
                                             string += `<h4 class="text-warning" style="font-weight:bold">Desierta</h4></div>`;
+                                        }else if (reserva.estado == 'espera') {
+                                            string += `<h4 style="color:#ff9800;font-weight:bold">En lista de espera</h4></div>`;
                                         }else{
                                             string += `<h4 style="color:#28a745;font-weight:bold">Validada</h4></div>`;
                                         }

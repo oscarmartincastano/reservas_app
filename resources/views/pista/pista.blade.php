@@ -185,7 +185,7 @@
                                 @foreach ($pista_selected->horario_con_reservas_por_dia($fecha->format('Y-m-d')) as $item)
                                     @foreach ($item as $intervalo)
                                         <div @if($intervalo['height'] < 17) style="height:{{ $intervalo['height']/2 }}rem" @else style="height:{{ $intervalo['height']/4 }}rem" @endif>
-                                            <a @if (!$intervalo['valida']) href="#" class="btn-no-disponible" @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
+                                            <a @if (!$intervalo['valida']) @if($intervalo['siguiente_reserva_lista_espera']) href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar btn-reservar-suplente" style="background: #ff9800" @else href="#" class="btn-no-disponible" @endif @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
                                                 @if(!$intervalo['reunion'])
                                                     {{ $intervalo['string'] }}
                                                 @else
@@ -207,6 +207,22 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-reserva-suplente" tabindex="-1" role="dialog" style="padding-right: 0">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content m-0" style="top:25vh">
+            <div class="modal-header">
+            <h4 class="h4 mb-0">Lista de espera</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body p-4">
+            <p class="mb-4 text-center" style="font-size: 17px">El cupo de reservas está <strong>COMPLETO</strong> en este intervalo. Si alguna reserva se cancela, se te avisará y se asignará una plaza de forma automática. </p>
+            <p class="text-center pt-2"><a href="#" class="btn btn-success">Realizar reserva</a></p>
+            </div>
+        </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -248,6 +264,11 @@
             
             $('#pista-select2').change(function (e) {
                 window.location.href = $('#url_instalacion').html() + $(this).val() + "?dia={{ request()->dia }}&dia_submit={{ request()->dia_submit }}";
+            });
+
+            $('.btn-reservar-suplente').click(function (e) { 
+                e.preventDefault();
+                $('#modal-reserva-suplente').modal('show').find('.btn-success').attr('href', $(this).attr('href'));
             });
         });
     </script>
