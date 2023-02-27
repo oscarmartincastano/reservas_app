@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
+// use App\Http\Controllers\SponsorController;
+
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
@@ -37,6 +39,7 @@ Route::get('prueba', function() {
 // Route::get('test', function () {
 //     return view('test');
 // });
+
 
 Route::get('validar/{code}', function ($code) {
     $now = \Carbon\Carbon::now();
@@ -198,6 +201,16 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             Route::get('/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
             Route::post('/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
             Route::get('/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
+        });
+        Route::prefix('patrocinadores')->group(function () {
+
+            route::get('/', 'SponsorController@index')->name('sponsors.index');
+            route::post('/', 'SponsorController@store')->name('sponsors.store');
+            route::get('/create', 'SponsorController@create')->name('sponsors.create');
+            Route::get('/{id}', 'SponsorController@show')->name('sponsors.show');
+            route::put('/{id}', 'SponsorController@update')->name('sponsors.update');
+            route::delete('/{id}', 'SponsorController@destroy')->name('sponsors.destroy');
+            route::get('/{id}/edit', 'SponsorController@edit')->name('sponsors.edit');
         });
     });
 

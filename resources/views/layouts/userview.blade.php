@@ -286,10 +286,11 @@
     <footer class="footer">
 
         @php
-            $sponsor_logos = ['congelados_diaz.png', 'frutas_valverde.png', 'taller_empresarial.png'];
+            $instalacion = \App\Models\Instalacion::where('slug', request()->slug_instalacion)->first();
+            $sponsors = $instalacion->sponsors;
         @endphp
-        @isset($sponsor_logos)
-            @include('sponsors', ['sponsor_logos' => $sponsor_logos])
+        @isset($sponsors)
+            @include('sponsors', ['sponsors' => $sponsors])
         @endisset
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"

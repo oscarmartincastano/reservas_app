@@ -46,15 +46,18 @@ class Instalacion extends Model
         return $this->hasOne(Configuracion::class, 'id_instalacion');
     }
 
-    public function getUsersValidosAttribute() {
+    public function getUsersValidosAttribute()
+    {
         return User::where('id_instalacion', $this->id)->whereNotNull('aprobado')->where('rol', 'user')->orderBy('name', 'asc')->get();
     }
-    
-    public function getDeportesAttribute() {
+
+    public function getDeportesAttribute()
+    {
         return $this->deportes();
     }
 
-    public function deportes() {
+    public function deportes()
+    {
         $deportes = [];
         foreach ($this->pistas as $pista) {
             array_push($deportes, $pista->tipo);
@@ -62,27 +65,33 @@ class Instalacion extends Model
         return array_unique($deportes);
     }
 
-    public function getUsersSinValidarAttribute() {
+    public function getUsersSinValidarAttribute()
+    {
         return $this->users_sin_validar();
     }
 
-    public function users_sin_validar() {
+    public function users_sin_validar()
+    {
         return User::where([['id_instalacion', $this->id], ['aprobado', null]])->get();
     }
 
-    public function getUserAdminAttribute() {
+    public function getUserAdminAttribute()
+    {
         return $this->user_admin();
     }
 
-    public function user_admin() {
+    public function user_admin()
+    {
         return User::where([['id_instalacion', $this->id], ['rol', 'admin']])->first();
     }
 
-    public function getCobrosAttribute() {
+    public function getCobrosAttribute()
+    {
         return $this->cobros();
     }
 
-    public function cobros() {
+    public function cobros()
+    {
         return Cobro::whereIn('id_user', User::where('id_instalacion', $this->id)->pluck('id'))->get();
     }
 
@@ -91,5 +100,10 @@ class Instalacion extends Model
         $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $this->id)->pluck('id'))->where('fecha', $fecha)->where('estado', 'active')->get();
 
         return count($reservas) ? count($reservas) : false;
+    }
+
+    public function sponsors()
+    {
+        return $this->hasMany(Sponsor::class);
     }
 }

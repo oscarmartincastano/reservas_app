@@ -4,11 +4,13 @@
             <div class="row mx-auto h-100">
                 <div id="gallery" class="carousel slide w-100 align-self-center" data-ride="carousel">
                     <div class="carousel-inner mx-auto w-90" role="listbox" data-target="#lightbox">
-                        @foreach ($sponsor_logos as $sponsor_logo)
-                            <div class="carousel-item">
+                        @foreach ($sponsors as $sponsor)
+                            <div class="carousel-item @if ($loop->first) active @endif">
                                 <div class="col-lg-5 col-md-4 row align-items-center g-0">
-                                    <img class="img-fluid" src="{{ asset('storage/sponsor_logos/' . $sponsor_logo) }}"
-                                        data-slide-to="0">
+                                    <a href="{{ $sponsor->website }}" title="{{ $sponsor->name }}">
+                                        <img class="img-fluid" src="{{ asset($sponsor->logo) }}" data-slide-to="0"
+                                            alt="{{ $sponsor->name }}">
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
@@ -146,30 +148,31 @@
 <script>
     jQuery('ready', function() {
         jQuery('#gallery').carousel({
-            interval: 5000
-            // interval: false
+            // interval: 5000
+            interval: false
         });
 
-        // DEBUG: En la primara iteracion no copia el primer elemento al final
+        const queue = [];
         jQuery('#gallery.carousel .carousel-item').each(function() {
-            let minPerSlide = 4;
-            let next = jQuery(this).next();
-            if (!next.length) {
-                next = jQuery(this).siblings(':first');
-            }
-
-            next.children(':first-child').clone().appendTo(jQuery(this));
-
-            for (let i = 0; i < minPerSlide; i++) {
-                next = next.next();
-                if (!next.length) {
-                    next = jQuery(this).siblings(':first');
-                }
-                next.children(':first-child').clone().appendTo(jQuery(this));
-            }
+            queue.push(jQuery(this).children());
         });
 
-        jQuery(".carousel-item:first-of-type").addClass("active");
-        jQuery(".carousel-indicators:first-child").addClass("active");
+        jQuery('#gallery.carousel .carousel-item').each(
+            function() {
+                do {
+                    queue.push(queue.shift());
+                    queue[0].clone().appendTo(this);
+                    console.log('clon');
+                } while (jQuery(this).children().length < 5);
+
+                if (queue.length == 2) {
+                    queue.unshift(queue.pop());
+                }
+
+                for (let i = 0; i < queue.length - 3; i++) {
+                    queue.push(queue.shift());
+                }
+            }
+        );
     });
 </script>
