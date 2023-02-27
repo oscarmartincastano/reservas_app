@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Route;
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -33,18 +33,23 @@ Route::get('prueba', function() {
     //return \App\Models\User::where('id_instalacion', 5)->get();
 });
 */
-Route::get('validar/{code}', function($code) {
+
+// Route::get('test', function () {
+//     return view('test');
+// });
+
+Route::get('validar/{code}', function ($code) {
     $now = \Carbon\Carbon::now();
     $user = \App\Models\User::where('codigo_aforos', $code)->first();
-    if($user != null) { // Check user
+    if ($user != null) { // Check user
         $reservas_activas = App\Models\Reserva::where('id_usuario', $user->id)->where('fecha', $now->format('Y-m-d'))->get();
-        if($reservas_activas != '[]') {
-            foreach($reservas_activas as $reserva) {
+        if ($reservas_activas != '[]') {
+            foreach ($reservas_activas as $reserva) {
                 $inicio = \Carbon\Carbon::createFromTimestamp($reserva->timestamp)->format('Hi');
                 $fin = \Carbon\Carbon::createFromTimestamp($reserva->timestamp)->addMinutes($reserva->minutos_totales)->format('Hi');
                 $actual = $now->format('Hi');
-                if($actual >= $inicio && $actual <= $fin) {
-                    if($reserva->estado == 'pasado') {
+                if ($actual >= $inicio && $actual <= $fin) {
+                    if ($reserva->estado == 'pasado') {
                         \App\Models\Reserva::find($reserva->id)->update(['estado' => 'canceled', 'salida', date('Y-m-d H:i:s')]);
                     } else {
                         \App\Models\Reserva::find($reserva->id)->update(['estado' => 'pasado']);
@@ -72,9 +77,9 @@ Route::get('validar/{code}', function($code) {
 });
 /**
 Route::get('/test-import', 'InstalacionController@import_users');
-*/
-Route::get('/','InstalacionController@home');
-Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacion'], function() {
+ */
+Route::get('/', 'InstalacionController@home');
+Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalacion'], function () {
     Route::get('/', 'UserController@index');
     Route::get('/normas', 'UserController@normas_instalacion');
 
@@ -85,18 +90,18 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('forgot_password_instalacion');
 
     Route::get('/register', [RegisteredUserController::class, 'create_user_instalacion'])
-                ->middleware('guest')->name('register_user_instalacion');
+        ->middleware('guest')->name('register_user_instalacion');
 
     Route::post('/register', [RegisteredUserController::class, 'store_instalacion'])
-                ->middleware('guest');
+        ->middleware('guest');
 
-   Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->middleware('guest')
-                ->name('password.reset_user_instalacion');
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->middleware('guest')
+        ->name('password.reset_user_instalacion');
 
     Route::post('/reset-password', [NewPasswordController::class, 'store'])
-                ->middleware('guest')
-                ->name('password.update');
+        ->middleware('guest')
+        ->name('password.update');
 
     Route::middleware(['auth_instalacion'])->group(function () {
         Route::get('/mis-reservas', 'UserController@mis_reservas');
@@ -105,7 +110,7 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         Route::post('/perfil/edit', 'UserController@edit_perfil');
     });
 
-    Route::group(['prefix' =>'admin', 'middleware' => 'auth_admin_instalacion'], function() {
+    Route::group(['prefix' => 'admin', 'middleware' => 'auth_admin_instalacion'], function () {
         Route::get('/', 'InstalacionController@index');
         Route::prefix('reservas')->group(function () {
             Route::get('/', 'InstalacionController@index');
@@ -184,7 +189,6 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
 
             Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
             Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
-
         });
 
         Route::prefix('campos-adicionales')->group(function () {
@@ -197,11 +201,11 @@ Route::group(['prefix' =>'{slug_instalacion}', 'middleware' => 'check_instalacio
         });
     });
 
-    Route::group(['prefix' =>'{deporte}'], function() {
+    Route::group(['prefix' => '{deporte}'], function () {
         Route::get('/', 'UserController@pistas');
-        Route::group(['prefix' =>'{id_pista}'], function() {
+        Route::group(['prefix' => '{id_pista}'], function () {
             Route::get('/', 'UserController@pistas');
-            Route::group(['middleware' => 'auth_instalacion'], function() {
+            Route::group(['middleware' => 'auth_instalacion'], function () {
                 Route::get('/{timestamp}', 'UserController@reserva');
                 Route::post('/{timestamp}/reserva', 'UserController@reservar');
             });
