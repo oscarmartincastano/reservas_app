@@ -17,7 +17,7 @@ class CreateSponsorsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->string('website');
+            $table->string('website')->nullable();
             $table->string('logo');
 
             $table->integer('id_instalacion')->constraint('instalaciones')->onDelete('no action')->onUpdate('no action');
