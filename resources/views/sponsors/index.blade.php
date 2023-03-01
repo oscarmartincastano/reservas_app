@@ -31,7 +31,7 @@
                                 <tr>
                                     <th>Logo</th>
                                     <th>Nombre</th>
-                                    <th>Email</th>
+                                    <th>Página web</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>

@@ -75,6 +75,12 @@ class SponsorController extends Controller
      */
     public function show(Instalacion $instalacion, Sponsor $sponsor)
     {
+        $instalacion = Instalacion::where('slug', request()->slug_instalacion)->firstOrFail();
+        $sponsor = Sponsor::where(
+            'id',
+            request()->id
+        )->firstOrFail();
+
         return view('sponsors.show', [
             'instalacion' => $instalacion,
             'sponsor' => $sponsor,
