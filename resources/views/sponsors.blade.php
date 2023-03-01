@@ -17,9 +17,9 @@
                                         <img class="img-fluid" src="{{ asset($sponsor->logo) }}" data-slide-to="0"
                                             alt="{{ $sponsor->name }}" />
                                     @else
-                                        <a href="{{ $sponsor->website }}" title="{{ $sponsor->name }}">
+                                        <a href="{{ $sponsor->website }}" title="{{ $sponsor->name }}" target="_blank">
                                             <img class="img-fluid" src="{{ asset($sponsor->logo) }}" data-slide-to="0"
-                                                alt="{{ $sponsor->name }}">
+                                                alt="{{ $sponsor->name }}" />
                                         </a>
                                     @endif
                                 </div>
