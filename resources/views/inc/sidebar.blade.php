@@ -100,8 +100,11 @@
             </li>
 
             <li class="{{ request()->is(request()->slug_instalacion . '/admin/patrocinadores') ? 'active' : '' }}">
-                <a href="/{{ request()->slug_instalacion }}/admin/patrocinadores">patrocinadores</a>
-                <span class="icon-thumbnail"><i data-feather="dollar-sign"></i></span>
+                <a
+                    href="
+                {{ route('sponsors.index', ['slug_instalacion' => request()->slug_instalacion]) }}
+                ">Patrocinadores</a>
+                <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
             </li>
             {{-- <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/configuracion" class="detailed">
