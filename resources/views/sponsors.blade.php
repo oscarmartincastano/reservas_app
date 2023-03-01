@@ -1,16 +1,27 @@
 <div class="container h-100 mt-6">
+
+    <h5 class="text-center text-secondary mb-0">
+        Empresas Colaboradoras:
+    </h5>
+
     <div class="row justify-content-center">
-        <div class="col-8">
+        <div class="col-12">
             <div class="row mx-auto h-100">
                 <div id="gallery" class="carousel slide w-100 align-self-center" data-ride="carousel">
                     <div class="carousel-inner mx-auto w-90" role="listbox" data-target="#lightbox">
                         @foreach ($sponsors as $sponsor)
                             <div class="carousel-item @if ($loop->first) active @endif">
                                 <div class="col-lg-5 col-md-4 row align-items-center g-0">
-                                    <a href="{{ $sponsor->website }}" title="{{ $sponsor->name }}">
+
+                                    @if ($sponsor->website == null)
                                         <img class="img-fluid" src="{{ asset($sponsor->logo) }}" data-slide-to="0"
-                                            alt="{{ $sponsor->name }}">
-                                    </a>
+                                            alt="{{ $sponsor->name }}" />
+                                    @else
+                                        <a href="{{ $sponsor->website }}" title="{{ $sponsor->name }}">
+                                            <img class="img-fluid" src="{{ asset($sponsor->logo) }}" data-slide-to="0"
+                                                alt="{{ $sponsor->name }}">
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -148,8 +159,7 @@
 <script>
     jQuery('ready', function() {
         jQuery('#gallery').carousel({
-            // interval: 5000
-            interval: false
+            interval: 5000
         });
 
         const queue = [];

@@ -33,7 +33,7 @@
     <div class="form-group row">
         <label class="col-md-2 control-label">Página web</label>
         <input name="website" type="text" placeholder="Página web..." class="form-control col-md-10"
-            value="{{ old('website') ?? (isset($sponsor) ? $sponsor->website : '') }}"required>
+            value="{{ old('website') ?? (isset($sponsor) ? $sponsor->website : '') }}">
     </div>
     @error('website')
         <div class="alert alert-danger">{{ $message }}</div>

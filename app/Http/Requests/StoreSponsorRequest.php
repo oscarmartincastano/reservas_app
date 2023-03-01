@@ -26,7 +26,7 @@ class StoreSponsorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'website' => 'required|url',
+            'website' => 'nullable|url',
             'logo' => 'required'
         ];
     }
