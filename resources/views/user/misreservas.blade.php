@@ -372,9 +372,7 @@
         <script>
             $(document).ready(function() {
                 $('.cancel-button').click(function() {
-                    console.log('a');
-                    var id = $(this).data('item-id');
-                    console.log(id);
+                    let id = $(this).data('item-id');
                     $('#modal-cancel form').attr('action', '/' +
                         "<?php echo request()->slug_instalacion; ?>" +
                         '/mis-reservas/' +
