@@ -233,15 +233,15 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             //     Route::get('/{id}/edit', 'ServiceTypeController@edit')->name('service-types.edit');
             // });
 
-            // Route::prefix('proveedores')->group(function () {
-            //     Route::get('/', 'SupplierController@index')->name('suppliers.index');
-            //     Route::post('/', 'SupplierController@store')->name('suppliers.store');
-            //     Route::get('/create', 'SupplierController@create')->name('suppliers.create');
-            //     Route::get('/{id}', 'SupplierController@show')->name('suppliers.show');
-            //     Route::put('/{id}', 'SupplierController@update')->name('suppliers.update');
-            //     Route::delete('/{id}', 'SupplierController@destroy')->name('suppliers.destroy');
-            //     Route::get('/{id}/edit', 'SupplierController@edit')->name('suppliers.edit');
-            // });
+            Route::prefix('proveedores')->group(function () {
+                Route::get('/', 'SupplierController@index')->name('suppliers.index');
+                Route::post('/', 'SupplierController@store')->name('suppliers.store');
+                Route::get('/create', 'SupplierController@create')->name('suppliers.create');
+                Route::get('/{id}', 'SupplierController@show')->name('suppliers.show');
+                Route::put('/{id}', 'SupplierController@update')->name('suppliers.update');
+                Route::delete('/{id}', 'SupplierController@destroy')->name('suppliers.destroy');
+                Route::get('/{id}/edit', 'SupplierController@edit')->name('suppliers.edit');
+            });
 
             // Route::get('/', 'InvoiceController@index')->name('invoices.index');
             // Route::post('/', 'InvoiceController@store')->name('invoices.store');

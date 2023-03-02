@@ -121,7 +121,8 @@
                         <span class="icon-thumbnail">li</span>
                     </li> --}}
 
-                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/entidades-bancarias') ? 'active' : '' }}">
                         <a href="{{ route('banks.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Entidades
                             bancarias</a>
                         <span class="icon-thumbnail">eb</span>
@@ -132,13 +133,14 @@
                             href="{{ route('service-types.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Tipos
                             de servicio</a>
                         <span class="icon-thumbnail">ts</span>
-                    </li>
+                    </li> --}}
 
-                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/proveedores') ? 'active' : '' }}">
                         <a
                             href="{{ route('suppliers.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Proveedores</a>
                         <span class="icon-thumbnail">p</span>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
 
