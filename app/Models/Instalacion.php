@@ -106,4 +106,24 @@ class Instalacion extends Model
     {
         return $this->hasMany(Sponsor::class);
     }
+
+    // public function invoices()
+    // {
+    //     return $this->hasMany(Invoice::class);
+    // }
+
+    public function banks()
+    {
+        return $this->hasMany(Bank::class);
+    }
+
+    public function serviceTypes()
+    {
+        return $this->hasMany(ServiceType::class);
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
+    }
 }
