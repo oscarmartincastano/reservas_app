@@ -87,7 +87,7 @@ class SupplierController extends Controller
     {
 
         $instalacion = Instalacion::where('slug', request()->slug_instalacion)->first();
-        $supplier = Supplier::where('id', $supplier->id);
+        $supplier = Supplier::where('id', request()->id)->first();
 
         $supplier->update($request->validated());
 

@@ -35,7 +35,6 @@ class UpdateSupplierRequest extends FormRequest
             'city' => 'nullable|string|max:255',
             'province' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:255',
-            'instalacion_id' => 'required|exists:instalacions,id',
         ];
     }
 

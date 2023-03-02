@@ -1,3 +1,16 @@
+{{-- all errors --}}
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+
+@endif
+
 <form
     @isset($supplier)
     action="{{ route('suppliers.update', ['slug_instalacion' => request()->slug_instalacion, 'id' => $supplier->id]) }}"

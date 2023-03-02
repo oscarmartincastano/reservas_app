@@ -6,7 +6,7 @@
 
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
-                    <h3 class="text-primary no-margin">Añadir patrocinador</h3>
+                    <h3 class="text-primary no-margin">Editar proveedor</h3>
                 </div>
             </div>
 
