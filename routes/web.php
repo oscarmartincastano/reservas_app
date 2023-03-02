@@ -217,20 +217,20 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
                 Route::get('/', 'BankController@index')->name('banks.index');
                 Route::post('/', 'BankController@store')->name('banks.store');
                 Route::get('/create', 'BankController@create')->name('banks.create');
-                Route::get('/{id}', 'BankController@show')->name('banks.show');
+                // Route::get('/{id}', 'BankController@show')->name('banks.show');
                 Route::put('/{id}', 'BankController@update')->name('banks.update');
                 Route::delete('/{id}', 'BankController@destroy')->name('banks.destroy');
                 Route::get('/{id}/edit', 'BankController@edit')->name('banks.edit');
             });
 
             // Route::prefix('tipos-servicio')->group(function () {
-            //     Route::get('/', 'ServiceTypeController@index')->name('service-types.index');
-            //     Route::post('/', 'ServiceTypeController@store')->name('service-types.store');
-            //     Route::get('/create', 'ServiceTypeController@create')->name('service-types.create');
-            //     Route::get('/{id}', 'ServiceTypeController@show')->name('service-types.show');
-            //     Route::put('/{id}', 'ServiceTypeController@update')->name('service-types.update');
-            //     Route::delete('/{id}', 'ServiceTypeController@destroy')->name('service-types.destroy');
-            //     Route::get('/{id}/edit', 'ServiceTypeController@edit')->name('service-types.edit');
+            //     Route::get('/', 'ServiceTypeController@index')->name('serviceTypes.index');
+            //     Route::post('/', 'ServiceTypeController@store')->name('serviceTypes.store');
+            //     Route::get('/create', 'ServiceTypeController@create')->name('serviceTypes.create');
+            //     Route::get('/{id}', 'ServiceTypeController@show')->name('serviceTypes.show');
+            //     Route::put('/{id}', 'ServiceTypeController@update')->name('serviceTypes.update');
+            //     Route::delete('/{id}', 'ServiceTypeController@destroy')->name('serviceTypes.destroy');
+            //     Route::get('/{id}/edit', 'ServiceTypeController@edit')->name('serviceTypes.edit');
             // });
 
             Route::prefix('proveedores')->group(function () {

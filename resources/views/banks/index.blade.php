@@ -36,8 +36,7 @@
                             <tbody>
                                 @if ($banks)
                                     @foreach ($banks as $bank)
-                                        <tr class="clickable"
-                                            data-href="{{ route('banks.show', ['slug_instalacion' => request()->slug_instalacion, 'id' => $bank->id]) }}">
+                                        <tr class="clickable" {{-- data-href="{{ route('banks.show', ['slug_instalacion' => request()->slug_instalacion, 'id' => $bank->id]) }}" --}}>
                                             <td>{{ $bank->name }}</td>
                                             <td>
                                                 <div class="d-flex" style="gap:5px">
@@ -78,16 +77,16 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 },
-                "order": [
-                    [3, "asc"]
-                ]
+                // "order": [
+                //     [3, "asc"]
+                // ]
             });
 
-            $('.clickable').click(function(e) {
-                if (e.target.tagName == 'TD') {
-                    window.location = $(this).data("href");
-                }
-            });
+            // $('.clickable').click(function(e) {
+            //     if (e.target.tagName == 'TD') {
+            //         window.location = $(this).data("href");
+            //     }
+            // });
         });
     </script>
 @endsection

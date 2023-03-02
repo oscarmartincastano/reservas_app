@@ -128,9 +128,10 @@
                         <span class="icon-thumbnail">eb</span>
                     </li>
 
-                    {{-- <li class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
+                    {{-- <li
+                        class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/tipos-servicio') ? 'active' : '' }}">
                         <a
-                            href="{{ route('service-types.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Tipos
+                            href="{{ route('serviceTypes.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Tipos
                             de servicio</a>
                         <span class="icon-thumbnail">ts</span>
                     </li> --}}
