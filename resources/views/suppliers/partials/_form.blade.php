@@ -18,7 +18,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Dirección</label>
-        <input name="address" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="address" type="text" placeholder="Dirección..." class="form-control col-md-10"
             value="{{ old('address', isset($supplier) ? $supplier->address : '') }}">
         @error('address')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -27,7 +27,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Teléfono</label>
-        <input name="phone" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="phone" type="text" placeholder="Teléfono..." class="form-control col-md-10"
             value="{{ old('phone', isset($supplier) ? $supplier->phone : '') }}">
         @error('phone')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -36,7 +36,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Correo electrónico</label>
-        <input name="email" type="email" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="email" type="email" placeholder="Correo electrónico..." class="form-control col-md-10"
             value="{{ old('email', isset($supplier) ? $supplier->email : '') }}">
         @error('email')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -45,7 +45,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">CIF</label>
-        <input name="cif" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="cif" type="text" placeholder="CIF..." class="form-control col-md-10"
             value="{{ old('cif', isset($supplier) ? $supplier->cif : '') }}">
         @error('cif')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -54,7 +54,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Código postal</label>
-        <input name="cp" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="cp" type="text" placeholder="Código postal..." class="form-control col-md-10"
             value="{{ old('cp', isset($supplier) ? $supplier->cp : '') }}">
         @error('cp')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -63,7 +63,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Localidad</label>
-        <input name="city" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="city" type="text" placeholder="Localidad..." class="form-control col-md-10"
             value="{{ old('city', isset($supplier) ? $supplier->city : '') }}">
         @error('city')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -72,7 +72,7 @@
 
     <div class="form-group row">
         <label class="col-md-2 control-label">Provincia</label>
-        <input name="province" type="text" placeholder="Nombre..." class="form-control col-md-10"
+        <input name="province" type="text" placeholder="Provincia..." class="form-control col-md-10"
             value="{{ old('province', isset($supplier) ? $supplier->province : '') }}">
         @error('province')
             <div class="alert alert-danger">{{ $message }}</div>
