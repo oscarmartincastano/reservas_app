@@ -251,16 +251,15 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             // Route::delete('/{id}', 'InvoiceController@destroy')->name('invoices.destroy');
             // Route::get('/{id}/edit', 'InvoiceController@edit')->name('invoices.edit');
         });
+    });
 
-
-        Route::group(['prefix' => '{deporte}'], function () {
+    Route::group(['prefix' => '{deporte}'], function () {
+        Route::get('/', 'UserController@pistas');
+        Route::group(['prefix' => '{id_pista}'], function () {
             Route::get('/', 'UserController@pistas');
-            Route::group(['prefix' => '{id_pista}'], function () {
-                Route::get('/', 'UserController@pistas');
-                Route::group(['middleware' => 'auth_instalacion'], function () {
-                    Route::get('/{timestamp}', 'UserController@reserva');
-                    Route::post('/{timestamp}/reserva', 'UserController@reservar');
-                });
+            Route::group(['middleware' => 'auth_instalacion'], function () {
+                Route::get('/{timestamp}', 'UserController@reserva');
+                Route::post('/{timestamp}/reserva', 'UserController@reservar');
             });
         });
     });
