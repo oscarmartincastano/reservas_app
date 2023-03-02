@@ -40,6 +40,9 @@ Route::get('prueba', function() {
 //     return view('test');
 // });
 
+route::get('/backups54897896', function () {
+    \Illuminate\Support\Facades\Artisan::call('database:backup');
+});
 
 Route::get('validar/{code}', function ($code) {
     $now = \Carbon\Carbon::now();
