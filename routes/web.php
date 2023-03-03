@@ -243,13 +243,13 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
                 Route::get('/{id}/edit', 'SupplierController@edit')->name('suppliers.edit');
             });
 
-            // Route::get('/', 'InvoiceController@index')->name('invoices.index');
-            // Route::post('/', 'InvoiceController@store')->name('invoices.store');
-            // Route::get('/create', 'InvoiceController@create')->name('invoices.create');
-            // Route::get('/{id}', 'InvoiceController@show')->name('invoices.show');
-            // Route::put('/{id}', 'InvoiceController@update')->name('invoices.update');
-            // Route::delete('/{id}', 'InvoiceController@destroy')->name('invoices.destroy');
-            // Route::get('/{id}/edit', 'InvoiceController@edit')->name('invoices.edit');
+            Route::get('/', 'InvoiceController@index')->name('invoices.index');
+            Route::post('/', 'InvoiceController@store')->name('invoices.store');
+            Route::get('/create', 'InvoiceController@create')->name('invoices.create');
+            Route::get('/{id}', 'InvoiceController@show')->name('invoices.show');
+            Route::put('/{id}', 'InvoiceController@update')->name('invoices.update');
+            Route::delete('/{id}', 'InvoiceController@destroy')->name('invoices.destroy');
+            Route::get('/{id}/edit', 'InvoiceController@edit')->name('invoices.edit');
         });
     });
 

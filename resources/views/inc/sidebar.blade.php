@@ -111,15 +111,15 @@
                 <a href="javascript:;"><span class="title">Facturas</span>
                     <span
                         class="arrow {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'open active' : '' }}"></span></a>
-                <span class="icon-thumbnail"><i data-feather="book"></i></span>
+                <span class="icon-thumbnail"><i data-feather="clipboard"></i></span>
                 <ul class="sub-menu p-0"
                     style=" {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'display:block' : '' }}">
 
-                    {{-- <li class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
+                    <li class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
                         <a
                             href="{{ route('invoices.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Lista</a>
                         <span class="icon-thumbnail">li</span>
-                    </li> --}}
+                    </li>
 
                     <li
                         class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/entidades-bancarias') ? 'active' : '' }}">
@@ -147,7 +147,8 @@
 
             <li>
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="detailed">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="detailed">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

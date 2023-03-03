@@ -107,10 +107,10 @@ class Instalacion extends Model
         return $this->hasMany(Sponsor::class);
     }
 
-    // public function invoices()
-    // {
-    //     return $this->hasMany(Invoice::class);
-    // }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 
     public function banks()
     {
