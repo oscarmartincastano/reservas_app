@@ -17,6 +17,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="Meet pages - The simplest and fastest way to build web UI for your dashboard or app."
         name="description" />
     <meta content="Ace" name="author" />
