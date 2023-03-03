@@ -107,7 +107,7 @@
                 <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
             </li>
 
-            @if (auth()->user()->instalacion->rol === 'admin')
+            @if (auth()->user()->rol === 'admin')
                 <li
                     class=" {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'open active' : '' }}">
                     <a href="javascript:;"><span class="title">Facturas</span>
