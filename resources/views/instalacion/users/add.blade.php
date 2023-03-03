@@ -16,15 +16,18 @@
                         <div class="card-title">Información</div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('add_user', ['slug_instalacion' => $instalacion->slug]) }}" method="post" role="form" class="form-horizontal">
+                        <form action="{{ route('add_user', ['slug_instalacion' => $instalacion->slug]) }}" method="post"
+                            role="form" class="form-horizontal">
                             @csrf
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nombre</label>
-                                <input name="name" type="text" placeholder="Nombre..." class="form-control col-md-10" required>
+                                <input name="name" type="text" placeholder="Nombre..." class="form-control col-md-10"
+                                    required>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Email</label>
-                                <input name="email" type="email" placeholder="Email..." class="form-control col-md-10" required>
+                                <input name="email" type="email" placeholder="Email..." class="form-control col-md-10"
+                                    required>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Cuota (opcional)</label>
@@ -32,16 +35,30 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Fecha de nacimiento (opcional)</label>
-                                <input name="date_birth" type="date" placeholder="Fecha de nacimiento..." class="form-control col-md-10">
+                                <input name="date_birth" type="date" placeholder="Fecha de nacimiento..."
+                                    class="form-control col-md-10">
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Teléfono (opcional)</label>
-                                <input name="tlfno" type="text" placeholder="Teléfono..." class="form-control col-md-10">
+                                <input name="tlfno" type="text" placeholder="Teléfono..."
+                                    class="form-control col-md-10">
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Contraseña</label>
-                                <input name="password" type="password" placeholder="Contraseña..." class="form-control col-md-10" required>
+                                <input name="password" type="password" placeholder="Contraseña..."
+                                    class="form-control col-md-10" required>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Contraseña</label>
+
+                                <select name="rol" class="form-control col-md-10">
+                                    {{-- <option value="admin">Administrador</option> --}}
+                                    <option value="user">Usuario</option>
+                                    <option value="worker">Empleado</option>
+                                </select>
+                            </div>
+
                             <input type="hidden" name="id_instalacion" value="{{ $instalacion->id }}">
                             <button class="btn btn-primary btn-lg m-b-10 mt-3" type="submit">Añadir</button>
                         </form>

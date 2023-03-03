@@ -26,18 +26,21 @@ use DateTime;
 
 class InstalacionController extends Controller
 {
-    public function home(){
+    public function home()
+    {
         return view('inicio');
     }
-    public function rangeWeek ($date) {
-        $dt = strtotime ($date);
-        return array (
-          "start" => date ('N', $dt) == 1 ? date ('Y-m-d', $dt) : date ('Y-m-d', strtotime ('last monday', $dt)),
-          "end" => date ('Y-m-d', strtotime ('next monday', $dt))
+    public function rangeWeek($date)
+    {
+        $dt = strtotime($date);
+        return array(
+            "start" => date('N', $dt) == 1 ? date('Y-m-d', $dt) : date('Y-m-d', strtotime('last monday', $dt)),
+            "end" => date('Y-m-d', strtotime('next monday', $dt))
         );
     }
 
-    public function generateRandomString($length = 10) {
+    public function generateRandomString($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -47,7 +50,8 @@ class InstalacionController extends Controller
         return $randomString;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
 
         if (isset($request->semana)) {
@@ -56,11 +60,11 @@ class InstalacionController extends Controller
                 $d = (int)substr($semana, 6) * 7;
                 $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
 
-                $semana = $this->rangeWeek(date("Y-m-d", strtotime($date->format('Y-m-d')."+{$request->semana} weeks")));
-            }else {
-                $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+                $semana = $this->rangeWeek(date("Y-m-d", strtotime($date->format('Y-m-d') . "+{$request->semana} weeks")));
+            } else {
+                $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d') . "+{$request->semana} weeks")));
             }
-        }else{
+        } else {
             $semana = $this->rangeWeek(date('Y-m-d'));
         }
 
@@ -82,7 +86,7 @@ class InstalacionController extends Controller
     {
         $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
         $ret_pistas = [];
-        foreach ($pistas as $i => $pista){
+        foreach ($pistas as $i => $pista) {
             $ret_pistas[$i] = $pista;
             $ret_pistas[$i]['num_reservas_dia'] = count($pista->reservas_activas_por_dia($request->fecha));
             $ret_pistas[$i]['res_dia'] = $pista->horario_con_reservas_por_dia_admin($request->fecha);
@@ -120,7 +124,7 @@ class InstalacionController extends Controller
     public function validar_reserva(Request $request)
     {
         $reserva = Reserva::find($request->id);
-        
+
         if ($reserva->estado == 'active') {
             $new_reserva = Reserva::where('id_pista', $reserva->id_pista)->where('timestamp', $reserva->timestamp)->where('estado', 'espera')->orderBy('created_at')->first();
 
@@ -128,12 +132,12 @@ class InstalacionController extends Controller
                 $new_reserva->update(['estado' => 'active']);
                 Mail::to($new_reserva->user->email)->send(new ReservaEspera($new_reserva->user, $new_reserva));
             }
-            
+
             if ($reserva->reserva_multiple) {
-                Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['id_usuario', $reserva->id_usuario]])->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
+                Reserva::where([['id_pista', $reserva->id_pista], ['reserva_multiple', $reserva->reserva_multiple], ['timestamp', $reserva->timestamp], ['id_usuario', $reserva->id_usuario]])->update((['estado' => $request->accion, 'observaciones_admin' => $request->observaciones]));
                 return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
             }
-            $reserva->update((['estado' =>$request->accion, 'observaciones_admin' => $request->observaciones]));
+            $reserva->update((['estado' => $request->accion, 'observaciones_admin' => $request->observaciones]));
             return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
         }
 
@@ -147,18 +151,18 @@ class InstalacionController extends Controller
         $pista = Pista::find($request->id_pista);
         $fecha = $request->timestamp;
 
-        foreach ($pista->horario_deserialized as $item){
-            if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
-                foreach ($item['intervalo'] as $index => $intervalo){
+        foreach ($pista->horario_deserialized as $item) {
+            if (in_array(date('w', $fecha), $item['dias']) || (date('w', $fecha) == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
                     $a = new \DateTime($intervalo['hfin']);
                     $b = new \DateTime($intervalo['hinicio']);
                     $interval = $a->diff($b);
                     $diff_minutes = $interval->format("%h") * 60;
                     $diff_minutes += $interval->format("%i");
-                    $numero_veces = $diff_minutes/$intervalo['secuencia'];
+                    $numero_veces = $diff_minutes / $intervalo['secuencia'];
 
                     $hora = new \DateTime($intervalo['hinicio']);
-                    for ($i=0; $i < floor($numero_veces); $i++) {
+                    for ($i = 0; $i < floor($numero_veces); $i++) {
                         if ($hora->format('h:i') == date(date('h:i', $fecha))) {
                             $secuencia = $intervalo['secuencia'];
                             $number = $numero_veces - $i;
@@ -196,13 +200,13 @@ class InstalacionController extends Controller
         $timestamps[0] = (int)$request->timestamp;
 
         if ($request->tarifa > 1) {
-            for ($i=1; $i < $request->tarifa; $i++) {
-                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+            for ($i = 1; $i < $request->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia * $i)->timestamp;
             }
         }
         $reserva_multiple_id = null;
-        if (isset($request->numero_reservas) && $request->numero_reservas>1) {
-            for ($i=0; $i < $request->numero_reservas; $i++) {
+        if (isset($request->numero_reservas) && $request->numero_reservas > 1) {
+            for ($i = 0; $i < $request->numero_reservas; $i++) {
                 $reserva = Reserva::create([
                     'id_pista' => $request->id_pista,
                     'id_usuario' => $request->user_id,
@@ -215,7 +219,7 @@ class InstalacionController extends Controller
                     'creado_por' => 'admin'
                 ]);
 
-                $reserva_multiple_id = $i==0 ? $reserva->id : $reserva_multiple_id;
+                $reserva_multiple_id = $i == 0 ? $reserva->id : $reserva_multiple_id;
                 $reserva->update(['reserva_multiple' => $reserva_multiple_id]);
 
                 if (isset($request->observaciones)) {
@@ -268,10 +272,11 @@ class InstalacionController extends Controller
         $date = new DateTime(date('Y-m-d', $request->timestamp));
         $week = $date->format("Y") . '-' . 'W' . $date->format("W");
 
-        return redirect($request->slug_instalacion . '/admin/reservas?week='. $week)->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
+        return redirect($request->slug_instalacion . '/admin/reservas?week=' . $week)->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
-    public function desactivar_tramo(Request $request) {
+    public function desactivar_tramo(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
 
         Desactivacion_reserva::create([
@@ -286,7 +291,8 @@ class InstalacionController extends Controller
         return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
-    public function activar_tramo(Request $request) {
+    public function activar_tramo(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
 
         if (isset($request->periodic)) {
@@ -295,13 +301,14 @@ class InstalacionController extends Controller
                 'timestamp' => $request->timestamp
             ]);
         } else {
-            Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $request->timestamp]])->delete();
+            Desactivacion_reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp]])->delete();
         }
 
         return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $request->timestamp));
     }
 
-    public function desactivar_dia(Request $request) {
+    public function desactivar_dia(Request $request)
+    {
         $pista = Pista::find($request->id_pista);
 
         foreach ($pista->horario_con_reservas_por_dia_admin($request->dia) as $item) {
@@ -316,12 +323,13 @@ class InstalacionController extends Controller
         return redirect()->back();
     }
 
-    public function activar_dia(Request $request) {
+    public function activar_dia(Request $request)
+    {
         $pista = Pista::find($request->id_pista);
 
         foreach ($pista->horario_con_reservas_por_dia_admin($request->dia) as $item) {
             foreach ($item as $valor) {
-                Desactivacion_reserva::where([['id_pista', $request->id_pista],['timestamp', $valor['timestamp']]])->delete();
+                Desactivacion_reserva::where([['id_pista', $request->id_pista], ['timestamp', $valor['timestamp']]])->delete();
             }
         }
 
@@ -334,18 +342,18 @@ class InstalacionController extends Controller
         $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();
         $pista = $reserva->pista;
         $fecha = $reserva->timestamp;
-        foreach ($pista->horario_deserialized as $item){
-            if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
-                foreach ($item['intervalo'] as $index => $intervalo){
+        foreach ($pista->horario_deserialized as $item) {
+            if (in_array(date('w', $fecha), $item['dias']) || (date('w', $fecha) == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
                     $a = new \DateTime($intervalo['hfin']);
                     $b = new \DateTime($intervalo['hinicio']);
                     $interval = $a->diff($b);
                     $diff_minutes = $interval->format("%h") * 60;
                     $diff_minutes += $interval->format("%i");
-                    $numero_veces = $diff_minutes/$intervalo['secuencia'];
+                    $numero_veces = $diff_minutes / $intervalo['secuencia'];
 
                     $hora = new \DateTime($intervalo['hinicio']);
-                    for ($i=0; $i < floor($numero_veces); $i++) {
+                    for ($i = 0; $i < floor($numero_veces); $i++) {
                         if ($hora->format('h:i') == date(date('h:i', $fecha))) {
                             $secuencia = $intervalo['secuencia'];
                             $number = $numero_veces - $i;
@@ -370,8 +378,8 @@ class InstalacionController extends Controller
         $timestamps[0] = (int)$reserva->timestamp;
 
         if ($reserva->tarifa > 1) {
-            for ($i=1; $i < $reserva->tarifa; $i++) {
-                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $reserva->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+            for ($i = 1; $i < $reserva->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $reserva->timestamp))->addMinutes($request->secuencia * $i)->timestamp;
             }
         }
         /* return $timestamps; */
@@ -474,8 +482,8 @@ class InstalacionController extends Controller
                         if (
                             strtotime(date('H:i', $hora)) >= strtotime($request->hora_inicio) &&
                             strtotime(date('H:i', $hora)) < strtotime($request->hora_fin)
-                           ) {
-                               /* if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
+                        ) {
+                            /* if (strtotime(date('Y-m-d', $hora)) >= strtotime('2022-03-27 00:00') && strtotime(date('Y-m-d', $hora)) <= strtotime('2022-10-30 00:00')) {
                                     $hora = $hora + 3600;
                                } */
                             $reserva = Reserva::create([
@@ -506,7 +514,7 @@ class InstalacionController extends Controller
             }
         }
 
-        return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
+        return redirect('/' . request()->slug_instalacion . '/admin/reservas/periodicas');
     }
 
     /* public function arreglos_reservas()
@@ -535,7 +543,7 @@ class InstalacionController extends Controller
 
         Reserva::where([['reserva_periodica', $request->id], ['fecha', '>=', date('Y-m-d')]])->delete();
 
-        return redirect('/'.request()->slug_instalacion.'/admin/reservas/periodicas');
+        return redirect('/' . request()->slug_instalacion . '/admin/reservas/periodicas');
     }
 
     public function desactivaciones_periodicas(Request $request)
@@ -563,7 +571,7 @@ class InstalacionController extends Controller
             'fecha_fin' => $request->fecha_fin,
         ]);
 
-        return redirect('/'.request()->slug_instalacion.'/admin/reservas/desactivaciones');
+        return redirect('/' . request()->slug_instalacion . '/admin/reservas/desactivaciones');
     }
 
     public function borrar_desactivaciones_periodicas(Request $request)
@@ -573,13 +581,15 @@ class InstalacionController extends Controller
         return back();
     }
 
-    public function edit_info(Request $request) {
+    public function edit_info(Request $request)
+    {
         $instalacion = auth()->user()->instalacion->toArray();
 
         return view('instalacion.editdata.edit', compact('instalacion'));
     }
 
-    public function editar_info(Request $request) {
+    public function editar_info(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
 
         $data = $request->all();
@@ -596,30 +606,32 @@ class InstalacionController extends Controller
             if (getimagesize($image)[0] > 1000) {
                 $img->resize(900, 900, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save($path .'/'. $name, 85, 'png');
-            }else{
-                $img->save($path .'/'. $name, 85, 'png');
+                })->save($path . '/' . $name, 85, 'png');
+            } else {
+                $img->save($path . '/' . $name, 85, 'png');
             }
-
-        } else{
+        } else {
             Instalacion::find($instalacion->id)->update($data);
         }
 
-        return redirect()->route('edit_config_inst', ['slug_instalacion'=> $instalacion->slug]);
+        return redirect()->route('edit_config_inst', ['slug_instalacion' => $instalacion->slug]);
     }
 
-    public function pistas() {
+    public function pistas()
+    {
         $instalacion = auth()->user()->instalacion;
         $pistas = $instalacion->pistas;
         return view('instalacion.pistas.list', compact('instalacion', 'pistas'));
     }
 
-    public function add_pista_view() {
+    public function add_pista_view()
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.pistas.add', compact('instalacion'));
     }
 
-    public function add_pista(Request $request) {
+    public function add_pista(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
 
         $data = $request->all();
@@ -636,11 +648,11 @@ class InstalacionController extends Controller
 
                 $intervalo['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
 
-                $numero_veces = $diff_minutes/$intervalo['secuencia'];
+                $numero_veces = $diff_minutes / $intervalo['secuencia'];
 
-                if (!is_int($diff_minutes/$intervalo['secuencia'])) {
+                if (!is_int($diff_minutes / $intervalo['secuencia'])) {
                     $hora = new \DateTime($intervalo['hinicio']);
-                    for ($i=0; $i < floor($numero_veces); $i++) {
+                    for ($i = 0; $i < floor($numero_veces); $i++) {
                         $hora->modify("+{$intervalo['secuencia']} minutes");
                     }
 
@@ -659,13 +671,15 @@ class InstalacionController extends Controller
         return redirect("/" . auth()->user()->instalacion->slug . "/admin/pistas");
     }
 
-    public function edit_pista_view(Request $request) {
+    public function edit_pista_view(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         $pista = Pista::find($request->id);
         return view('instalacion.pistas.edit', compact('instalacion', 'pista'));
     }
 
-    public function edit_pista(Request $request) {
+    public function edit_pista(Request $request)
+    {
 
         $data = $request->all();
         array_shift($data);
@@ -681,11 +695,11 @@ class InstalacionController extends Controller
 
                 $intervalo['secuencia'] = $intervalo['secuencia'] == 'completo' ? $diff_minutes : $intervalo['secuencia'];
 
-                $numero_veces = $diff_minutes/$intervalo['secuencia'];
+                $numero_veces = $diff_minutes / $intervalo['secuencia'];
 
-                if (!is_int($diff_minutes/$intervalo['secuencia'])) {
+                if (!is_int($diff_minutes / $intervalo['secuencia'])) {
                     $hora = new \DateTime($intervalo['hinicio']);
-                    for ($i=0; $i < floor($numero_veces); $i++) {
+                    for ($i = 0; $i < floor($numero_veces); $i++) {
                         $hora->modify("+{$intervalo['secuencia']} minutes");
                     }
 
@@ -704,17 +718,20 @@ class InstalacionController extends Controller
         return redirect("/" . auth()->user()->instalacion->slug . '/admin/pistas');
     }
 
-    public function configuracion_pistas_reservas(Request $request) {
+    public function configuracion_pistas_reservas(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.configuraciones.pistas_reservas', compact('instalacion'));
     }
 
-    public function configuracion_instalacion(Request $request) {
+    public function configuracion_instalacion(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.configuraciones.instalacion', compact('instalacion'));
     }
 
-    public function edit_configuracion(Request $request) {
+    public function edit_configuracion(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         $data = $request->all();
         array_shift($data);
@@ -736,23 +753,26 @@ class InstalacionController extends Controller
         return redirect()->back();
     }
 
-    public function campos_adicionales(Request $request) {
+    public function campos_adicionales(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.configuraciones.campos_adicionales', compact('instalacion'));
     }
 
-    public function view_campos_personalizados(Request $request) {
+    public function view_campos_personalizados(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.configuraciones.campos_personalizados', compact('instalacion'));
     }
 
-    public function add_campos_personalizados(Request $request) {
+    public function add_campos_personalizados(Request $request)
+    {
         if (!isset($request->required_field)) {
             $request->required_field = 0;
         }
         if (!isset($request->opcion)) {
             $opciones = null;
-        }else{
+        } else {
             $opciones = serialize($request->opcion);
         }
 
@@ -771,26 +791,28 @@ class InstalacionController extends Controller
                     'id_campo' => $campo->id
                 ]);
             }
-        }else{
+        } else {
             $campo->update(['all_pistas' => 1]);
         }
 
         return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
-    public function view_edit_campos_personalizados(Request $request) {
+    public function view_edit_campos_personalizados(Request $request)
+    {
         $instalacion = auth()->user()->instalacion;
         $campo = Campos_personalizados::find($request->id);
-        return view('instalacion.configuraciones.edit_campos_personalizados', compact('instalacion','campo'));
+        return view('instalacion.configuraciones.edit_campos_personalizados', compact('instalacion', 'campo'));
     }
 
-    public function edit_campos_personalizados(Request $request) {
+    public function edit_campos_personalizados(Request $request)
+    {
         if (!isset($request->required_field)) {
             $request->required_field = 0;
         }
         if (!isset($request->opciones)) {
             $opciones = null;
-        }else{
+        } else {
             $opciones = serialize($request->opciones);
         }
 
@@ -813,26 +835,29 @@ class InstalacionController extends Controller
                     'id_campo' => $campo->id
                 ]);
             }
-        }else{
+        } else {
             $campo->update(['all_pistas' => 1]);
         }
 
         return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
-    public function delete_campos_personalizados(Request $request) {
+    public function delete_campos_personalizados(Request $request)
+    {
         Campos_personalizados::find($request->id)->delete();
         Pistas_campos_relation::where('id_campo', $request->id)->delete();
 
         return redirect('/' . auth()->user()->instalacion->slug . '/admin/campos-adicionales');
     }
 
-    public function users() {
+    public function users()
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.users.list', compact('instalacion'));
     }
 
-    public function users_no_valid() {
+    public function users_no_valid()
+    {
         $instalacion = auth()->user()->instalacion;
         return view('instalacion.users.list_no_valid', compact('instalacion'));
     }
@@ -868,11 +893,11 @@ class InstalacionController extends Controller
 
         $data['password'] = \Hash::make($request->password);
         $data['aprobado'] = date('Y-m-d H:i:s');
-        $data['rol'] = 'user';
+        $data['rol'] = $request->rol;
 
         User::where('id', $request->id)->create($data);
 
-        return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
+        return redirect("/" . auth()->user()->instalacion->slug . "/admin/users");
     }
 
     public function desactivar_user(Request $request)
@@ -881,7 +906,7 @@ class InstalacionController extends Controller
 
         if (!$user->deleted_at) {
             $user->delete();
-        } else{
+        } else {
             $user->restore();
         }
         return redirect()->back();
@@ -921,7 +946,7 @@ class InstalacionController extends Controller
                 if (
                     isset(unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo]) &&
                     unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo] == $value
-                    ) {
+                ) {
                     unset($max_reservas_tipo_espacio[$tipo]);
                 }
             }
@@ -932,11 +957,11 @@ class InstalacionController extends Controller
         if (!isset($request->password)) {
             unset($data['password']);
             $user->update($data);
-        }else {
+        } else {
             $data['password'] = \Hash::make($request->password);
             $user->update($data);
         }
-        return redirect("/". auth()->user()->instalacion->slug . "/admin/users");
+        return redirect("/" . auth()->user()->instalacion->slug . "/admin/users");
     }
 
     public function cambiar_foto_user(Request $request)
@@ -963,7 +988,7 @@ class InstalacionController extends Controller
             if (
                 isset(unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo]) &&
                 unserialize($user->instalacion->configuracion->max_reservas_tipo_espacio)[$tipo] == $value
-                ) {
+            ) {
                 unset($max_reservas_tipo_espacio[$tipo]);
             }
         }
@@ -1049,10 +1074,8 @@ class InstalacionController extends Controller
 
         $header = null;
         $data = array();
-        if (($handle = fopen($filename, 'r')) !== false)
-        {
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
-            {
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
                 if (!$header)
                     $header = $row;
                 else
