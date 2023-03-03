@@ -1,16 +1,3 @@
-{{-- all errors --}}
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-
 <form enctype="multipart/form-data" method="post"
     @isset($sponsor)
     action="{{ route('sponsors.update', ['slug_instalacion' => $instalacion->slug, 'id' => $sponsor->id]) }}"

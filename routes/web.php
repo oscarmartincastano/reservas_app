@@ -116,7 +116,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
         Route::post('/perfil/edit', 'UserController@edit_perfil');
     });
 
-    Route::group(['prefix' => 'admin', 'middleware' => 'auth_admin_instalacion'], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => 'admin_o_empleado_instalacion'], function () {
         Route::get('/', 'InstalacionController@index');
         Route::prefix('reservas')->group(function () {
             Route::get('/', 'InstalacionController@index');
@@ -214,6 +214,45 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             route::put('/{id}', 'SponsorController@update')->name('sponsors.update');
             route::delete('/{id}', 'SponsorController@destroy')->name('sponsors.destroy');
             route::get('/{id}/edit', 'SponsorController@edit')->name('sponsors.edit');
+        });
+        Route::prefix('facturas')->middleware('admin_instalacion')->group(function () {
+            Route::prefix('entidades-bancarias')->group(function () {
+                Route::get('/', 'BankController@index')->name('banks.index');
+                Route::post('/', 'BankController@store')->name('banks.store');
+                Route::get('/create', 'BankController@create')->name('banks.create');
+                // Route::get('/{id}', 'BankController@show')->name('banks.show');
+                Route::put('/{id}', 'BankController@update')->name('banks.update');
+                Route::delete('/{id}', 'BankController@destroy')->name('banks.destroy');
+                Route::get('/{id}/edit', 'BankController@edit')->name('banks.edit');
+            });
+
+            Route::prefix('tipos-servicio')->group(function () {
+                Route::get('/', 'ServiceTypeController@index')->name('serviceTypes.index');
+                Route::post('/', 'ServiceTypeController@store')->name('serviceTypes.store');
+                Route::get('/create', 'ServiceTypeController@create')->name('serviceTypes.create');
+                // Route::get('/{id}', 'ServiceTypeController@show')->name('serviceTypes.show');
+                Route::put('/{id}', 'ServiceTypeController@update')->name('serviceTypes.update');
+                Route::delete('/{id}', 'ServiceTypeController@destroy')->name('serviceTypes.destroy');
+                Route::get('/{id}/edit', 'ServiceTypeController@edit')->name('serviceTypes.edit');
+            });
+
+            Route::prefix('proveedores')->group(function () {
+                Route::get('/', 'SupplierController@index')->name('suppliers.index');
+                Route::post('/', 'SupplierController@store')->name('suppliers.store');
+                Route::get('/create', 'SupplierController@create')->name('suppliers.create');
+                Route::get('/{id}', 'SupplierController@show')->name('suppliers.show');
+                Route::put('/{id}', 'SupplierController@update')->name('suppliers.update');
+                Route::delete('/{id}', 'SupplierController@destroy')->name('suppliers.destroy');
+                Route::get('/{id}/edit', 'SupplierController@edit')->name('suppliers.edit');
+            });
+
+            Route::get('/', 'InvoiceController@index')->name('invoices.index');
+            Route::post('/', 'InvoiceController@store')->name('invoices.store');
+            Route::get('/create', 'InvoiceController@create')->name('invoices.create');
+            Route::get('/{id}', 'InvoiceController@show')->name('invoices.show');
+            Route::put('/{id}', 'InvoiceController@update')->name('invoices.update');
+            Route::delete('/{id}', 'InvoiceController@destroy')->name('invoices.destroy');
+            Route::get('/{id}/edit', 'InvoiceController@edit')->name('invoices.edit');
         });
     });
 

@@ -106,15 +106,53 @@
                 ">Patrocinadores</a>
                 <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
             </li>
-            {{-- <li class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'active' : '' }}">
-                <a href="/{{ request()->slug_instalacion }}/admin/configuracion" class="detailed">
-                    <span class="title">Configuracion</span>
-                </a>
-                <span class="icon-thumbnail"><i data-feather="settings"></i></span>
-            </li> --}}
+
+            @if (auth()->user()->instalacion->rol === 'admin')
+                <li
+                    class=" {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'open active' : '' }}">
+                    <a href="javascript:;"><span class="title">Facturas</span>
+                        <span
+                            class="arrow {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'open active' : '' }}"></span></a>
+                    <span class="icon-thumbnail"><i data-feather="clipboard"></i></span>
+                    <ul class="sub-menu p-0"
+                        style=" {{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'display:block' : '' }}">
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/facturas*') ? 'active' : '' }}">
+                            <a
+                                href="{{ route('invoices.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Lista</a>
+                            <span class="icon-thumbnail">li</span>
+                        </li>
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/entidades-bancarias') ? 'active' : '' }}">
+                            <a href="{{ route('banks.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Entidades
+                                bancarias</a>
+                            <span class="icon-thumbnail">eb</span>
+                        </li>
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/tipos-servicio') ? 'active' : '' }}">
+                            <a
+                                href="{{ route('serviceTypes.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Tipos
+                                de servicio</a>
+                            <span class="icon-thumbnail">ts</span>
+                        </li>
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/facturas/proveedores') ? 'active' : '' }}">
+                            <a
+                                href="{{ route('suppliers.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Proveedores</a>
+                            <span class="icon-thumbnail">p</span>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             <li>
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="detailed">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    class="detailed">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
