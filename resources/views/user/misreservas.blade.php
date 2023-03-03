@@ -4,66 +4,81 @@
 
 @section('style')
     <style>
-        .reserva{
+        .reserva {
             margin-top: 25px;
         }
-        .reserva .card{
+
+        .reserva .card {
             color: white;
             border-radius: 5px;
         }
-        select.form-control{
+
+        select.form-control {
             height: calc(1em + 0.75rem + 2px);
             padding: 0;
             padding-left: 6px;
             font-size: 13px;
             font-weight: bold;
         }
-        label.col-form-label{
+
+        label.col-form-label {
             font-weight: bold;
         }
-        h1{
+
+        h1 {
             font-size: 1.1rem;
             font-weight: bold;
         }
-        .horario{
+
+        .horario {
             font-weight: bold;
         }
-        .fecha-title{
+
+        .fecha-title {
             font-size: 15px;
         }
-        .boton-cancelar{
+
+        .boton-cancelar {
             position: absolute;
             right: 10px;
             bottom: 5px;
         }
-        .h2{
+
+        .h2 {
             font-size: 1.7rem;
             font-weight: bold;
             margin-bottom: 0;
         }
-        .table-reservas thead{
+
+        .table-reservas thead {
             font-weight: bold;
         }
-        #DataTables_Table_0_length > label > select{
+
+        #DataTables_Table_0_length>label>select {
             padding-right: 24px;
         }
-        .pagination{
+
+        .pagination {
             margin-top: 15px !important;
         }
-        nav.navbar{
+
+        nav.navbar {
             margin-bottom: 25px;
         }
+
         @media (min-width: 1215px) {
-            table.table-reservas{
+            table.table-reservas {
                 display: table;
                 border: 0;
             }
         }
+
         @media (max-width: 900px) {
-            table.table-reservas{
+            table.table-reservas {
                 font-size: 14px;
             }
-            a.cancel {
+
+            button.cancel {
                 font-size: 14px;
                 padding: 1px 8px;
             }
@@ -73,76 +88,110 @@
 
 @section('content')
 
-<div class="container is-max-desktop mt-2">
-    
-    <div class="container mt-3">
-        <h1 class="title titulo-pagina">Mis Reservas</h1>
-        <div class="card" style="box-shadow: none">
-            <div class="card-body">
-                <div class="list-reservas row">
-                    <table class="table table-reservas  w-100" style="overflow-x: auto !important;-webkit-overflow-scrolling: touch !important;">
-                        <thead>
-                            <tr>
-                                <td>Fecha de alquiler</td>
-                                {{-- <td>Día de la semana</td> --}}
-                                <td>Horas</td>
-                                {{-- <td>Hora final</td> --}}
-                                <td>Espacio</td>
-                                <td>Estado</td>
-                                <td>#</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($reservas as $item)
-                            <tr>
-                                <td>{{ date('d/m/Y', $item->timestamp) }}</td>
-                                {{-- <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->fecha)->translatedFormat('l') }}</td> --}}
-                                <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i')  }} - {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td>
-                                {{-- <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td> --}}
-                                <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
-                                <td>
-                                    @if ($item->estado  == 'active')
-                                        @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                            Confirmada
-                                        @else
-                                            Pasado
-                                        @endif
-                                    @endif
-                                    @if ($item->estado  == 'espera')
-                                        <span style="color: #ff9800">En lista de espera</span>
-                                    @endif
-                                    @if($item->estado == 'desierta')
-                                        <span class="text-warning">Desierta</span>
-                                    @endif
-                                    @if($item->estado == 'canceled')
-                                        <span class="text-danger">Cancelada</span>
-                                    @endif
-                                    @if($item->estado == 'pasado')
-                                        <span class="text-success">Validada</span>
-                                    @endif
-                                </td>
-                                <td>
-                                        @if (($item->estado  == 'active' || $item->estado == 'espera') && strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') > strtotime(date('Y-m-d H:i')))
-                                            <form action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel" method="post">
-                                                @csrf
-                                            </form>
-                                            @if(strtotime(date('Y-m-d H:i') . " + {$item->pista->antelacion_cancelacion} hours") < $item->timestamp)
-                                                <a class="cancel btn btn-danger" title="Cancelar reserva" onclick="if(confirm('¿Estás seguro que quieres cancelar esta reserva?')){$(this).prev().submit()}">
-                                                    <i class="fas fa-times"></i>
-                                                </a>
-                                            @endif
-                                        @endif
-                                </td>
-                            </tr>
-                            @empty
+    <div class="container is-max-desktop mt-2">
+
+        <div class="container mt-3">
+            <h1 class="title titulo-pagina">Mis Reservas</h1>
+            <div class="card" style="box-shadow: none">
+                <div class="card-body">
+                    <div class="list-reservas row">
+                        <table class="table table-reservas  w-100"
+                            style="overflow-x: auto !important;-webkit-overflow-scrolling: touch !important;">
+                            <thead>
                                 <tr>
-                                    <td colspan="7" class="text-center">No se encuentran registros</td>
+                                    <td>Fecha de alquiler</td>
+                                    {{-- <td>Día de la semana</td> --}}
+                                    <td>Horas</td>
+                                    {{-- <td>Hora final</td> --}}
+                                    <td>Espacio</td>
+                                    <td>Estado</td>
+                                    <td>#</td>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    {{-- <h2 class="h2 text-success">Reservas activas</h2> --}}
-                    {{-- @if (count(auth()->user()->reservas_activas) == 0)
+                            </thead>
+                            <tbody>
+                                @forelse ($reservas as $item)
+                                    <tr>
+                                        <td>{{ date('d/m/Y', $item->timestamp) }}</td>
+                                        {{-- <td style="text-transform:capitalize">{{ \Carbon\Carbon::parse($item->fecha)->translatedFormat('l') }}</td> --}}
+                                        <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->format('H:i') }} -
+                                            {{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}
+                                        </td>
+                                        {{-- <td>{{ \Carbon\Carbon::createFromTimestamp($item->timestamp)->addMinutes($item->minutos_totales)->format('H:i') }}</td> --}}
+                                        <td>{{ $item->pista->tipo }}. {{ $item->pista->nombre }}</td>
+                                        <td>
+                                            @if ($item->estado == 'active')
+                                                @if (strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') >
+                                                        strtotime(date('Y-m-d H:i')))
+                                                    Confirmada
+                                                @else
+                                                    Pasado
+                                                @endif
+                                            @endif
+                                            @if ($item->estado == 'espera')
+                                                <span style="color: #ff9800">En lista de espera</span>
+                                            @endif
+                                            @if ($item->estado == 'desierta')
+                                                <span class="text-warning">Desierta</span>
+                                            @endif
+                                            @if ($item->estado == 'canceled')
+                                                <span class="text-danger">Cancelada</span>
+                                            @endif
+                                            @if ($item->estado == 'pasado')
+                                                <span class="text-success">Validada</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (
+                                                ($item->estado == 'active' || $item->estado == 'espera') &&
+                                                    strtotime(date('Y-m-d H:i', $item->timestamp) . ' +' . $item->minutos_totales . ' minutes') >
+                                                        strtotime(date('Y-m-d H:i')))
+                                                @if (strtotime(date('Y-m-d H:i') . " + {$item->pista->antelacion_cancelacion} hours") < $item->timestamp)
+                                                    <button type="button" class="cancel btn btn-danger cancel-button"
+                                                        data-toggle="modal-cancel" title="Cancelar reserva"
+                                                        data-item-id="{{ $item->id }}">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                @endif
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">No se encuentran registros</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{-- modal para confirmar la cancelacion de una reserva --}}
+                        <div class="modal fade" id="modal-cancel" tabindex="-1" role="dialog" style="padding-right: 0">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content m-0" style="top:25vh">
+                                    <div class="modal-header">
+                                        <h4 class="h4 mb-0">Cancelar reserva</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <p class="mb-4 text-center" style="font-size: 17px">¿Estás seguro que quieres
+                                            cancelar esta reserva?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form
+                                            action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel"
+                                            method="post">
+                                            @csrf
+                                            <button type="submit" class="cancel btn btn-danger" title="Cancelar reserva"
+                                                data-item-id="{{ $item->id }}">
+                                                Cancelar reserva </button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- <h2 class="h2 text-success">Reservas activas</h2> --}} {{-- @if (count(auth()->user()->reservas_activas) == 0)
                         <p class="mt-3 mb-4">No hay reservas activas actualmente.</p>
                     @endif
                     @foreach (auth()->user()->reservas_activas as $item)
@@ -151,7 +200,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
-                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
+                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1>
                                     </div>
                                     <div class="form-group row mt-5 mb-2">
                                         <label class="col-sm-3 col-form-label py-0">Deporte:</label>
@@ -214,7 +263,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
-                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
+                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1>
                                     </div>
                                     <div class="form-group row mt-5 mb-2">
                                         <label class="col-sm-3 col-form-label py-0">Deporte:</label>
@@ -265,7 +314,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h1><i class="far fa-calendar-check mr-2"></i> {{ date('d-m-Y', $item->timestamp) }}</h1>
-                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1> 
+                                        <h1><i class="far fa-clock mr-2"></i> {{ date('H:i', $item->timestamp) }} a {{ date('H:i',strtotime (date('H:i', $item->timestamp) . " +{$item->minutos_totales} minutes")) }}</h1>
                                     </div>
                                     <div class="form-group row mt-5 mb-2">
                                         <label class="col-sm-3 col-form-label py-0">Deporte:</label>
@@ -307,29 +356,30 @@
                             </div>
                         </div>
                     @endforeach --}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right p-3">
+                    {{ $reservas->links() }}
                 </div>
             </div>
         </div>
-        
-        <div class="text-right p-3">
-            {{ $reservas->links() }}
-        </div>
-    </div>
-</div>
 
-@endsection
+    @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function () {
-            
-            /* $('.table-reservas').dataTable({
-                "info": false,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                },
-                "order": [[ 6, "desc"], [ 0, "asc"], [ 3, "desc"]]
-            }); */
-        });
-    </script>
-@endsection
+    @section('script')
+        <script>
+            $(document).ready(function() {
+                $('.cancel-button').click(function() {
+                    let id = $(this).data('item-id');
+                    $('#modal-cancel form').attr('action', '/' +
+                        "<?php echo request()->slug_instalacion; ?>" +
+                        '/mis-reservas/' +
+                        id +
+                        '/cancel');
+                    $('#modal-cancel').modal('show');
+                });
+            })
+        </script>
+    @endsection
