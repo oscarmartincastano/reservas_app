@@ -12,7 +12,7 @@
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
+        <div x-data="{ submitButtonDisabled: false }">
         <form method="POST" action="@if (isset(request()->slug_instalacion)) {{ route('login', ['slug_instalacion' => request()->slug_instalacion]) }} @else {{ route('login') }} @endif">
             @csrf
 
@@ -48,10 +48,11 @@
                     </a>
                 @endif
 
-                <x-button class="ml-3">
+                <x-button class="ml-3" x-bind:disabled="submitButtonDisabled">
                     {{ __('Iniciar sesión') }}
                 </x-button>
             </div>
         </form>
+        </div>
     </x-auth-card>
 </x-guest-layout>
