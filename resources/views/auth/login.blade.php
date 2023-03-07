@@ -62,14 +62,17 @@
 
             $('#form-login').on('submit', function() {
                 $('#boton-login').prop('disabled', true);
+                $('#boton-login').text('Iniciando');
             });
 
             $('#email').on('focus',function(){  
                 $("#boton-login").removeAttr("disabled");
+                $('#boton-login').text('Iniciar sesión');
             });
 
             $('#password').on('focus',function(){  
                 $("#boton-login").removeAttr("disabled");
+                $('#boton-login').text('Iniciar sesión');
             });
 
         });
