@@ -19,6 +19,7 @@
                 </a>
                 <span class="icon-thumbnail"><i data-feather="home"></i></span>
             </li>
+
             <li class=" {{ request()->is(request()->slug_instalacion . '/admin/reservas*') ? 'open active' : '' }}">
                 <a href="javascript:;"><span class="title">Reservas</span>
                     <span
@@ -50,12 +51,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="{{ request()->is(request()->slug_instalacion . '/admin/pistas*') ? 'active' : '' }}">
-                <a href="/{{ request()->slug_instalacion }}/admin/pistas" class="detailed">
-                    <span class="title">Espacios</span>
-                </a>
-                <span class="icon-thumbnail"><i class="material-icons sports_tennis">&#xea32;</i></span>
-            </li>
+
             <li class="{{ request()->is(request()->slug_instalacion . '/admin/users*') ? 'active' : '' }}">
                 <a href="/{{ request()->slug_instalacion }}/admin/users" class="detailed">
                     <span class="title" style="position: relative">Usuarios @if (count(auth()->user()->instalacion->users_sin_validar))
@@ -64,47 +60,6 @@
                     </span>
                 </a>
                 <span class="icon-thumbnail"><i data-feather="users"></i></span>
-            </li>
-            <li class="{{ request()->is(request()->slug_instalacion . '/admin/cobro*') ? 'active' : '' }}">
-                <a href="/{{ request()->slug_instalacion }}/admin/cobro" class="detailed">
-                    <span class="title">Cobros</span>
-                </a>
-                <span class="icon-thumbnail"><i data-feather="credit-card"></i></span>
-            </li>
-            <li
-                class=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}">
-                <a href="javascript:;"><span class="title">Configuracion</span>
-                    <span
-                        class="arrow {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}"></span></a>
-                <span class="icon-thumbnail"><i data-feather="settings"></i></span>
-                <ul class="sub-menu"
-                    style=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'display:block' : '' }}">
-                    <li
-                        class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/instalacion') ? 'active' : '' }}">
-                        <a href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion">Instalación</a>
-                        <span class="icon-thumbnail">in</span>
-                    </li>
-                    <li
-                        class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/pistas-reservas') ? 'active' : '' }}">
-                        <a href="/{{ request()->slug_instalacion }}/admin/configuracion/pistas-reservas">Pistas y
-                            reservas</a>
-                        <span class="icon-thumbnail">pi</span>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="{{ request()->is(request()->slug_instalacion . '/admin/campos-adicionales') ? 'active' : '' }}">
-                <a href="/{{ request()->slug_instalacion }}/admin/campos-adicionales">Campos adicionales en
-                    reservas</a>
-                <span class="icon-thumbnail"><i data-feather="plus-circle"></i></span>
-            </li>
-
-            <li class="{{ request()->is(request()->slug_instalacion . '/admin/patrocinadores') ? 'active' : '' }}">
-                <a
-                    href="
-                {{ route('sponsors.index', ['slug_instalacion' => request()->slug_instalacion]) }}
-                ">Patrocinadores</a>
-                <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
             </li>
 
             @if (auth()->user()->rol === 'admin')
@@ -145,7 +100,62 @@
                                 href="{{ route('suppliers.index', ['slug_instalacion' => request()->slug_instalacion]) }}">Proveedores</a>
                             <span class="icon-thumbnail">p</span>
                         </li>
+
                     </ul>
+                </li>
+
+                <li class="{{ request()->is(request()->slug_instalacion . '/admin/cobro*') ? 'active' : '' }}">
+                    <a href="/{{ request()->slug_instalacion }}/admin/cobro" class="detailed">
+                        <span class="title">Cobros</span>
+                    </a>
+                    <span class="icon-thumbnail"><i data-feather="credit-card"></i></span>
+                </li>
+
+                <li
+                    class=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}">
+                    <a href="javascript:;"><span class="title">Configuracion</span>
+                        <span
+                            class="arrow {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'open active' : '' }}"></span></a>
+                    <span class="icon-thumbnail"><i data-feather="settings"></i></span>
+                    <ul class="sub-menu"
+                        style=" {{ request()->is(request()->slug_instalacion . '/admin/configuracion*') ? 'display:block' : '' }}">
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/instalacion') ? 'active' : '' }}">
+                            <a
+                                href="/{{ request()->slug_instalacion }}/admin/configuracion/instalacion">Instalación</a>
+                            <span class="icon-thumbnail">in</span>
+                        </li>
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/configuracion/pistas-reservas') ? 'active' : '' }}">
+                            <a href="/{{ request()->slug_instalacion }}/admin/configuracion/pistas-reservas">Pistas
+                                y
+                                reservas</a>
+                            <span class="icon-thumbnail">pi</span>
+                        </li>
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/pistas*') ? 'active' : '' }}">
+                            <a href="/{{ request()->slug_instalacion }}/admin/pistas" class="detailed">
+                                <span class="title">Espacios</span>
+                            </a>
+                            <span class="icon-thumbnail"><i class="material-icons sports_tennis">&#xea32;</i></span>
+                        </li>
+
+                        <li
+                            class="{{ request()->is(request()->slug_instalacion . '/admin/campos-adicionales') ? 'active' : '' }}">
+                            <a href="/{{ request()->slug_instalacion }}/admin/campos-adicionales">Campos adicionales en
+                                reservas</a>
+                            <span class="icon-thumbnail"><i data-feather="plus-circle"></i></span>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="{{ request()->is(request()->slug_instalacion . '/admin/patrocinadores') ? 'active' : '' }}">
+                    <a
+                        href="
+                {{ route('sponsors.index', ['slug_instalacion' => request()->slug_instalacion]) }}
+                ">Patrocinadores</a>
+                    <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
                 </li>
             @endif
 

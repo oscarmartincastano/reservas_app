@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use GuzzleHttp\Middleware;
 // use App\Http\Controllers\SponsorController;
 
 use Illuminate\Support\Facades\Route;
@@ -114,6 +115,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
         Route::post('/mis-reservas/{id}/cancel', 'UserController@cancel_reservas');
         Route::get('/perfil', 'UserController@perfil');
         Route::post('/perfil/edit', 'UserController@edit_perfil');
+        Route::post('/perfil/delete', 'UserController@delete_perfil')->name('delete.perfil');
     });
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin_o_empleado_instalacion'], function () {
@@ -148,15 +150,17 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             Route::get('/{id_pista}/activar-dia/{dia}', 'InstalacionController@activar_dia');
         });
 
-        Route::prefix('pistas')->group(function () {
-            Route::get('/', 'InstalacionController@pistas');
-            Route::get('add', 'InstalacionController@add_pista_view');
-            Route::post('add/annadir', 'InstalacionController@add_pista')->name('add_pista');
-            Route::prefix('{id}')->group(function () {
-                Route::get('edit', 'InstalacionController@edit_pista_view');
-                Route::post('edit/annadir', 'InstalacionController@edit_pista')->name('edit_pista');
+        Route::prefix('pistas')
+            ->middleware('admin_instalacion')
+            ->group(function () {
+                Route::get('/', 'InstalacionController@pistas');
+                Route::get('add', 'InstalacionController@add_pista_view');
+                Route::post('add/annadir', 'InstalacionController@add_pista')->name('add_pista');
+                Route::prefix('{id}')->group(function () {
+                    Route::get('edit', 'InstalacionController@edit_pista_view');
+                    Route::post('edit/annadir', 'InstalacionController@edit_pista')->name('edit_pista');
+                });
             });
-        });
 
         Route::prefix('users')->group(function () {
             Route::get('/', 'InstalacionController@users');
@@ -177,44 +181,51 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             });
         });
 
-        Route::prefix('cobro')->group(function () {
-            Route::get('/', 'InstalacionController@list_cobros');
-            Route::get('/add', 'InstalacionController@add_cobro_view');
-            Route::post('/add', 'InstalacionController@add_cobro');
-            Route::prefix('{id}')->group(function () {
-                Route::get('/', 'InstalacionController@edit_cobro_view');
-                Route::post('/', 'InstalacionController@edit_cobro');
-                Route::get('/delete', 'InstalacionController@delete_cobro');
+        Route::prefix('cobro')
+            ->middleware('admin_instalacion')
+            ->group(function () {
+                Route::get('/', 'InstalacionController@list_cobros');
+                Route::get('/add', 'InstalacionController@add_cobro_view');
+                Route::post('/add', 'InstalacionController@add_cobro');
+                Route::prefix('{id}')->group(function () {
+                    Route::get('/', 'InstalacionController@edit_cobro_view');
+                    Route::post('/', 'InstalacionController@edit_cobro');
+                    Route::get('/delete', 'InstalacionController@delete_cobro');
+                });
             });
-        });
 
-        Route::prefix('configuracion')->group(function () {
-            Route::get('/instalacion', 'InstalacionController@configuracion_instalacion')->name('edit_config_inst');
-            Route::get('/instalacion/edit/{tipo}', 'InstalacionController@edit_info');
-            Route::post('/instalacion/edit/{tipo}', 'InstalacionController@editar_info');
+        Route::prefix('configuracion')
+            ->middleware('admin_instalacion')
+            ->group(function () {
+                Route::get('/instalacion', 'InstalacionController@configuracion_instalacion')->name('edit_config_inst');
+                Route::get('/instalacion/edit/{tipo}', 'InstalacionController@edit_info');
+                Route::post('/instalacion/edit/{tipo}', 'InstalacionController@editar_info');
 
-            Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
-            Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
-        });
+                Route::get('/pistas-reservas', 'InstalacionController@configuracion_pistas_reservas');
+                Route::post('configuracion/edit', 'InstalacionController@edit_configuracion')->name('edit_config');
+            });
 
-        Route::prefix('campos-adicionales')->group(function () {
-            Route::get('/', 'InstalacionController@campos_adicionales');
-            Route::get('/campos-personalizados', 'InstalacionController@view_campos_personalizados');
-            Route::post('/campos-personalizados', 'InstalacionController@add_campos_personalizados');
-            Route::get('/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
-            Route::post('/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
-            Route::get('/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
-        });
-        Route::prefix('patrocinadores')->group(function () {
+        Route::prefix('campos-adicionales')
+            ->middleware('admin_instalacion')
+            ->group(function () {
+                Route::get('/', 'InstalacionController@campos_adicionales');
+                Route::get('/campos-personalizados', 'InstalacionController@view_campos_personalizados');
+                Route::post('/campos-personalizados', 'InstalacionController@add_campos_personalizados');
+                Route::get('/campos-personalizados/{id}', 'InstalacionController@view_edit_campos_personalizados');
+                Route::post('/campos-personalizados/{id}', 'InstalacionController@edit_campos_personalizados');
+                Route::get('/campos-personalizados/{id}/delete', 'InstalacionController@delete_campos_personalizados');
+            });
+        Route::prefix('patrocinadores')->middleware('admin_instalacion')
+            ->group(function () {
 
-            route::get('/', 'SponsorController@index')->name('sponsors.index');
-            route::post('/', 'SponsorController@store')->name('sponsors.store');
-            route::get('/create', 'SponsorController@create')->name('sponsors.create');
-            Route::get('/{id}', 'SponsorController@show')->name('sponsors.show');
-            route::put('/{id}', 'SponsorController@update')->name('sponsors.update');
-            route::delete('/{id}', 'SponsorController@destroy')->name('sponsors.destroy');
-            route::get('/{id}/edit', 'SponsorController@edit')->name('sponsors.edit');
-        });
+                route::get('/', 'SponsorController@index')->name('sponsors.index');
+                route::post('/', 'SponsorController@store')->name('sponsors.store');
+                route::get('/create', 'SponsorController@create')->name('sponsors.create');
+                Route::get('/{id}', 'SponsorController@show')->name('sponsors.show');
+                route::put('/{id}', 'SponsorController@update')->name('sponsors.update');
+                route::delete('/{id}', 'SponsorController@destroy')->name('sponsors.destroy');
+                route::get('/{id}/edit', 'SponsorController@edit')->name('sponsors.edit');
+            });
         Route::prefix('facturas')->middleware('admin_instalacion')->group(function () {
             Route::prefix('entidades-bancarias')->group(function () {
                 Route::get('/', 'BankController@index')->name('banks.index');
