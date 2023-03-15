@@ -37,7 +37,7 @@
                             class="text-white btn btn-primary">Añadir nuevo</a>
                         <table class="table table-hover" id="table-users">
                             <thead>
-                                <tr>
+                                <tr>1
                                     <th>Nombre</th>
                                     <th>Email</th>
                                     <th>Direccion</th>
@@ -72,7 +72,7 @@
                                                             class="btn btn-primary"><i data-feather="edit"></i></a>
                                                     @endif
 
-                                                    @if (auth()->user()->rol == 'admin' || $item->rol == 'user')
+                                                    @if ((auth()->user()->rol == 'admin' && auth()->user()->id != $item->id) || $item->rol == 'user')
                                                         <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar"
                                                             class="btn-activate btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}"
                                                             onclick="return confirm('¿Estás seguro que quieres {{ !$item->deleted_at ? 'desactivar' : 'activar' }} este usuario?');"
