@@ -114,6 +114,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
         Route::post('/mis-reservas/{id}/cancel', 'UserController@cancel_reservas');
         Route::get('/perfil', 'UserController@perfil');
         Route::post('/perfil/edit', 'UserController@edit_perfil');
+        Route::post('/perfil/delete','UserController@delete_perfil')->name('delete.perfil');
     });
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin_o_empleado_instalacion'], function () {

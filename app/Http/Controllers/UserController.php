@@ -273,4 +273,10 @@ class UserController extends Controller
         }
         return view("normas", compact('instalacion'));
     }
+
+    public function delete_perfil(Request $request)
+    {
+        $usuario = User::where('id', auth()->user()->id)->delete();
+        return redirect()->to('/superate/Gimnasio');
+    }
 }

@@ -76,6 +76,14 @@
                         @endif
                         <input type="submit" value="Cambiar" class="btn btn-primary mt-2 w-100">
                     </form>
+                    <form action="/{{ request()->slug_instalacion }}/perfil/delete" method="post">
+                        @csrf
+                        @if(Auth::user()->id == 2043)
+                            <div class="mt-3">
+                                <button class="btn btn-danger mt-2 w-100" style="color: white">Dar de baja</button>
+                            </div>
+                        @endif
+                    </form>
                 </div>
             </div>
         </div>
