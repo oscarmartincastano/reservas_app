@@ -12,8 +12,7 @@
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="@if (isset(request()->slug_instalacion)) {{ route('login', ['slug_instalacion' => request()->slug_instalacion]) }} @else {{ route('login') }} @endif">
+        <form id="form-login" method="POST" action="@if (isset(request()->slug_instalacion)) {{ route('login', ['slug_instalacion' => request()->slug_instalacion]) }} @else {{ route('login') }} @endif">
             @csrf
 
             <!-- Email Address -->
@@ -48,10 +47,33 @@
                     </a>
                 @endif
 
-                <x-button class="ml-3">
+                <x-button class="ml-3" id="boton-login">
                     {{ __('Iniciar sesión') }}
                 </x-button>
             </div>
         </form>
+        </div>
     </x-auth-card>
 </x-guest-layout>
+<script src="/simply_white/assets/plugins/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script>
+        $(document).ready(function () {
+
+
+            $('#form-login').on('submit', function() {
+                $('#boton-login').prop('disabled', true);
+                $('#boton-login').text('Iniciando');
+            });
+
+            $('#email').on('focus',function(){  
+                $("#boton-login").removeAttr("disabled");
+                $('#boton-login').text('Iniciar sesión');
+            });
+
+            $('#password').on('focus',function(){  
+                $("#boton-login").removeAttr("disabled");
+                $('#boton-login').text('Iniciar sesión');
+            });
+
+        });
+    </script>
