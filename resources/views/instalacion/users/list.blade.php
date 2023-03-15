@@ -54,7 +54,7 @@
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->direccion }}</td>
                                             <td>
-                                                @if ($item->rol == 'admin')
+                                                @if ($item->rol == 'jadmin')
                                                     <span class="badge badge-primary">Admin</span>
                                                 @elseif ($item->rol == 'user')
                                                     <span class="badge badge-success">Cliente</span>
@@ -64,9 +64,15 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex" style="gap:5px">
-                                                    <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}"
-                                                        class="btn btn-primary"><i data-feather="edit"></i></a>
-                                                    @if ($item->id != auth()->user()->id)
+                                                    <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/ver"
+                                                        class="btn btn-info"><i data-feather="eye"></i></a>
+
+                                                    @if (auth()->user()->rol == 'admin' || $item->rol == 'user' || $item->id == auth()->user()->id)
+                                                        <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}"
+                                                            class="btn btn-primary"><i data-feather="edit"></i></a>
+                                                    @endif
+
+                                                    @if (auth()->user()->rol == 'admin' || $item->rol == 'user')
                                                         <a href="/{{ $instalacion->slug }}/admin/users/{{ $item->id }}/desactivar"
                                                             class="btn-activate btn {{ !$item->deleted_at ? 'btn-danger' : 'btn-success' }}"
                                                             onclick="return confirm('¿Estás seguro que quieres {{ !$item->deleted_at ? 'desactivar' : 'activar' }} este usuario?');"
