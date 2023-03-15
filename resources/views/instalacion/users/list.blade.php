@@ -54,7 +54,7 @@
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->direccion }}</td>
                                             <td>
-                                                @if ($item->rol == 'jadmin')
+                                                @if ($item->rol == 'admin')
                                                     <span class="badge badge-primary">Admin</span>
                                                 @elseif ($item->rol == 'user')
                                                     <span class="badge badge-success">Cliente</span>
