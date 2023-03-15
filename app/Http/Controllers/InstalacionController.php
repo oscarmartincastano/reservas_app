@@ -893,7 +893,6 @@ class InstalacionController extends Controller
 
         $data['password'] = \Hash::make($request->password);
         $data['aprobado'] = date('Y-m-d H:i:s');
-        $data['rol'] = $request->rol;
 
         User::where('id', $request->id)->create($data);
 
@@ -926,7 +925,7 @@ class InstalacionController extends Controller
         $user = User::find($request->id);
 
         array_shift($data);
-
+ 
         if (isset($request->email)) {
             $emails = User::withTrashed()->where([['email', $request->email], ['id_instalacion', auth()->user()->instalacion->id]])->get();
             foreach ($emails as $value) {

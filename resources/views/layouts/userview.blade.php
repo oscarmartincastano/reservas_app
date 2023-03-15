@@ -196,21 +196,21 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
                     <a href="/{{ request()->slug_instalacion }}"
-                        class="navbar-item {{ request()->is('/') ? 'active' : '' }}"> Inicio </a>
-                    {{-- <a href="" class="navbar-item"> Reservar </a> --}}
+                        class="navbar-item {{ request()->is('/') ? 'active' : '' }}">Inicio</a>
+                    {{-- <a href="" class="navbar-item">Reservar</a> --}}
                     @if (App\Models\Instalacion::where('slug', request()->slug_instalacion)->first()->html_normas)
-                        <a href="/{{ request()->slug_instalacion }}/normas" class="navbar-item"> Normas </a>
+                        <a href="/{{ request()->slug_instalacion }}/normas" class="navbar-item">Normas</a>
                     @endif
                     @if (\Auth::check())
-                        @if (auth()->user()->rol != 'admin')
+                        @if (auth()->user()->rol == 'admin' || auth()->user()->rol == 'worker')
+                            <a href="/{{ request()->slug_instalacion }}/admin" class="navbar-item"><i
+                                    class="fas fa-unlock-alt mr-2"></i>Administración</a>
+                        @else
                             <a href="/{{ request()->slug_instalacion }}/mis-reservas"
                                 class="navbar-item {{ request()->is(request()->slug_instalacion . '/mis-reservas') ? 'active' : '' }}"><i
-                                    class="fas fa-book-open mr-2"></i> Mis reservas </a>
+                                    class="fas fa-book-open mr-2"></i>Mis reservas</a>
                             <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i
-                                    class="fas fa-user mr-2"></i> Mi perfil </a>
-                        @else
-                            <a href="/{{ request()->slug_instalacion }}/perfil" class="navbar-item"><i
-                                    class="fas fa-unlock-alt mr-2"></i> Administración </a>
+                                    class="fas fa-user mr-2"></i>Mi perfil</a>
                         @endif
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -219,14 +219,14 @@
                                 style="display: none;">
                                 @csrf
                             </form>
-                            <i class="fas fa-power-off mr-2"></i> Cerrar sesión
+                            <i class="fas fa-power-off mr-2"></i>Cerrar sesión
                         </a>
                     @else
                         <a href="{{ route('login_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}"
-                            class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i> Acceder</a>
+                            class="navbar-item"><i class="fas fa-sign-in-alt mr-2"></i>Acceder</a>
                         @if (request()->slug_instalacion == 'alminar')
                             <a href="{{ route('register_user_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}"
-                                class="navbar-item"><i class="fa-solid fa-user-plus mr-2"></i> Registrarse</a>
+                                class="navbar-item"><i class="fa-solid fa-user-plus mr-2"></i>Registrarse</a>
                         @endif
                     @endif
                 </div>
@@ -237,22 +237,22 @@
         @yield('content')
         {{-- @if (!auth()->user() && request()->slug_instalacion == 'alminar')
             @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp
-            <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
-                <div class="modal-dialog" role="document">
-                <div class="modal-content m-0" style="top:25vh">
-                    <div class="modal-header">
-                    <h4 class="h4 mb-0">Aviso</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body p-4">
-                    <p class="mb-4 text-center" style="font-size: 17px">El sistema ha cambiado y todos los usuarios tienen que recuperar su contraseña. Puedes hacerlo desde este link: </p>
-                    <p class="text-center pt-2"><a href="{{ route('forgot_password_instalacion', ['slug_instalacion' => request()->slug_instalacion]) }}" class="btn btn-success">Recuperar contraseña</a></p>
-                    </div>
-                </div>
-                </div>
-            </div>
+           <div class="modal" id="myModal" tabindex="-1" role="dialog" style="padding-right: 0">
+               <div class="modal-dialog" role="document">
+               <div class="modal-content m-0" style="top:25vh">
+                   <div class="modal-header">
+                   <h4 class="h4 mb-0">Aviso</h4>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                   </div>
+                   <div class="modal-body p-4">
+                   <p class="mb-4 text-center" style="font-size: 17px">El sistema ha cambiado y todos los usuarios tienen que recuperar su contraseña. Puedes hacerlo desde este link:</p>
+                   <p class="text-center pt-2"><a href="{{ route('forgot_password_instalacion', ['slug_instalacion' =>request()->slug_instalacion]) }}" class="btn btn-success">Recuperar contraseña</a></p>
+                   </div>
+               </div>
+               </div>
+           </div>
         @endif --}}
         @if (auth()->user() && request()->slug_instalacion == 'alminar' && !auth()->user()->direccion)
             {{-- @php Cookie::queue(Cookie::make('modal', 'true', 10000000)) @endphp --}}
@@ -266,9 +266,9 @@
                             </button>
                         </div>
                         <div class="modal-body p-4">
-                            <p class="mb-4 text-center" style="font-size: 17px">Nos falta el dato de tu <b>DIRECCIÓN
-                                    COMPLETA</b> para el funcionamiento de la aplicación. Añade tu dirección desde aquí
-                                o tu cuenta puede ser bloqueada: </p>
+                            <p class="mb-4 text-center" style="font-size: 17px">Nos falta el dato de tu<b>DIRECCIÓN
+                                    COMPLETA</b>para el funcionamiento de la aplicación. Añade tu dirección desde aquí
+                                o tu cuenta puede ser bloqueada:</p>
                             <form method="POST" action="/{{ request()->slug_instalacion }}/perfil/edit">
                                 @csrf
                                 <p class="text-center py-2"><input type="text" class="form-control"

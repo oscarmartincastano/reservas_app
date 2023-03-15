@@ -50,12 +50,50 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Contraseña</label>
-
+                                <label class="col-md-2 control-label">Rol</label>
                                 <select name="rol" class="form-control col-md-10">
-                                    {{-- <option value="admin">Administrador</option> --}}
-                                    <option value="user">Usuario</option>
-                                    <option value="worker">Empleado</option>
+                                    <option value="user">Cliente</option>
+                                    <option value="worker">Entrenador</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Código postal</label>
+                                <input name="postal_code" type="text" placeholder="Código postal..."
+                                    class="form-control col-md-10">
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Localidad</label>
+                                <input name="city" type="text" placeholder="Localidad..."
+                                    class="form-control col-md-10">
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Canal publicitario</label>
+                                <select name="canal_publicitario" class="form-control col-md-10">
+                                    @foreach (App\Models\User::$CANALES_PUBLICITARIOS as $canal_publicitario)
+                                        <option value="{{ $canal_publicitario }}">{{ $canal_publicitario }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Datos deportivos</label>
+                                <textarea name="datos_deportivos" class="form-control col-md-10" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Notas generales</label>
+                                <textarea name="notas_generales" class="form-control col-md-10" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Estado</label>
+                                <select name="estado" class="form-control col-md-10">
+                                    @foreach (App\Models\User::$ESTADOS as $estado)
+                                        <option value="{{ $estado }}">{{ $estado }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 

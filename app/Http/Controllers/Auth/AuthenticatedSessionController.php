@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if (isset($request->slug_instalacion)) {
-            if (auth()->user()->rol == 'admin') {
+            if (auth()->user()->rol == 'admin' || auth()->user()->rol == 'worker') {
                 return redirect(request()->slug_instalacion . '/' . 'admin');
             }
             return redirect(request()->slug_instalacion . '/');

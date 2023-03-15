@@ -21,6 +21,10 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
     }
 
+    public static $CANALES_PUBLICITARIOS = ['referido', 'internet', 'visita', 'radio', 'evento'];
+    public static $ROLES = ['admin', 'user', 'worker'];
+    public static $ESTADOS = ['esperando', 'cliente', 'no interesado', 'quiere oferta', 'sin contactar'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,6 +43,12 @@ class User extends Authenticatable
         'tlfno',
         'date_birth',
         'max_reservas_tipo_espacio',
+        'postal_code',
+        'city',
+        'canal_publicitario',
+        'datos_deportivos',
+        'notas_generales',
+        'estado',
     ];
 
     /**
@@ -69,15 +79,16 @@ class User extends Authenticatable
 
     public function reservas()
     {
-        return $this->hasMany(Reserva::class,'id_usuario');
+        return $this->hasMany(Reserva::class, 'id_usuario');
     }
 
     public function cobros()
     {
-        return $this->hasMany(Cobro::class,'id_user');
+        return $this->hasMany(Cobro::class, 'id_user');
     }
 
-    public function getReservasActivasAttribute() {
+    public function getReservasActivasAttribute()
+    {
         return $this->reservas_activas();
     }
 
@@ -94,7 +105,8 @@ class User extends Authenticatable
         return $reservas_activas;
     }
 
-    public function getReservasPasadasAttribute() {
+    public function getReservasPasadasAttribute()
+    {
         return $this->reservas_pasadas();
     }
 
@@ -107,14 +119,15 @@ class User extends Authenticatable
                 array_push($reservas_pasadas, $item);
             }
             if (count($reservas_pasadas) == 10) {
-               break;
+                break;
             }
         }
 
         return $reservas_pasadas;
     }
 
-    public function getReservasCanceladasAttribute() {
+    public function getReservasCanceladasAttribute()
+    {
         return $this->reservas_canceladas();
     }
 
@@ -127,7 +140,7 @@ class User extends Authenticatable
                 array_push($reservas_canceladas, $item);
             }
             if (count($reservas_canceladas) == 10) {
-               break;
+                break;
             }
         }
 
