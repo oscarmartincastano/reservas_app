@@ -4,47 +4,57 @@
 
 @section('style')
     <style>
-        #select2-pista-select2-container{
+        #select2-pista-select2-container {
             text-align: center;
             color: white;
             font-size: 20px;
         }
-        .select2-container--default .select2-selection--single{
+
+        .select2-container--default .select2-selection--single {
             background-color: #373d43;
         }
-        #select2-pista-select2-results{
+
+        #select2-pista-select2-results {
             color: white;
             background-color: #373d43;
         }
-        body > span > span > span.select2-search.select2-search--dropdown{
+
+        body>span>span>span.select2-search.select2-search--dropdown {
             background-color: #373d43;
         }
-        body > main > div.container.is-max-desktop > div > div > div > div.pistas > span > span.selection > span {
+
+        body>main>div.container.is-max-desktop>div>div>div>div.pistas>span>span.selection>span {
             height: auto;
             padding: 12px;
         }
-        .select2-container--default .select2-selection--single .select2-selection__arrow{
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 26px;
             position: absolute;
             top: 13px;
             right: 11px;
             width: 20px;
         }
-        .select2-container--default .select2-results__option--selected{
+
+        .select2-container--default .select2-results__option--selected {
             color: #373d43;
         }
+
         .datepicker.date-input {
             color: white;
             background: #6c757d;
         }
-        #form-dia > div > a {
+
+        #form-dia>div>a {
             border-right: 1px solid white;
         }
-        .select2-container--default .select2-selection--single .select2-selection__arrow b{
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
             border-color: #fff transparent transparent transparent !important;
             color: white !important;
         }
-        .picker__box{
+
+        .picker__box {
             padding-top: 18px;
         }
 
@@ -61,7 +71,6 @@
             background: white;
             color: #0d6efd;
         }
-        
     </style>
     @if (count($pistas) > 1)
         <style>
@@ -72,7 +81,7 @@
     @endif
     @if (count($pistas) > 4)
         <style>
-            .seleccionar-pista-label{
+            .seleccionar-pista-label {
                 top: 60px !important;
             }
         </style>
@@ -87,9 +96,11 @@
 @endsection
 
 @section('content')
+
     <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
-        <div class="has-text-centered title-div title-pista-section" style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/banner-'. lcfirst($pista_selected->tipo) .'.jpg')), url(/img/deportes/banner-{{ lcfirst($pista_selected->tipo) }}.jpg) @endif center;
+        <div class="has-text-centered title-div title-pista-section"
+            style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/banner-' . lcfirst($pista_selected->tipo) . '.jpg')) , url(/img/deportes/banner-{{ lcfirst($pista_selected->tipo) }}.jpg) @endif center;
             background-size:cover;">
             <h1 class="title">{{ $pista_selected->tipo }}<br>{{ $pista_selected->subtipo ?? '' }}</h1>
         </div>
@@ -101,23 +112,34 @@
                 <div class="div-reservas">
                     <div class="pistas" @if ($pista_selected->id_instalacion == 2) style="padding-top:10px" @endif>
                         @if (count($pistas) > 1)
-                            <div class="seleccionar-pista-label" style="position: absolute; color: white;top:11px;font-size: 18px;@if ($pista_selected->id_instalacion == 2) display:none; @endif">Selecciona espacio: </div>
+                            <div class="seleccionar-pista-label"
+                                style="position: absolute; color: white;top:11px;font-size: 18px;@if ($pista_selected->id_instalacion == 2) display:none; @endif">
+                                Selecciona espacio: </div>
                         @endif
                         @if (count($pistas) > 4)
                             @if ($pista_selected->id_instalacion != 2)
-                            <select name="pista" class="form-select" id="pista-select2">
-                                @foreach ($pistas as $pista)
-                                    <option value="{{ $pista->id }}" @if ($pista_selected->id == $pista->id) selected @endif>{{ $pista->nombre }}</option>
-                                @endforeach
-                            </select>
+                                <select name="pista" class="form-select" id="pista-select2">
+                                    @foreach ($pistas as $pista)
+                                        <option value="{{ $pista->id }}"
+                                            @if ($pista_selected->id == $pista->id) selected @endif>{{ $pista->nombre }}</option>
+                                    @endforeach
+                                </select>
                             @else
-                            <ul class="nav nav-pills justify-content-center">
-                                @foreach ($pistas as $pista)
-                                    <li class="nav-item">
-                                        <a class="nav-link @if ($pista_selected->id == $pista->id) active @endif" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}"><span>{{ $pista->nombre }}</span>@if($pista->reservas_given_two_dates(date('Y-m-d'), iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count()) <span class="span-num-res ml-2">{{ $pista->reservas_given_two_dates(date('Y-m-d'), iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count() }}</span> @endif</a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <ul class="nav nav-pills justify-content-center">
+                                    @foreach ($pistas as $pista)
+                                        <li class="nav-item">
+                                            <a class="nav-link @if ($pista_selected->id == $pista->id) active @endif"
+                                                href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}"><span>{{ $pista->nombre }}</span>
+                                                @if (
+                                                    $pista->reservas_given_two_dates(date('Y-m-d'),
+                                                            iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count())
+                                                    <span
+                                                        class="span-num-res ml-2">{{ $pista->reservas_given_two_dates(date('Y-m-d'), iterator_to_array($period)[count(iterator_to_array($period)) - 1]->format('Y-m-d'))->count() }}</span>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @endif
                         @else
                             @foreach ($pistas as $index => $pista)
@@ -128,72 +150,84 @@
                             @endforeach
                         @endif
                     </div>
+
                     <div class="calendario-horarios">
                         <div class="navigator">
                             <div class="semanas">
-                                <a class="button" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana-1 }}">
-                                    <
-                                </a>
-                                <a class="button {{ request()->semana == null || request()->semana == 0 ? 'active' : '' }}" href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}">
-                                    Hoy
-                                </a> 
-                                <a class="button" href="?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana+1 }}">
-                                    >
-                                </a> 
+                                <a class="button"
+                                    href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}?semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana - 1 }}">
+                                    < </a>
+                                        <a class="button {{ request()->semana == null || request()->semana == 0 ? 'active' : '' }}"
+                                            href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}">
+                                            Hoy
+                                        </a>
+                                        <a class="button"
+                                            href="?semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana + 1 }}">
+                                            >
+                                        </a>
                             </div>
+
                             <div class="calendario">
                                 <div class="text-center mb-2" style="font-size: 18px">Selecciona día:</div>
-                                <form id="form-dia" method="get" action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}">
+                                <form id="form-dia" method="get"
+                                    action="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista_selected->id }}">
                                     <div class="input-group diapicker">
-                                        <a href="#" class="btn btn-secondary"><i class="fas fa-calendar"></i></a>
-                                        <input type="hidden" id="dia" class="datepicker date-input form-control" name="dia" value="{{ request()->dia == null ? date('d/m/Y') : request()->dia }}">
+                                        <a href="#" class="btn btn-secondary">
+                                            <i class="fas fa-calendar"></i>
+                                        </a>
+                                        <input type="hidden" id="dia" class="datepicker date-input form-control"
+                                            name="dia"
+                                            value="{{ request()->dia == null ? date('d/m/Y') : request()->dia }}">
                                     </div>
                                 </form>
                             </div>
+
+                            @php
+                                $dias_periodo = iterator_to_array($period);
+                            @endphp
+
                             <div style="text-transform: capitalize" class="mes">
-                                {{ \Carbon\Carbon::parse(iterator_to_array($period)[0])->translatedFormat('d M') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->translatedFormat('d M')}}
+                                {{ \Carbon\Carbon::parse($dias_periodo[0])->translatedFormat('d M') .
+                                    ' - ' .
+                                    \Carbon\Carbon::parse($dias_periodo[count($dias_periodo) - 1])->translatedFormat('d M') }}
                             </div>
                         </div>
                     </div>
+
                     <div class="thead">
-                        {{-- <div>
-                            <div class="th">Hora</div>
-                            <div class="th">6:00 - 7:00</div>
-                            <div class="th">7:00 - 8:00</div>
-                            <div class="th">8:00 - 9:00</div>
-                            <div class="th">9:00 - 10:00</div>
-                            <div class="th">10:00 - 11:00</div>
-                            <div class="th">11:00 - 12:00</div>
-                            <div class="th">12:00 - 13:00</div>
-                            <div class="th">13:00 - 14:00</div>
-                            <div class="th">14:00 - 15:00</div>
-                            <div class="th">15:00 - 16:00</div>
-                            <div class="th">16:00 - 17:00</div>
-                            <div class="th">17:00 - 18:00</div>
-                            <div class="th">18:00 - 19:00</div>
-                            <div class="th">19:00 - 20:00</div>
-                            <div class="th">20:00 - 21:00</div>
-                            <div class="th">21:00 - 22:00</div>
-                            <div class="th">22:00 - 23:00</div>
-                        </div> --}}
-                        
-                        @foreach ($period as $fecha)
+
+                        @foreach ($horarios_final as $horario)
                             <div class="th" style="text-transform: capitalize">
-                                <div style="height:4rem">
-                                    {{ \Carbon\Carbon::parse($fecha)->translatedFormat('l') }}<br>{{ $fecha->format('d M') }}
-                                </div>
-                                @foreach ($pista_selected->horario_con_reservas_por_dia($fecha->format('Y-m-d')) as $item)
-                                    @foreach ($item as $intervalo)
-                                        <div @if($intervalo['height'] < 17) style="height:{{ $intervalo['height']/2 }}rem" @else style="height:{{ $intervalo['height']/4 }}rem" @endif>
-                                            <a @if (!$intervalo['valida']) @if($intervalo['siguiente_reserva_lista_espera']) href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar btn-reservar-suplente" style="background: #ff9800" @else href="#" class="btn-no-disponible" @endif @else href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}" class="btn-reservar" @endif>
-                                                @if(!$intervalo['reunion'])
+                                @foreach ($horario as $mini_horario)
+                                    <div style="height:4rem">
+                                        {{ \Carbon\Carbon::parse($mini_horario[0]['timestamp'])->translatedFormat('l') }}
+
+                                    </div>
+                                    @foreach ($mini_horario as $intervalo)
+                                        <div
+                                            @if ($intervalo['height'] < 17) style="height:{{ $intervalo['height'] / 2 }}rem"
+                                            @else
+                                                style="height:{{ $intervalo['height'] / 4 }}rem" @endif>
+                                            <a @if (!$intervalo['valida']) @if ($intervalo['siguiente_reserva_lista_espera'])
+                                                        href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
+                                                        class="btn-reservar btn-reservar-suplente" style="background: #ff9800"
+                                                    @else
+                                                        href="#" class="btn-no-disponible" @endif
+                                            @else
+                                                href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
+                                                class="btn-reservar" @endif
+                                                title='{{ var_dump($intervalo) }}''>
+                                                @if (!$intervalo['reunion'])
                                                     {{ $intervalo['string'] }}
                                                 @else
-                                                    <span style="max-width:150px;">{!! strlen($intervalo['reunion']->valor_nombre_reunion)>17 ?  strrev(implode(strrev('<br>'), explode(strrev(" "), strrev($intervalo['reunion']->valor_nombre_reunion), 2))) : $intervalo['reunion']->valor_nombre_reunion !!}</span>
+                                                    <span style="max-width:150px;">{!! strlen($intervalo['reunion']->valor_nombre_reunion) > 17
+                                                        ? strrev(implode(strrev('<br>'), explode(strrev(' '), strrev($intervalo['reunion']->valor_nombre_reunion), 2)))
+                                                        : $intervalo['reunion']->valor_nombre_reunion !!}</span>
                                                 @endif
                                                 @if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])
                                                     <br>
-                                                    (Libres: {{ $pista_selected->reservas_por_tramo-$intervalo['num_res'] }})
+                                                    (Libres:
+                                                    {{ $pista_selected->reservas_por_tramo - $intervalo['num_res'] }})
                                                 @endif
                                             </a>
                                         </div>
@@ -201,6 +235,52 @@
                                 @endforeach
                             </div>
                         @endforeach
+                        {{-- @foreach ($period as $fecha)
+                            @php
+                                $carbon_fecha = \Carbon\Carbon::parse($fecha);
+                            @endphp
+                            <div class="th" style="text-transform: capitalize">
+
+                                @php
+                                    $horarios = $pista_selected->horario_con_reservas_por_dia($carbon_fecha);
+                                @endphp
+
+                                @foreach ($horarios as $horario)
+                                    <div style="height:4rem">
+                                        {{ $carbon_fecha->translatedFormat('l') }}<br>{{ $carbon_fecha->translatedFormat('d M') }}
+                                    </div>
+
+                                    @foreach ($horario as $intervalo)
+                                        <div
+                                            @if ($intervalo['height'] < 17) style="height:{{ $intervalo['height'] / 2 }}rem"
+                                            @else
+                                                style="height:{{ $intervalo['height'] / 4 }}rem" @endif>
+                                            <a @if (!$intervalo['valida']) @if ($intervalo['siguiente_reserva_lista_espera'])
+                                                        href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
+                                                        class="btn-reservar btn-reservar-suplente" style="background: #ff9800"
+                                                    @else
+                                                        href="#" class="btn-no-disponible" @endif
+                                            @else
+                                                href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
+                                                class="btn-reservar" @endif >
+                                                @if (!$intervalo['reunion'])
+                                                    {{ $intervalo['string'] }}
+                                                @else
+                                                    <span style="max-width:150px;">{!! strlen($intervalo['reunion']->valor_nombre_reunion) > 17
+                                                        ? strrev(implode(strrev('<br>'), explode(strrev(' '), strrev($intervalo['reunion']->valor_nombre_reunion), 2)))
+                                                        : $intervalo['reunion']->valor_nombre_reunion !!}</span>
+                                                @endif
+                                                @if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])
+                                                    <br>
+                                                    (Libres:
+                                                    {{ $pista_selected->reservas_por_tramo - $intervalo['num_res'] }})
+                                                @endif
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        @endforeach --}}
                     </div>
                 </div>
             </div>
@@ -209,26 +289,31 @@
 
     <div class="modal fade" id="modal-reserva-suplente" tabindex="-1" role="dialog" style="padding-right: 0">
         <div class="modal-dialog" role="document">
-        <div class="modal-content m-0" style="top:25vh">
-            <div class="modal-header">
-            <h4 class="h4 mb-0">Lista de espera</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-content m-0" style="top:25vh">
+                <div class="modal-header">
+                    <h4 class="h4 mb-0">Lista de espera</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-4 text-center" style="font-size: 17px">El cupo de reservas está <strong>COMPLETO</strong>
+                        en este intervalo. Si alguna reserva se cancela, se te avisará y se asignará una plaza de forma
+                        automática. </p>
+                    <p class="text-center pt-2"><a href="#" class="btn btn-success">Realizar reserva</a></p>
+                </div>
             </div>
-            <div class="modal-body p-4">
-            <p class="mb-4 text-center" style="font-size: 17px">El cupo de reservas está <strong>COMPLETO</strong> en este intervalo. Si alguna reserva se cancela, se te avisará y se asignará una plaza de forma automática. </p>
-            <p class="text-center pt-2"><a href="#" class="btn btn-success">Realizar reserva</a></p>
-            </div>
-        </div>
         </div>
     </div>
+    {{-- @php
+        throw new \Exception('final de blade');
+    @endphp --}}
 @endsection
 
 @section('script')
     <script>
-        $(document).ready(function () {
-            $('.btn-no-disponible').click(function (e) { 
+        $(document).ready(function() {
+            $('.btn-no-disponible').click(function(e) {
                 e.preventDefault();
             });
 
@@ -243,11 +328,11 @@
 
             var picker = input_date.pickadate('picker');
 
-            $("#dia").focus(function(){
+            $("#dia").focus(function() {
                 document.activeElement.blur();
             });
 
-            $(".diapicker").on("click", function (e) {
+            $(".diapicker").on("click", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -261,14 +346,16 @@
             });
 
             $('#pista-select2').select2();
-            
-            $('#pista-select2').change(function (e) {
-                window.location.href = $('#url_instalacion').html() + $(this).val() + "?dia={{ request()->dia }}&dia_submit={{ request()->dia_submit }}";
+
+            $('#pista-select2').change(function(e) {
+                window.location.href = $('#url_instalacion').html() + $(this).val() +
+                    "?dia={{ request()->dia }}&dia_submit={{ request()->dia_submit }}";
             });
 
-            $('.btn-reservar-suplente').click(function (e) { 
+            $('.btn-reservar-suplente').click(function(e) {
                 e.preventDefault();
-                $('#modal-reserva-suplente').modal('show').find('.btn-success').attr('href', $(this).attr('href'));
+                $('#modal-reserva-suplente').modal('show').find('.btn-success').attr('href', $(this).attr(
+                    'href'));
             });
         });
     </script>

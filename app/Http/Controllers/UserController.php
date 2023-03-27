@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use App\Mail\NewReserva;
 use App\Mail\ReservaEspera;
 use App\Models\Valor_campo_personalizado;
 use App\Models\Instalacion;
@@ -19,23 +17,26 @@ use DateTime;
 
 class UserController extends Controller
 {
-    public function index(Request $request) {
-        
-        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
-        if (count($instalacion->deportes)>1 || count($instalacion->pistas) == 0) {
+    public function index(Request $request)
+    {
+
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->get();
+
+        if (count($instalacion->deportes) > 1 || count($instalacion->pistas) == 0) {
             return view('home', compact('instalacion'));
         }
         return redirect("{$instalacion->slug}/{$instalacion->pistas->first()->tipo}");
     }
 
-    public function pistas(Request $request) {
+    public function pistas(Request $request)
+    {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
 
         $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
 
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);
-        } else{
+        } else {
             if (isset($pistas[0])) {
                 $pista_selected = $pistas[0];
             } else {
@@ -45,15 +46,15 @@ class UserController extends Controller
 
         if (isset($request->semana)) {
             if ($pista_selected->max_dias_antelacion > 10) {
-                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
-                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+{$request->semana} weeks")));
+                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d') . "+{$request->semana} weeks")));
+                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d') . "+{$request->semana} weeks")));
                 $plus_date->add(new \DateInterval('P8D'));
             } else {
-                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
-                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d')."+".$request->semana*$pista_selected->max_dias_antelacion." days")));
-                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+                $current_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d') . "+" . $request->semana * $pista_selected->max_dias_antelacion . " days")));
+                $plus_date = new DateTime(date("Y-m-d", strtotime(date('Y-m-d') . "+" . $request->semana * $pista_selected->max_dias_antelacion . " days")));
+                $plus_date->add(new \DateInterval('P' . $pista_selected->max_dias_antelacion . 'D'));
             }
-        }elseif (isset($request->dia)) {
+        } elseif (isset($request->dia)) {
             if ($pista_selected->max_dias_antelacion > 10) {
                 $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
                 $current_date = new DateTime($fecha);
@@ -63,9 +64,9 @@ class UserController extends Controller
                 $fecha = Carbon::createFromFormat('d/m/Y', $request->dia)->format('d-m-Y');
                 $current_date = new DateTime($fecha);
                 $plus_date = new DateTime($fecha);
-                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+                $plus_date->add(new \DateInterval('P' . $pista_selected->max_dias_antelacion . 'D'));
             }
-        }else{
+        } else {
             if ($pista_selected->max_dias_antelacion > 10) {
                 $current_date = new DateTime();
                 $plus_date = new DateTime();
@@ -73,30 +74,30 @@ class UserController extends Controller
             } else {
                 $current_date = new DateTime();
                 $plus_date = new DateTime();
-                $plus_date->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+                $plus_date->add(new \DateInterval('P' . $pista_selected->max_dias_antelacion . 'D'));
             }
         }
 
         $date_for_valid = new DateTime();
-        $date_for_valid->add(new \DateInterval('P'.$pista_selected->max_dias_antelacion.'D'));
+        $date_for_valid->add(new \DateInterval('P' . $pista_selected->max_dias_antelacion . 'D'));
 
         $valid_period = new \DatePeriod(new DateTime(), \DateInterval::createFromDateString('1 day'), $date_for_valid);
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
+        $horarios_final = $pista_selected->horarios_final($period);
 
-        return view('pista.pista', compact('period', 'valid_period', 'pistas', 'pista_selected'));
+        return view('pista.pista', compact('period', 'valid_period', 'pistas', 'pista_selected', 'instalacion', 'horarios_final'));
     }
 
     public function reserva(Request $request)
     {
         $reserva = Reserva::where([['id_pista', $request->id_pista], ['timestamp', $request->timestamp], ['estado', 'active']])->first();
-        
+
         $pista = Pista::find($request->id_pista);
         $user = User::find(auth()->user()->id);
         $fecha = $request->timestamp;
         $res_siguiente_espera = $pista->siguiente_reserva_lista_espera($request->timestamp);
 
-        /* return dd($user->numero_total_reservas_tipo($pista->tipo)); */
         if (!$pista->check_reserva_valida($request->timestamp) && !$res_siguiente_espera) {
             return view('pista.reservanodisponible');
         }
@@ -112,11 +113,11 @@ class UserController extends Controller
             $user_no_valid = true;
             return view('pista.reservanodisponible', compact('user_no_valid'));
         }
-        
-        
-        foreach ($pista->horario_deserialized as $item){
-            if (in_array(date('w', $fecha), $item['dias']) || ( date('w', $fecha) == 0 && in_array(7, $item['dias']) )){
-                foreach ($item['intervalo'] as $index => $intervalo){
+
+
+        foreach ($pista->horario_deserialized as $item) {
+            if (in_array(date('w', $fecha), $item['dias']) || (date('w', $fecha) == 0 && in_array(7, $item['dias']))) {
+                foreach ($item['intervalo'] as $index => $intervalo) {
                     $hora = new \DateTime(date('Y-m-d H:i', $fecha));
                     $a = new \DateTime(date('Y-m-d', $fecha) . ' ' . $intervalo['hfin']);
                     $b = new \DateTime(date('Y-m-d', $fecha) . ' ' . $intervalo['hinicio']);
@@ -125,13 +126,13 @@ class UserController extends Controller
                         $interval = $a->diff($b);
                         $diff_minutes = $interval->format("%h") * 60;
                         $diff_minutes += $interval->format("%i");
-                        $numero_veces = $diff_minutes/$secuencia;
-                        
-                        for ($i=0; $i < floor($numero_veces)+1; $i++) {
+                        $numero_veces = $diff_minutes / $secuencia;
+
+                        for ($i = 0; $i < floor($numero_veces) + 1; $i++) {
                             if (!$pista->check_reserva_valida($hora->getTimestamp())) {
                                 $number = $i;
                                 break;
-                            } 
+                            }
                             if ($hora->format('H:i') == $a->format('H:i')) {
                                 $number = $i;
                                 break;
@@ -150,7 +151,7 @@ class UserController extends Controller
         $pista = Pista::find($request->id_pista);
         $user = User::find(auth()->user()->id);
         $reserva_espera = $pista->siguiente_reserva_lista_espera($request->timestamp);
-        
+
         Log::channel('actividadreserva')->info("#{$user->id}: realiza reserva.");
 
         if ($reserva_espera && $user->reservas_en_espera()->count() >= 1) {
@@ -171,14 +172,14 @@ class UserController extends Controller
         $minutos_totales = $request->secuencia * $request->tarifa;
 
         $timestamps[0] = (int)$request->timestamp;
-        
+
         if ($request->tarifa > 1) {
-            for ($i=1; $i < $request->tarifa; $i++) {
-                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia*$i)->timestamp;
+            for ($i = 1; $i < $request->tarifa; $i++) {
+                $timestamps[$i] = \Carbon\Carbon::parse(date('d-m-Y H:i:s', $request->timestamp))->addMinutes($request->secuencia * $i)->timestamp;
             }
         }
-        
-        
+
+
         $reserva = Reserva::create([
             'id_pista' => $request->id_pista,
             'id_usuario' => auth()->user()->id,
@@ -191,13 +192,13 @@ class UserController extends Controller
             'lista_espera' => $reserva_espera,
             'estado' => $reserva_espera ? 'espera' : 'active'
         ]);
-        
+
         Log::channel('actividadreserva')->info("#{$user->id}: reserva realizada (#{$reserva->id}).");
 
         if (isset($request->observaciones)) {
             $reserva->update(['observaciones' => $request->observaciones]);
         }
-        
+
         if (isset($request->campo_adicional)) {
             foreach ($request->campo_adicional as $id_campo => $valor) {
                 Valor_campo_personalizado::create([
@@ -207,9 +208,6 @@ class UserController extends Controller
                 ]);
             }
         }
-
-        /* Mail::to(auth()->user()->instalacion->user_admin->email)->send(new NewReserva(auth()->user(), $reserva)); */
-
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
 
@@ -234,7 +232,7 @@ class UserController extends Controller
                 Mail::to($new_reserva->user->email)->send(new ReservaEspera($new_reserva->user, $new_reserva));
             }
         }
-        
+
         return redirect()->back();
     }
 
@@ -253,7 +251,7 @@ class UserController extends Controller
             unset($data['password']);
             unset($data['password_rep']);
             User::where('id', auth()->user()->id)->update($data);
-        }else {
+        } else {
             if ($data['password'] == $data['password_rep']) {
                 unset($data['password_rep']);
                 $data['password'] = Hash::make($request->password);
@@ -265,8 +263,9 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'true');
     }
 
-    public function normas_instalacion(Request $request) {
-        
+    public function normas_instalacion(Request $request)
+    {
+
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
         if (!$instalacion->html_normas) {
             return redirect("/{$instalacion->slug}");

@@ -4,8 +4,6 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
-use GuzzleHttp\Middleware;
-// use App\Http\Controllers\SponsorController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -21,25 +19,6 @@ require __DIR__ . '/auth.php';
 | contains the "web" middleware group. Now create something great!
 |
 */
-/* Route::get('/arreglo-admin-reserva', 'InstalacionController@arreglos_reservas'); */
-/*
-Route::get('prueba', function() {
-    $json_string = file_get_contents('vincular/lasislas.json');
-    $data = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $json_string) );
-    $users = $data->Hoja1;
-    //$user = \App\Models\User::find($users[0]->id);
-    foreach($users as $user) {
-        $u = App\Models\User::find($user->id);
-        //$u->update(['codigo_aforos' => $user->codigo]);
-    }
-
-    //return \App\Models\User::where('id_instalacion', 5)->get();
-});
-*/
-
-// Route::get('test', function () {
-//     return view('test');
-// });
 
 route::get('/backups54897896', function () {
     \Illuminate\Support\Facades\Artisan::call('database:backup');
@@ -66,25 +45,7 @@ Route::get('validar/{code}', function ($code) {
             }
         }
     }
-
-    /*$reserva = App\Models\Reserva::where('id_usuario', $id)->where('fecha', $now->format('Y-m-d'))->first();
-    if($reserva != null) {
-        if($reserva->estado == 'in') {
-            //$reserva->update(['estado' => 'out']);
-            return 'out';
-        } elseif($reserva->estado == 'out') {
-            return null;
-        } else {
-            //$reserva->update(['estado' => 'in']);
-            return 'in';
-        }
-    } else {
-        return 'no existe';
-    }*/
 });
-/**
-Route::get('/test-import', 'InstalacionController@import_users');
- */
 Route::get('/', 'InstalacionController@home');
 Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalacion'], function () {
     Route::get('/', 'UserController@index');
@@ -115,7 +76,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
         Route::post('/mis-reservas/{id}/cancel', 'UserController@cancel_reservas');
         Route::get('/perfil', 'UserController@perfil');
         Route::post('/perfil/edit', 'UserController@edit_perfil');
-        Route::post('/perfil/delete','UserController@delete_perfil')->name('delete.perfil');
+        Route::post('/perfil/delete', 'UserController@delete_perfil')->name('delete.perfil');
     });
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin_o_empleado_instalacion'], function () {
@@ -278,19 +239,3 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
         });
     });
 });
-
-/* Route::get('/peticion', function($requestHttpMethod, $fechaHoraUTC, $requestUri, $param, $bodyParam, $idInstalacion) {
-    $secretKey = "secret";
-    $requestContentBase64String = "";
-    $nonce = com_create_guid();
-    $uriEncode = urlencode($requestUri);
-    $now = new \DateTime();
-    $timestamp = $now->getTimestamp();
-
-    $APPId = "appkey";
-
-    $firma = $APPId . $requestHttpMethod . $uriEncode . $timestamp . $nonce;
-
-    $hmac = hash_hmac('sha256', $firma, $secretKey);
-
-}); */
