@@ -303,7 +303,7 @@ class Pista extends Model
                         $horario[$index][$i]['tramos'] = 1;
                         $horario[$index][$i]['timestamp'] = $timestamp;
                         $horario[$index][$i]['num_res'] = count($reservasActivas);
-                        $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas($timestamp)[0] ?? null)  : null;
+                        $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas[0] ?? null)  : null;
 
                         if ($hora->format('H:i') == $intervalo['hfin']) {
                             break;
@@ -506,7 +506,7 @@ class Pista extends Model
                             $horario[$index][$i]['tramos'] = 1;
                             $horario[$index][$i]['timestamp'] = $timestamp;
                             $horario[$index][$i]['num_res'] = count($reservasActivas);
-                            $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas($timestamp)[0] ?? null)  : null;
+                            $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas[0] ?? null)  : null;
 
                             if ($hora->format('H:i') == $intervalo['hfin']) {
                                 break;

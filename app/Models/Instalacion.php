@@ -24,7 +24,7 @@ class Instalacion extends Model
         'slug',
     ];
 
-    protected $appends = ['deportes', 'user_admin', 'users_sin_validar'];
+    protected $appends = ['user_admin', 'users_sin_validar'];
 
     public function users()
     {

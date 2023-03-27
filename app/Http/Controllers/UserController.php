@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->get();
+        $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
 
         if (count($instalacion->deportes) > 1 || count($instalacion->pistas) == 0) {
             return view('home', compact('instalacion'));
