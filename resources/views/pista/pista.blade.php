@@ -216,7 +216,7 @@
                                             @else
                                                 href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
                                                 class="btn-reservar" @endif
-                                                title='{{ var_dump($intervalo) }}''>
+                                                >
                                                 @if (!$intervalo['reunion'])
                                                     {{ $intervalo['string'] }}
                                                 @else
@@ -235,52 +235,6 @@
                                 @endforeach
                             </div>
                         @endforeach
-                        {{-- @foreach ($period as $fecha)
-                            @php
-                                $carbon_fecha = \Carbon\Carbon::parse($fecha);
-                            @endphp
-                            <div class="th" style="text-transform: capitalize">
-
-                                @php
-                                    $horarios = $pista_selected->horario_con_reservas_por_dia($carbon_fecha);
-                                @endphp
-
-                                @foreach ($horarios as $horario)
-                                    <div style="height:4rem">
-                                        {{ $carbon_fecha->translatedFormat('l') }}<br>{{ $carbon_fecha->translatedFormat('d M') }}
-                                    </div>
-
-                                    @foreach ($horario as $intervalo)
-                                        <div
-                                            @if ($intervalo['height'] < 17) style="height:{{ $intervalo['height'] / 2 }}rem"
-                                            @else
-                                                style="height:{{ $intervalo['height'] / 4 }}rem" @endif>
-                                            <a @if (!$intervalo['valida']) @if ($intervalo['siguiente_reserva_lista_espera'])
-                                                        href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
-                                                        class="btn-reservar btn-reservar-suplente" style="background: #ff9800"
-                                                    @else
-                                                        href="#" class="btn-no-disponible" @endif
-                                            @else
-                                                href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
-                                                class="btn-reservar" @endif >
-                                                @if (!$intervalo['reunion'])
-                                                    {{ $intervalo['string'] }}
-                                                @else
-                                                    <span style="max-width:150px;">{!! strlen($intervalo['reunion']->valor_nombre_reunion) > 17
-                                                        ? strrev(implode(strrev('<br>'), explode(strrev(' '), strrev($intervalo['reunion']->valor_nombre_reunion), 2)))
-                                                        : $intervalo['reunion']->valor_nombre_reunion !!}</span>
-                                                @endif
-                                                @if ($pista_selected->instalacion->id == 5 && $intervalo['valida'])
-                                                    <br>
-                                                    (Libres:
-                                                    {{ $pista_selected->reservas_por_tramo - $intervalo['num_res'] }})
-                                                @endif
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                @endforeach
-                            </div>
-                        @endforeach --}}
                     </div>
                 </div>
             </div>
@@ -305,9 +259,6 @@
             </div>
         </div>
     </div>
-    {{-- @php
-        throw new \Exception('final de blade');
-    @endphp --}}
 @endsection
 
 @section('script')
