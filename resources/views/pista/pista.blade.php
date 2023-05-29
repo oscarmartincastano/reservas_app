@@ -205,7 +205,7 @@
                                     </div>
                                     @foreach ($mini_horario as $intervalo)
                                         <div
-                                            @if ($intervalo['height'] < 17) style="height:{{ $intervalo['height'] / 2 }}rem"
+                                            @if ($intervalo['height'] < 17) style="height: @if( request()->slug_instalacion != "bancordoba"){{ $intervalo['height'] / 2 }}rem @else 2.5rem @endif "
                                             @else
                                                 style="height:{{ $intervalo['height'] / 4 }}rem" @endif>
                                             <a @if (!$intervalo['valida']) @if ($intervalo['siguiente_reserva_lista_espera'])

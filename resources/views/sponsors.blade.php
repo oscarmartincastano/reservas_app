@@ -1,3 +1,4 @@
+@if(count($sponsors)>0)
 <div class="container h-100 mt-6">
 
     <h5 class="text-center text-secondary mb-0">
@@ -41,6 +42,7 @@
         </div>
     </div>
 </div>
+@endif
 <style>
     /* bootstrap mod: carousel controls */
     .carousel-control-prev-icon,

@@ -18,8 +18,10 @@ class SponsorController extends Controller
     public function index()
     {
         $instalacion = Instalacion::where('slug', request()->slug_instalacion)->firstOrFail();
+        $sponsor = Sponsor::where('instalacion_id',$instalacion->id)->get();
+
         return view('sponsors.index', [
-            'sponsors' => Sponsor::all(),
+            'sponsors' => $sponsor,
             'instalacion' => $instalacion,
         ]);
     }
