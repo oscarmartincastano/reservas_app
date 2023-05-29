@@ -99,10 +99,18 @@
 
     <div id="url_instalacion" style="display: none">/{{ request()->slug_instalacion }}/{{ request()->deporte }}/</div>
     <section class="hero is-medium">
+        @if(request()->slug_instalacion != 'bancordoba')
         <div class="has-text-centered title-div title-pista-section"
             style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5))@if (file_exists(public_path() . '/img/deportes/banner-' . lcfirst($pista_selected->tipo) . '.jpg')) , url(/img/deportes/banner-{{ lcfirst($pista_selected->tipo) }}.jpg) @endif center;
             background-size:cover;">
+
             <h1 class="title">{{ $pista_selected->tipo }}<br>{{ $pista_selected->subtipo ?? '' }}</h1>
+            @else
+                <div class="has-text-centered title-div title-pista-section"
+                     style="background:linear-gradient(0deg, rgba(36, 36, 36, 0.5), rgba(36, 36, 36, 0.5)) , url(https://www.jeseblogs.es/u/bancordoba/images/cordobanmayo.jpg)  center;
+                         background-size:cover;">
+                <h1 class="title">Recogida de alimentos</h1>
+            @endif
         </div>
     </section>
 
