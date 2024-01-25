@@ -151,7 +151,10 @@
                             @endif
                         @else
                             @foreach ($pistas as $index => $pista)
-                                <div class="@if ($pista->id == $pista_selected->id) active @endif"><a class=" select-pista"
+                                
+                                <div class="@if ($pista->id == $pista_selected->id) active @endif " @if ($pistas->count() == 1)
+                                    style="width:100%"
+                                @endif><a class=" select-pista"
                                         data-id_pista="{{ $pista->id }}"
                                         href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}">{{ $pista->nombre }}</a>
                                 </div>

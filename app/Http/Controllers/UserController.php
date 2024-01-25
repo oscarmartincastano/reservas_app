@@ -32,7 +32,7 @@ class UserController extends Controller
     {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
 
-        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id]])->get();
+        $pistas = Pista::where([['tipo', $request->deporte], ['id_instalacion', $instalacion->id], ['active', 1]])->get();
 
         if (isset($request->id_pista)) {
             $pista_selected = Pista::find($request->id_pista);
