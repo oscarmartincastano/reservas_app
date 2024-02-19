@@ -85,6 +85,7 @@ class UserController extends Controller
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
 
         $horarios_final = $pista_selected->horarios_final($period);
+
         return view('pista.pista', compact('period', 'valid_period', 'pistas', 'pista_selected', 'instalacion', 'horarios_final'));
     }
 

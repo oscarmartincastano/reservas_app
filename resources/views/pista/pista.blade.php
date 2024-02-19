@@ -118,8 +118,6 @@
         <div class="columns">
             <div class="column is-full">
                 <div class="div-reservas">
-                    @php
-                    @endphp
                     <div class="pistas" @if ($pista_selected->id_instalacion == 2) style="padding-top:10px" @endif>
                         @if (count($pistas) > 1)
                             <div class="seleccionar-pista-label"
@@ -208,6 +206,7 @@
                     </div>
 
                     <div class="thead">
+
                         @foreach ($horarios_final as $horario)
                             <div class="th" style="text-transform: capitalize">
                                 @foreach ($horario as $mini_horario)
