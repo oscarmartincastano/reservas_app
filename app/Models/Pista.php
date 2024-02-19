@@ -400,6 +400,15 @@ class Pista extends Model
             ]
         )->get();
 
+        $reservasActivasFinalHorario = Reserva::where(
+            [
+                ['id_pista', $this->id],
+                ['estado', '!=', 'canceled'],
+                ['fecha', '>=', $period->start->format('Y-m-d')],
+                ['fecha', '<=', $period->end->format('Y-m-d')]
+            ]
+        )->get();
+
         $desactivacionesReservas = Desactivacion_reserva::where([['id_pista', $this->id], ['timestamp', '>=', $period->start->getTimestamp()], ['timestamp', '<=', $period->end->getTimestamp()]])->get();
         $excepcionesDesactivacionesPeriodicas = Excepciones_desactivaciones_periodicas::where([['id_pista', $this->id], ['timestamp', '>=', $period->start->getTimestamp()], ['timestamp', '<=', $period->end->getTimestamp()]])->get();
         foreach ($period as $fecha) {
@@ -423,12 +432,15 @@ class Pista extends Model
                         }
 
                         foreach ($horas as $i => $hora) {
-
+                            $valida = true;
                             $timestamp = $hora->getTimestamp();
-
                             $reservasActivas =
                                 $reservasActivasFinal->where('timestamp', $timestamp)->where('estado', '!=', 'canceled');
-
+                            foreach($reservasActivasFinalHorario as $reserva_activa_final_horario){
+                                if(in_array($timestamp, $reserva_activa_final_horario->horarios_deserialized)){
+                                    $valida = false;
+                                }
+                            }
                             $fecha1 = Carbon::createFromTimestamp($timestamp)
                                 ->startOfDay();
 
@@ -470,7 +482,6 @@ class Pista extends Model
 
                             $fecha5 = Carbon::now()->addHours($this->atenlacion_reserva)->startOfMinute();
                             $fecha6 = Carbon::createFromTimestamp($timestamp)->addMinutes($this->get_minutos_given_timestamp($timestamp))->startOfMinute();
-
                             if (
                                 $fecha1 < $fecha2 &&
                                 !$checkDesactivado &&
@@ -480,6 +491,7 @@ class Pista extends Model
                             ) {
                                 $horario[$index][$i]['valida'] = true;
                             }
+                       
                             $fecha7 = Carbon::now()->startOfDay();
                             $fecha8 = now()->addDays($this->max_dias_antelacion)->startOfDay();
                             $fecha9 = Carbon::now()->addHours($this->atenlacion_reserva)->startOfMinute();
@@ -491,7 +503,13 @@ class Pista extends Model
                                     return in_array($timestamp, $reserva->horarios_deserialized) && $reserva->estado == 'espera';
                                 })->count();
 
-
+                            foreach($reservasActivas as $reserva_activa){
+                                $horario_desearilizado = $reserva_activa->horarios_deserialized;
+                                if(in_array($timestamp, $horario_desearilizado)){
+                                    $horario[$index][$i]['valida'] = false;
+                                }
+                            }
+                            
                             $horario[$index][$i]['siguiente_reserva_lista_espera'] =
                                 $fecha7 < $fecha8 &&
                                 !$checkDesactivado &&
@@ -507,7 +525,9 @@ class Pista extends Model
                             $horario[$index][$i]['timestamp'] = $timestamp;
                             $horario[$index][$i]['num_res'] = count($reservasActivas);
                             $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas[0] ?? null)  : null;
-
+                            if(!$valida){
+                                $horario[$index][$i]['valida'] = false;
+                            }
                             if ($hora->format('H:i') == $intervalo['hfin']) {
                                 break;
                             }
