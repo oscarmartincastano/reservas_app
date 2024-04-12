@@ -76,6 +76,7 @@
                                             </td>
                                             <td>{{ $item->hora_inicio }} - {{ $item->hora_fin }}</td>
                                             <td>
+                                                <a class="btn btn-primary" href="/{{request()->slug_instalacion}}/admin/reservas/periodicas/{{ $item->id }}/editar"><i class="fas fa-edit"></i></a>
                                                 <a href="/{{ request()->slug_instalacion }}/admin/reservas/periodicas/{{ $item->id }}/borrar" onclick="return confirm('¿Estás seguro que quieres borrar todas estas reservas periódicas?');" class="btn btn-danger text-white" title="Borrar estas reservas periódicas">
                                                     <i class="fas fa-trash"></i>
                                                 </a>

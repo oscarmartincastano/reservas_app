@@ -535,6 +535,70 @@ class InstalacionController extends Controller
         return Reserva::where([['timestamp', '>=', strtotime('2022-03-27 00:00')], ['timestamp', '<=', strtotime('2022-10-30 00:00')]], ['creado_por', 'admin'], ['reserva_periodica', '!=', null])->get();
     } */
 
+    public function editar_reservas_periodicas_view(Request $request)
+    {
+        $reserva_periodica = Reservas_periodicas::find($request->id);
+
+        return view('instalacion.reservas.edit_reserva_periodica', compact('reserva_periodica'));
+    }
+
+    public function update_reserva_periodica(Request $request)
+    {
+        $reserva_periodica = Reservas_periodicas::find($request->id);
+        $reserva_periodica->id_pista = $request->espacio;
+        $reserva_periodica->id_user = $request->user_id;
+        $pista = Pista::find($reserva_periodica->id_pista);
+
+        $reserva_periodica->update([
+            'dias' => serialize($request->dias),
+            'hora_inicio' => $request->hora_inicio,
+            'hora_fin' => $request->hora_fin,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
+        ]);
+
+        $period = new \DatePeriod(new DateTime($request->fecha_inicio), new \DateInterval('P1D'), new DateTime($request->fecha_fin));
+
+        Reserva::where('reserva_periodica', $request->id)->delete();
+
+        foreach ($period as $fecha) {
+            if (in_array($fecha->format('w'), $request->dias)) {
+                foreach ($pista->horario_tramos($fecha->format('Y-m-d')) as $horas) {
+                    foreach ($horas as $hora) {
+                        if (
+                            strtotime(date('H:i', $hora)) >= strtotime($request->hora_inicio) &&
+                            strtotime(date('H:i', $hora)) < strtotime($request->hora_fin)
+                        ) {
+                            $reserva = Reserva::create([
+                                'id_pista' => $pista->id,
+                                'id_usuario' => $reserva_periodica->id_user,
+                                'timestamp' => $hora,
+                                'horarios' => serialize([$hora]),
+                                'fecha' => date('Y/m/d', $hora),
+                                'hora' => date('Hi', $hora),
+                                'tarifa' => 1,
+                                'minutos_totales' => $pista->get_minutos_given_timestamp($hora),
+                                'reserva_periodica' => $reserva_periodica->id,
+                                'creado_por' => 'admin'
+                            ]);
+
+                            if (isset($request->campo_adicional)) {
+                                foreach ($request->campo_adicional as $id_campo => $valor) {
+                                    Valor_campo_personalizado::create([
+                                        'id_reserva' => $reserva->id,
+                                        'id_campo' => $id_campo,
+                                        'valor' => $valor
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return redirect('/' . request()->slug_instalacion . '/admin/reservas/periodicas');
+    }
+
     public function borrar_reservas_periodicas(Request $request)
     {
         Reservas_periodicas::find($request->id)->delete();

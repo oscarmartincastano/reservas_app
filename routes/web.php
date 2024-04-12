@@ -20,6 +20,10 @@ require __DIR__ . '/auth.php';
 |
 */
 
+Route::get('/holii', function () {
+    echo '<h1>A trabajar ya hombree</h1>';
+});
+
 route::get('/backups54897896', function () {
     \Illuminate\Support\Facades\Artisan::call('database:backup');
 });
@@ -89,6 +93,8 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             Route::get('/periodicas/add', 'InstalacionController@add_reservas_periodicas_view');
             Route::post('/periodicas/add', 'InstalacionController@add_reservas_periodicas')->name('add_reserva_periodica');
             Route::get('/periodicas/{id}/borrar', 'InstalacionController@borrar_reservas_periodicas');
+            Route::get('/periodicas/{id}/editar', 'InstalacionController@editar_reservas_periodicas_view');
+            Route::post('/periodicas/update', 'InstalacionController@update_reserva_periodica')->name('update_reserva_periodica');
 
             Route::get('/desactivaciones', 'InstalacionController@desactivaciones_periodicas');
             Route::get('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas_view');
