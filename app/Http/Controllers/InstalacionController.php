@@ -68,11 +68,15 @@ class InstalacionController extends Controller
         }
 
         if (isset($request->week) && !isset($request->semana)) {
-            $semana = $request->week;
-            $d = (int)substr($semana, 6) * 7;
-            $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
-
+            $semana = $request->week; 
+            $year = substr($semana, 0, 4);  
+            $week = substr($semana, 6);  
+            
+            $date = new DateTime();
+            $date->setISODate($year, $week);
+            
             $semana = $this->rangeWeek($date->format('Y-m-d'));
+            
         }
 
         $period = new \DatePeriod(new DateTime($semana['start']), new \DateInterval('P1D'), new DateTime($semana['end']));
