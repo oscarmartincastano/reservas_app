@@ -399,12 +399,16 @@ class Pista extends Model
                 ['fecha', '<=', $period->end->format('Y-m-d')]
             ]
         )->get();
-
+        // foreach ($reservasActivasFinal as $key => $value) {
+        //     if($value->id == 84878){
+        //     }
+        // }
         $desactivacionesReservas = Desactivacion_reserva::where([['id_pista', $this->id], ['timestamp', '>=', $period->start->getTimestamp()], ['timestamp', '<=', $period->end->getTimestamp()]])->get();
         $excepcionesDesactivacionesPeriodicas = Excepciones_desactivaciones_periodicas::where([['id_pista', $this->id], ['timestamp', '>=', $period->start->getTimestamp()], ['timestamp', '<=', $period->end->getTimestamp()]])->get();
         foreach ($period as $fecha) {
             $carbon_fecha = \Carbon\Carbon::parse($fecha);
             $horario = [];
+
             foreach ($this->horario_deserialized as $key => $item) {
                 if (
                     in_array($carbon_fecha->dayOfWeek, $item['dias'])
@@ -425,14 +429,24 @@ class Pista extends Model
                         foreach ($horas as $i => $hora) {
 
                             $timestamp = $hora->getTimestamp();
-
+       
                             $reservasActivas =
-                                $reservasActivasFinal->where('timestamp', $timestamp)->where('estado', '!=', 'canceled');
+                                $reservasActivasFinal->where('estado', '!=', 'canceled')->filter(function ($reserva) use ($timestamp) {
+                                    return in_array($timestamp, $reserva->horarios_deserialized);
+                                });
 
+
+                            // if($fecha->format('d-m-Y') == "05-06-2024"){
+                            //     if($timestamp == 1717592400){
+                            //         dd($reservasActivas, $horas);
+                            //     }
+                
+                            // }
                             $fecha1 = Carbon::createFromTimestamp($timestamp)
                                 ->startOfDay();
 
 
+             
                             // checkReservaActiva
 
                             $horario[$index][$i]['valida'] = false;
@@ -480,6 +494,7 @@ class Pista extends Model
                             ) {
                                 $horario[$index][$i]['valida'] = true;
                             }
+                 
                             $fecha7 = Carbon::now()->startOfDay();
                             $fecha8 = now()->addDays($this->max_dias_antelacion)->startOfDay();
                             $fecha9 = Carbon::now()->addHours($this->atenlacion_reserva)->startOfMinute();
@@ -507,7 +522,7 @@ class Pista extends Model
                             $horario[$index][$i]['timestamp'] = $timestamp;
                             $horario[$index][$i]['num_res'] = count($reservasActivas);
                             $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas[0] ?? null)  : null;
-
+              
                             if ($hora->format('H:i') == $intervalo['hfin']) {
                                 break;
                             }
