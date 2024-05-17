@@ -438,7 +438,21 @@
                             @foreach ($period as $fecha)
                                 <div class="col text-center">
                                     <div class="text-uppercase p-3 dia">
-                                        {{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}</div>
+                                        {{-- {{ \Carbon\Carbon::parse($fecha)->formatLocalized('%A') }}  si hago esto en la tilde de miércoles me sale un caracter raro creo que por el utf-8 y quiero que salga en español --}}
+                                        @php
+                                            $dias = [
+                                                'Monday' => 'Lunes',
+                                                'Tuesday' => 'Martes',
+                                                'Wednesday' => 'Miércoles',
+                                                'Thursday' => 'Jueves',
+                                                'Friday' => 'Viernes',
+                                                'Saturday' => 'Sábado',
+                                                'Sunday' => 'Domingo',
+                                            ];
+                                        @endphp
+                                        {{ $dias[$fecha->format('l')] }}
+
+                                    </div>
                                     <div><a data-fecha="{{ $fecha->format('Y-m-d') }}"
                                             data-fecha_long="{{ $fecha->format('d/m/Y') }}"
                                             @if (auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d'))) data-toggle="tooltip" data-placement="top" title="{{ auth()->user()->instalacion->check_reservas_dia($fecha->format('Y-m-d')) }} Reservas pendientes" @endif
