@@ -787,8 +787,6 @@
                             alert('Ha ocurrido un error al eliminar la reserva');
                         }else{
                             containerPadre.remove();
-                            alert('Reserva eliminada correctamente 🤙');
-
                         }
                     }
                 });
@@ -807,7 +805,26 @@
             $('#modalSlideUp').on('click', '.submit-form-validar', function(e) {
                 e.preventDefault();
                 $(this).parent().find('input').val($(this).data('accion'));
-                $('#modalSlideUp').find('form').submit();
+                // $('#modalSlideUp').find('form').submit();
+                // to ajax
+                let form = $('#modalSlideUp').find('form');
+
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        if (response == 1) {
+                            $('#modalSlideUp').modal('hide');
+                            // $('.btn-dia.active').click();
+                            $('.tab-pista.active').click();
+
+                        } else {
+                            alert('Ha ocurrido un error al validar la reserva');
+                        }
+                    }
+                });
             });
 
             $('input#week').change(function(e) {

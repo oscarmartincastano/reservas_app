@@ -151,10 +151,11 @@ class InstalacionController extends Controller
                 return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
             }
             $reserva->update((['estado' => $request->accion, 'observaciones_admin' => $request->observaciones]));
-            return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
+            // return redirect()->back()->with('dia_reserva_hecha', date('Y-m-d', $reserva->timestamp));
+            return true;
         }
 
-        return redirect()->back()->with('error', 'true');
+        return false;
     }
 
     public function hacer_reserva_view(Request $request)
