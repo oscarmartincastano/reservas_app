@@ -84,6 +84,14 @@ class InstalacionController extends Controller
         return view('instalacion.home', compact('instalacion', 'period', 'pistas'));
     }
 
+    public function eliminar_reserva(Request $request)
+    {
+        $reserva = Reserva::find($request->id);
+        $reserva->delete();
+
+        return redirect()->back();
+    }
+
     public function reservas_dia(Request $request)
     {
         $pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->get();

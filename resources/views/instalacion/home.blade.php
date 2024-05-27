@@ -697,7 +697,11 @@
                                                     `<h4 class="text-danger" style="font-weight:bold">Salida (${reserva.salida})</h4></div>`;
                                             } else {
                                                 string +=
-                                                    `<h4 class="text-danger" style="font-weight:bold">Cancelado</h4></div>`;
+                                                    `<h4 class="text-danger" style="font-weight:bold">Cancelado
+                                                        <a href="/{{ request()->slug_instalacion }}/admin/reservas/${reserva.id}/eliminar" class="btn btn-danger btn-eliminar-reserva" data-reserva="${reserva.id}" onclick="return confirm('¿Estás seguro de que quieres eliminar la reserva?')"><i class="fa-solid fa-trash mr-0"></i></a></h4>
+                                                        </h4>
+    
+                                                    </div>`;
                                             }
                                         } else if (reserva.estado ==
                                             'desierta') {

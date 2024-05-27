@@ -96,11 +96,13 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             Route::get('/periodicas/{id}/editar', 'InstalacionController@editar_reservas_periodicas_view');
             Route::post('/periodicas/update', 'InstalacionController@update_reserva_periodica')->name('update_reserva_periodica');
 
+
             Route::get('/desactivaciones', 'InstalacionController@desactivaciones_periodicas');
             Route::get('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas_view');
             Route::post('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas')->name('add_desactivacion');
             Route::get('/desactivaciones/{id}/borrar', 'InstalacionController@borrar_desactivaciones_periodicas');
 
+            Route::get('/{id}/eliminar', 'InstalacionController@eliminar_reserva')->name('reserva.remove');
 
             Route::get('/{id}/edit', 'InstalacionController@edit_reserva_view')->name('reserva.edit');
             Route::post('/{id}/edit', 'InstalacionController@edit_reserva')->name('reserva.edit');
