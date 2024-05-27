@@ -86,10 +86,13 @@ class InstalacionController extends Controller
 
     public function eliminar_reserva(Request $request)
     {
-        $reserva = Reserva::find($request->id);
-        $reserva->delete();
-
-        return redirect()->back();
+        try {
+            $reserva = Reserva::find($request->id);
+            $reserva->delete();
+            return true;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function reservas_dia(Request $request)
