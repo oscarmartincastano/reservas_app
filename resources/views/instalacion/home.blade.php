@@ -698,7 +698,7 @@
                                             } else {
                                                 string +=
                                                     `<h4 class="text-danger" style="font-weight:bold">Cancelado
-                                                        <a href="" data-url="/{{ request()->slug_instalacion }}/admin/reservas/${reserva.id}/eliminar" class="btn btn-danger btn-eliminar-reserva" data-reserva="${reserva.id}"><i class="fa-solid fa-trash mr-0"></i></a></h4>
+                                                        <a href="" data-url="/{{ request()->slug_instalacion }}/admin/reservas/${reserva.id}/eliminar" class="btn btn-danger btn-eliminar-reserva" data-reserva="${reserva.id}" onclick="return confirm('¿Estás seguro de que quieres eliminar la reserva?')"><i class="fa-solid fa-trash mr-0"></i></a></h4>
                                                         </h4>
     
                                                     </div>`;
@@ -777,24 +777,21 @@
 
             $('.reservas-dia').on('click', '.btn-eliminar-reserva' , function(e) {
                 e.preventDefault();
-                if(confirm('¿Estás seguro de que quieres eliminar la reserva?')){
-                    let containerPadre = $(this).parent().parent().parent().parent();
-                    $.ajax({
-                        type: "GET",
-                        url: $(this).data('url'),
-                        success: function (response) {
-                            console.log(response);
-                            if (response != 1) {
-                                alert('Ha ocurrido un error al eliminar la reserva');
-                            }else{
-                                containerPadre.remove();
-                                alert('Reserva eliminada correctamente 🤙');
-    
-                            }
-                        }
-                    });
+                let containerPadre = $(this).parent().parent().parent();
+                $.ajax({
+                    type: "GET",
+                    url: $(this).data('url'),
+                    success: function (response) {
+                        console.log(response);
+                        if (response != 1) {
+                            alert('Ha ocurrido un error al eliminar la reserva');
+                        }else{
+                            containerPadre.remove();
+                            alert('Reserva eliminada correctamente 🤙');
 
-                }
+                        }
+                    }
+                });
             });
 
             $('.reservas-dia').on('click', '.btn-acciones-reserva', function(e) {
