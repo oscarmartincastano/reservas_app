@@ -20,13 +20,17 @@ require __DIR__ . '/auth.php';
 |
 */
 
-Route::get('/holii', function () {
-    echo '<h1>A trabajar ya hombree</h1>';
-});
+// Route::any('{any}', function () {
+//     return view('mantenimiento');
+// })->where('any', '.*');
 
 route::get('/backups54897896', function () {
     \Illuminate\Support\Facades\Artisan::call('database:backup');
 });
+
+Route::get('mantenimiento', function () {
+    return view('mantenimiento');
+})->name('mantenimiento');
 
 Route::get('validar/{code}', function ($code) {
     $now = \Carbon\Carbon::now();
