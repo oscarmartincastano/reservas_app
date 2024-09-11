@@ -11,7 +11,7 @@ class CheckInstalacion
     public function handle($request, Closure $next)
     {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
-        if($request->slug_instalacion == "superate" and $instalacion->mantenimiento == 1){
+        if($instalacion->mantenimiento == 1){
             return redirect()->route('mantenimiento');
         }
 
