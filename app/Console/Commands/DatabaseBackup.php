@@ -51,8 +51,8 @@ class DatabaseBackUp extends Command
         exec($command, $output, $returnVar);
         $disk = Storage::build([
             'driver' => 'ftp',
-            'host' => "85.55.6.93",
-            'username' => "taller",
+            'host' => "85.59.89.10",
+            'username' => "ftpuser",
             'password' => "2016Taller#",
             'port' => 21,
             'ssl' => false,
