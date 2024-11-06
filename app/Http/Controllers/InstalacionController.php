@@ -134,6 +134,26 @@ class InstalacionController extends Controller
         return $retorno;
     }
 
+    public function print_reserva(Request $request){
+        // esta funccion servira para imprimir una unica reserva como si fuera un ticket
+        $reserva = Reserva::find($request->id);
+        return view('instalacion.reservas.print', compact('reserva'));
+    }
+
+    public function imprimir_reservas(Request $request){
+        $instalacion = auth()->user()->instalacion;
+        $fecha_inicio = $request->fecha_inicio;
+        $fecha_fin = $request->fecha_fin;
+
+        // $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $instalacion->id)->pluck('id'))->where('fecha', $fecha)->get();
+        $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $instalacion->id)->pluck('id'))->whereBetween('fecha', [$fecha_inicio, $fecha_fin])->get();
+
+
+        
+        // en la cabecera el día y mes y en el cuerpo los nombres de las salas con reserva con su nombre de reserva la hora,duración y observaciones. imprimir a pdf
+        return view('instalacion.reservas.print_all', compact('reservas', 'fecha_inicio', 'fecha_fin'));
+    }
+
     public function validar_reserva(Request $request)
     {
         $reserva = Reserva::find($request->id);

@@ -428,6 +428,40 @@
                                                 class="btn btn-next">></a>
                                 </div>
                             </div>
+                            @if (request()->slug_instalacion == "ceco")
+                                <button type="button" class="btn btn-outline-success mt-3" data-toggle="modal" data-target="#modalEspecifica">Imprimir reservas</button>
+                            @endif
+                                               
+                            {{-- modal --}}
+                            <div class="modal fade" id="modalEspecifica" tabindex="-1" role="dialog" aria-labelledby="modalEspecificaLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form action="{{route('imprimir_reservas', request()->slug_instalacion)}}" method="POST">
+                                            @csrf
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalEspecificaLabel">Selecciona las fechas</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="fecha">Fecha inicio</label>
+                                                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="fecha">Fecha fin</label>
+                                                    <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="submit" class="btn btn-primary">Buscar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col text-center text-uppercase p-3 mes">

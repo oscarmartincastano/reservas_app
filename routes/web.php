@@ -20,10 +20,6 @@ require __DIR__ . '/auth.php';
 |
 */
 
-// Route::any('{any}', function () {
-//     return view('mantenimiento');
-// })->where('any', '.*');
-
 route::get('/backups54897896', function () {
     \Illuminate\Support\Facades\Artisan::call('database:backup');
 });
@@ -100,6 +96,8 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
             Route::get('/periodicas/{id}/editar', 'InstalacionController@editar_reservas_periodicas_view');
             Route::post('/periodicas/update', 'InstalacionController@update_reserva_periodica')->name('update_reserva_periodica');
 
+            Route::post('/imprimir', 'InstalacionController@imprimir_reservas')->name('imprimir_reservas');
+
 
             Route::get('/desactivaciones', 'InstalacionController@desactivaciones_periodicas');
             Route::get('/desactivaciones/add', 'InstalacionController@add_desactivaciones_periodicas_view');
@@ -110,6 +108,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
 
             Route::get('/{id}/edit', 'InstalacionController@edit_reserva_view')->name('reserva.edit');
             Route::post('/{id}/edit', 'InstalacionController@edit_reserva')->name('reserva.edit');
+            Route::get('/{id}/print', 'InstalacionController@print_reserva')->name('reserva.print');
 
             Route::get('/numero/{fecha}', 'InstalacionController@numero_reservas_dia_por_pista');
             Route::get('/{fecha}', 'InstalacionController@reservas_dia');

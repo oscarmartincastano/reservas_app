@@ -73,17 +73,20 @@
                     </h3>
                 </div>
             </div>
-
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
                 <div class="card ">
                     <div class="card-header">
                         <div class="card-title">Listado de reservas</div>
                     </div>
                     <div class="card-body table-responsive">
-                        @if(request()->fecha != 'all')<a href="?fecha=all">Todas</a> -@endif @if(request()->fecha != 'today')<a href="?fecha=today">Hoy</a> -@endif @if(request()->fecha != 'week')<a href="?fecha=week">Semana</a> -@endif @if(request()->fecha != 'month')<a href="?fecha=month">Mes</a>@endif
+                        @if(request()->fecha != 'all')<a href="?fecha=all">Todas</a> -@endif @if(request()->fecha != 'today')<a href="?fecha=today">Hoy</a> -@endif @if(request()->fecha != 'week')<a href="?fecha=week">Semana</a> -@endif @if(request()->fecha != 'month')<a href="?fecha=month">Mes</a> @endif
+                        <br>
+
+
                         {{-- <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="btn btn-outline-primary mr-2">Añadir desactivación periódica</a> 
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="text-white btn btn-primary">Añadir reserva periódica</a> --}}
                         <table class="table table-hover" id="table-reservas">
+                   
                             <thead>
                                 <tr>
                                     @if(auth()->user()->id_instalacion != 2)
@@ -158,6 +161,9 @@
                                                 @if(auth()->user()->instalacion->id == 2)
                                                     <a href="{{ route('reserva.edit', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-success">
                                                         <i class="fa-solid fa-edit"></i>
+                                                    </a>
+                                                    <a href="{{ route('reserva.print', ['slug_instalacion' => request()->slug_instalacion, 'id' => $item->id]) }}" class="btn btn-primary">
+                                                        <i class="fa-solid fa-print"></i>
                                                     </a>
                                                 @endif
                                             </div>

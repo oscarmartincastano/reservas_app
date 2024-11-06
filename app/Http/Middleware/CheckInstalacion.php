@@ -14,7 +14,6 @@ class CheckInstalacion
         if($request->slug_instalacion == "superate" and $instalacion->mantenimiento == 1){
             return redirect()->route('mantenimiento');
         }
-
         if ($instalacion) {
             return $next($request);
         }

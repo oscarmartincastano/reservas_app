@@ -163,33 +163,35 @@
                             </tbody>
                         </table>
                         {{-- modal para confirmar la cancelacion de una reserva --}}
-                        <div class="modal fade" id="modal-cancel" tabindex="-1" role="dialog" style="padding-right: 0">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content m-0" style="top:25vh">
-                                    <div class="modal-header">
-                                        <h4 class="h4 mb-0">Cancelar reserva</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                        @if (isset($item))
+                            <div class="modal fade" id="modal-cancel" tabindex="-1" role="dialog" style="padding-right: 0">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content m-0" style="top:25vh">
+                                        <div class="modal-header">
+                                            <h4 class="h4 mb-0">Cancelar reserva</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body p-4">
+                                            <p class="mb-4 text-center" style="font-size: 17px">¿Estás seguro que quieres
+                                                cancelar esta reserva?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form
+                                                action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel"
+                                                method="post">
+                                                @csrf
+                                                <button type="submit" class="cancel btn btn-danger" title="Cancelar reserva"
+                                                    data-item-id="{{ $item->id }}">
+                                                    Cancelar reserva </button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body p-4">
-                                        <p class="mb-4 text-center" style="font-size: 17px">¿Estás seguro que quieres
-                                            cancelar esta reserva?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form
-                                            action="/{{ request()->slug_instalacion }}/mis-reservas/{{ $item->id }}/cancel"
-                                            method="post">
-                                            @csrf
-                                            <button type="submit" class="cancel btn btn-danger" title="Cancelar reserva"
-                                                data-item-id="{{ $item->id }}">
-                                                Cancelar reserva </button>
-                                        </form>
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
                             </div>
+                        @endif
 
                             {{-- <h2 class="h2 text-success">Reservas activas</h2> --}} {{-- @if (count(auth()->user()->reservas_activas) == 0)
                         <p class="mt-3 mb-4">No hay reservas activas actualmente.</p>

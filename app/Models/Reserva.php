@@ -61,6 +61,10 @@ class Reserva extends Model
         return self::valores_campos_personalizados()->where('id_campo', 17)->first()->valor ?? '---';
     }
 
+    public function getComentariosAttribute() {
+        return self::valores_campos_personalizados()->where('id_campo', 21)->first()->valor ?? '---';
+    }
+
     public function getHorariosDeserializedAttribute() {
         return $this->horariosDeserializado();
     }
