@@ -152,12 +152,23 @@
                         @else
                             @foreach ($pistas as $index => $pista)
                                 
-                                <div class="@if ($pista->id == $pista_selected->id) active @endif " @if ($pistas->count() == 1)
-                                    style="width:100%"
-                                @endif><a class=" select-pista"
-                                        data-id_pista="{{ $pista->id }}"
-                                        href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}">{{ $pista->nombre }}</a>
-                                </div>
+                          
+                                @if ($pista->id == 67 && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::createFromFormat('d/m/Y', '20/01/2025')))
+                                    <div class="@if ($pista->id == $pista_selected->id) active @endif " @if ($pistas->count() == 1)
+                                        style="width:100%"
+                                    @endif><a class=" select-pista"
+                                            data-id_pista="{{ $pista->id }}"
+                                            href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}">{{ $pista->nombre }}</a>
+                                    </div>
+                                @endif
+                                @if ($pista->id != 67)
+                                    <div class="@if ($pista->id == $pista_selected->id) active @endif " @if ($pistas->count() == 1)
+                                        style="width:100%"
+                                    @endif><a class=" select-pista"
+                                            data-id_pista="{{ $pista->id }}"
+                                            href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ isset(request()->subtipo) ? request()->subtipo . '/' : '' }}{{ $pista->id }}">{{ $pista->nombre }}</a>
+                                    </div>
+                                @endif
                             @endforeach
                         @endif
                     </div>
