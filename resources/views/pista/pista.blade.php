@@ -153,7 +153,7 @@
                             @foreach ($pistas as $index => $pista)
                                 
                           
-                                @if ($pista->id == 67 && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::createFromFormat('d/m/Y', '20/01/2025')))
+                                @if ($pista->id == 67)
                                     <div class="@if ($pista->id == $pista_selected->id) active @endif " @if ($pistas->count() == 1)
                                         style="width:100%"
                                     @endif><a class=" select-pista"
