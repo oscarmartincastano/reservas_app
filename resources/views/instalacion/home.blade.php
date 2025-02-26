@@ -708,7 +708,7 @@
                                         if (reserva.estado ==
                                             'active') {
                                             string +=
-                                                `<h4><a href="#" class="btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.user??.name}">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.user?.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
+                                                `<h4><a href="#" class="btn-acciones-reserva" data-intervalo="${reserva.string_intervalo}" data-reserva="${reserva.id}" data-reserva_string="${reserva.reserva_multiple ? reserva.id + ' - #' + (+reserva.id + +reserva.numero_reservas) : reserva.id}" data-user="${reserva.user?.name}">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.user?.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
                                         } else {
                                             string +=
                                                 `<h4><a href="/{{ request()->slug_instalacion }}/admin/users/${reserva.user?.id}/ver">#${reserva.id} ${reserva.reserva_multiple ? ' - #' + (+reserva.id + +reserva.numero_reservas-1) : ''} ${reserva.user?.name} ${reserva.reserva_multiple ? '(' + reserva.numero_reservas + ' reservas)' : ''}</a></h4>`;
