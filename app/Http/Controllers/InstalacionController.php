@@ -442,7 +442,10 @@ class InstalacionController extends Controller
     public function listado_todas_reservas(Request $request)
     {
         $ids_pistas = Pista::where('id_instalacion', auth()->user()->instalacion->id)->pluck('id');
-        if ($request->fecha) {
+
+        if($request->fecha_inicio && $request->fecha_fin){
+            $reservas = Reserva::whereIn('id_pista', $ids_pistas)->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin]);
+        } elseif ($request->fecha) {
             switch ($request->fecha) {
                 case 'all':
                     $reservas = Reserva::whereIn('id_pista', $ids_pistas);

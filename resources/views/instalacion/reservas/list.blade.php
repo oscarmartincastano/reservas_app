@@ -42,7 +42,9 @@
             <div class="p-l-20 p-r-20 p-b-10 pt-3">
                 <div>
                     <h3 class="text-primary no-margin">
-                        @if (request()->fecha)
+                        @if (request()->fecha_inicio && request()->fecha_fin)
+                            Reservas del {{ date('d/m/Y', strtotime(request()->fecha_inicio)) }} al {{ date('d/m/Y', strtotime(request()->fecha_fin)) }}
+                        @elseif (request()->fecha)
                             @switch(request()->fecha)
                                 @case('all')
                                     Todas las reservas @if(request()->periodicas) periódicas @endif
@@ -71,6 +73,7 @@
                             @endif
                         @endif
                     </h3>
+       
                 </div>
             </div>
             <div class="p-t-15 p-b-15 p-l-20 p-r-20">
@@ -79,9 +82,42 @@
                         <div class="card-title">Listado de reservas</div>
                     </div>
                     <div class="card-body table-responsive">
-                        @if(request()->fecha != 'all')<a href="?fecha=all">Todas</a> -@endif @if(request()->fecha != 'today')<a href="?fecha=today">Hoy</a> -@endif @if(request()->fecha != 'week')<a href="?fecha=week">Semana</a> -@endif @if(request()->fecha != 'month')<a href="?fecha=month">Mes</a> @endif
-                        <br>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                @if(request()->fecha != 'all')<a href="?fecha=all">Todas</a> -@endif @if(request()->fecha != 'today')<a href="?fecha=today">Hoy</a> -@endif @if(request()->fecha != 'week')<a href="?fecha=week">Semana</a> -@endif @if(request()->fecha != 'month')<a href="?fecha=month">Mes</a> @endif
+                            </div>
+                            <br>
+                            {{-- boton abre moda con form fecha inicio y fecha fin --}}
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFiltrarFecha">
+                                Filtrar por fecha
+                            </button>
+                            <div class="modal fade" id="modalFiltrarFecha" tabindex="-1" role="dialog" aria-labelledby="modalFiltrarFechaLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalFiltrarFechaLabel">Filtrar por fecha</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="form-group mt-2">
+                                                    <label for="fecha_inicio">Fecha inicio</label>
+                                                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" value="{{ request()->fecha_inicio ?? date('Y-m-d') }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="fecha_fin">Fecha fin</label>
+                                                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="{{ request()->fecha_fin ?? date('Y-m-d') }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                        </div>
 
                         {{-- <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="btn btn-outline-primary mr-2">Añadir desactivación periódica</a> 
                         <a href="/{{ request()->slug_instalacion }}/admin/reservas/add" class="text-white btn btn-primary">Añadir reserva periódica</a> --}}
@@ -212,6 +248,7 @@
                 $(this).parent().find('input').val($(this).data('accion'));
                 $('#modalSlideUp').find('form').submit();
             });
+  
         });
     </script>
 @endsection
