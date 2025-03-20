@@ -404,7 +404,7 @@
                         <div class="row d-flex justify-content-between mb-2">
                             <div class="next-prev-week">
                                 <div>{{-- {{ dd(request()->semana) }} --}}
-                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '-1' : request()->semana - 1 }}"
+                                    <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ 'week=' . \Carbon\Carbon::parse(request()->week)->subWeek()->format('Y-\WW') }}"
                                         class="btn btn-prev">
                                         < </a>
                                             <div class="exmp-wrp">
@@ -424,7 +424,9 @@
                                                 </div>
                                             </div>
                                             {{-- <a href="#" class="btn btn-select-week">{!! request()->semana == null || request()->semana == 0 ? 'Semana actual' :  \Carbon\Carbon::parse(iterator_to_array($period)[0])->formatLocalized('%d %b') . ' - ' . \Carbon\Carbon::parse(iterator_to_array($period)[count(iterator_to_array($period))-1])->formatLocalized('%d %b') !!} </a> --}}
-                                            <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ request()->week ? 'week=' . request()->week . '&&' : '' }}semana={{ request()->semana == null || request()->semana == 0 ? '1' : request()->semana + 1 }}"
+
+
+                                            <a href="/{{ request()->slug_instalacion }}/admin/reservas?{{ 'week=' . \Carbon\Carbon::parse(request()->week)->addWeek()->format('Y-\WW') }}"
                                                 class="btn btn-next">></a>
                                 </div>
                             </div>
