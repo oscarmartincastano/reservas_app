@@ -59,6 +59,7 @@ class InstalacionController extends Controller
                 $d = (int)substr($semana, 6) * 7;
                 $date = DateTime::createFromFormat('z Y', $d . ' ' . substr($semana, 0, 4));
 
+
                 $semana = $this->rangeWeek(date("Y-m-d", strtotime($date->format('Y-m-d') . "+{$request->semana} weeks")));
             } else {
                 $semana = $this->rangeWeek(date("Y-m-d", strtotime(date('Y-m-d') . "+{$request->semana} weeks")));
@@ -148,10 +149,11 @@ class InstalacionController extends Controller
         // $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $instalacion->id)->pluck('id'))->where('fecha', $fecha)->get();
         $reservas = Reserva::whereIn('id_pista', Pista::where('id_instalacion', $instalacion->id)->pluck('id'))->whereBetween('fecha', [$fecha_inicio, $fecha_fin])->get();
 
+        $formato = $request->formato;
 
         
         // en la cabecera el día y mes y en el cuerpo los nombres de las salas con reserva con su nombre de reserva la hora,duración y observaciones. imprimir a pdf
-        return view('instalacion.reservas.print_all', compact('reservas', 'fecha_inicio', 'fecha_fin'));
+        return view('instalacion.reservas.print_all', compact('reservas', 'fecha_inicio', 'fecha_fin', 'formato'));
     }
 
     public function validar_reserva(Request $request)

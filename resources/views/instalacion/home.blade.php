@@ -456,6 +456,26 @@
                                                     <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
                                                 </div>
                                             </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="formato">Selecciona el formato</label>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="formato" id="pdf" value="pdf" checked>
+                                                        <label class="form-check
+                                                        -label" for="pdf">
+                                                            PDF
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="formato" id="excel" value="excel">
+                                                        <label class="form-check-label" for="excel">
+                                                            EXCEL
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                        
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 <button type="submit" class="btn btn-primary">Buscar</button>
