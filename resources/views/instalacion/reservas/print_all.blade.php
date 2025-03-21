@@ -139,8 +139,8 @@
         });
 
 
-        // setTimeout(function() {
-        //     window.location.href = '/ceco/admin';
-        // }, 100);
+        setTimeout(function() {
+            window.location.href = '/ceco/admin';
+        }, 100);
     </script>
 @endif
