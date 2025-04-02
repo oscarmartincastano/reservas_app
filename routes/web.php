@@ -4,9 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
-
 use Illuminate\Support\Facades\Route;
-
 require __DIR__ . '/auth.php';
 
 /*
@@ -20,7 +18,7 @@ require __DIR__ . '/auth.php';
 |
 */
 
-route::get('/backups54897896', function () {
+Route::get('/backups54897896', function () {
     \Illuminate\Support\Facades\Artisan::call('database:backup');
 });
 

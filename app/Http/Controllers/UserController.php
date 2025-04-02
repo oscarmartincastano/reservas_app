@@ -13,15 +13,16 @@ use App\Models\Pista;
 use App\Models\Reserva;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use DateTime;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-
+        
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
-
+        
         if (count($instalacion->deportes) > 1 || count($instalacion->pistas) == 0) {
             return view('home', compact('instalacion'));
         }
@@ -208,6 +209,61 @@ class UserController extends Controller
                 ]);
             }
         }
+
+        $superadmin = DB::connection('superadmin')
+        ->table('superadmin')
+        ->get()
+        ->filter(function ($record) use ($request) {
+            // Extraer el slug de la columna `url`
+            $urlParts = explode('/', rtrim($record->url, '/')); // Dividir la URL por "/"
+            $slug = end($urlParts); // Obtener el último segmento de la URL
+            return $slug === $request->segment(1); // Comparar con el slug del request
+        })
+        ->first();
+
+        config([
+            'database.connections.dynamic' => [
+                'driver' => env('DB_SUPERADMIN_CONNECTION', 'mysql'),
+                'host' => env('DB_SUPERADMIN_HOST', '127.0.0.1'),
+                'port' => env('DB_SUPERADMIN_PORT', '3306'),
+                'database' => $superadmin->bd_nombre, // Nombre de la base de datos obtenido del registro
+                'username' => env('DB_SUPERADMIN_USERNAME', 'forge'),
+                'password' => env('DB_SUPERADMIN_PASSWORD', ''),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+                'strict' => true,
+                'engine' => null,
+            ],
+        ]);
+
+        $registro_pista = DB::connection('dynamic')
+        ->table('pistas')
+        ->where('nombre', $pista->nombre)
+        ->first();
+
+        $email = DB::connection('dynamic')
+        ->table('users')
+        ->where('email', $user->email)
+        ->first();
+
+
+        // Crear la reserva en la base de datos dinámica
+        DB::connection('dynamic')->table('reservas')->insert([
+            'id_pista' => $registro_pista->id,
+            'id_usuario' => $email->id,
+            'timestamp' => $request->timestamp,
+            'horarios' => serialize($timestamps),
+            'fecha' => date('Y/m/d', $request->timestamp),
+            'hora' => date('Hi', $request->timestamp),
+            'tarifa' => $request->tarifa,
+            'minutos_totales' => $minutos_totales,
+            'estado' => $reserva_espera ? 'espera' : 'active',
+            'observaciones' => isset($request->observaciones) ? $request->observaciones : null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         return redirect("/{$request->slug_instalacion}/mis-reservas");
     }
 
@@ -219,11 +275,12 @@ class UserController extends Controller
     }
 
     public function cancel_reservas(Request $request)
-    {
+    {   
+        $user = User::find(auth()->user()->id);
         $reserva = Reserva::find($request->id);
         $estado_actual = $reserva->estado;
         $reserva->update(['estado' => 'canceled']);
-
+        $pista = Pista::find($reserva->id_pista);
         if ($estado_actual == 'active') {
             $new_reserva = Reserva::where('id_pista', $reserva->id_pista)->where('timestamp', $reserva->timestamp)->where('estado', 'espera')->orderBy('created_at')->first();
 
@@ -231,6 +288,60 @@ class UserController extends Controller
                 $new_reserva->update(['estado' => 'active']);
                 Mail::to($new_reserva->user->email)->send(new ReservaEspera($new_reserva->user, $new_reserva));
             }
+        }
+        $superadmin = DB::connection('superadmin')
+        ->table('superadmin')
+        ->get()
+        ->filter(function ($record) use ($request) {
+            // Extraer el slug de la columna `url`
+            $urlParts = explode('/', rtrim($record->url, '/')); // Dividir la URL por "/"
+            $slug = end($urlParts); // Obtener el último segmento de la URL
+            return $slug === $request->segment(1); // Comparar con el slug del request
+        })
+        ->first();
+
+        config([
+            'database.connections.dynamic' => [
+                'driver' => env('DB_SUPERADMIN_CONNECTION', 'mysql'),
+                'host' => env('DB_SUPERADMIN_HOST', '127.0.0.1'),
+                'port' => env('DB_SUPERADMIN_PORT', '3306'),
+                'database' => $superadmin->bd_nombre, // Nombre de la base de datos obtenido del registro
+                'username' => env('DB_SUPERADMIN_USERNAME', 'forge'),
+                'password' => env('DB_SUPERADMIN_PASSWORD', ''),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+                'strict' => true,
+                'engine' => null,
+            ],
+        ]);
+
+        $email = DB::connection('dynamic')
+        ->table('users')
+        ->where('email', $user->email)
+        ->first();
+
+        $registro_pista = DB::connection('dynamic')
+        ->table('pistas')
+        ->where('nombre', $pista->nombre)
+        ->first();
+
+        // Reservas de la base de datos dinámica del usuario y del mismo tiempo horario
+        // Obtener el primer registro que coincida con las condiciones
+        $reserva = DB::connection('dynamic')
+        ->table('reservas')
+        ->where('id_usuario', $email->id)
+        ->where('id_pista', $registro_pista->id)
+        ->where('timestamp', $reserva->timestamp)
+        ->where('estado', 'active')
+        ->first();
+
+        if ($reserva) {
+        // Actualizar el estado del registro encontrado
+        DB::connection('dynamic')
+            ->table('reservas')
+            ->where('id', $reserva->id) // Usar el ID del registro encontrado
+            ->update(['estado' => 'canceled']);
         }
 
         return redirect()->back();

@@ -11,6 +11,8 @@
         <div></div>
     </div>
     <div class="row" style="place-content: center">
+        @php 
+        @endphp
         @foreach ($instalacion->deportes as $index => $item)
             <div class="col-md-4" style="padding: calc(var(--bs-gutter-x) * .5)">
                 @if (!file_exists(public_path() . '/img/deportes/'.lcfirst($item).'.jpg'))
