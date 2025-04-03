@@ -270,41 +270,83 @@ class Pista extends Model
 
     public function horario_con_reservas_por_dia($fecha)
     {
+        // Asegurarse de que $fecha sea un objeto DateTime
+        $fecha = new \DateTime($fecha);
         $horario = [];
+    
         foreach ($this->horario_deserialized as $key => $item) {
-            if (
-                in_array($fecha->dayOfWeek, $item['dias'])
-                || ($fecha->format('w') == 0 && in_array(7, $item['dias']))
-            ) {
-                foreach ($item['intervalo'] as $index => $intervalo) {
-                    $hInicio = Carbon::parse($fecha->format('Y-m-d') . ' ' . $intervalo['hinicio']);
-                    $hFin = Carbon::parse($fecha->format('Y-m-d') . ' ' . $intervalo['hfin']);
-
-                    $secuencia = $intervalo['secuencia'];
-
-                    $horas = [];
-                    while ($hInicio->lt($hFin)) {
-                        $horas[] = $hInicio->copy();
-                        $hInicio->addMinutes($secuencia);
+            // Verifica si las claves 'dias' e 'intervalo' existen
+            $dias = $item['dias'] ?? [];
+            $intervalos = $item['intervalo'] ?? [];
+    
+            if (in_array($fecha->format('w'), $dias) || ($fecha->format('w') == 0 && in_array(7, $dias))) {
+                foreach ($intervalos as $index => $intervalo) {
+                    $hFin = new \DateTime($intervalo['hfin']);
+    
+                    // Ajustar si el horario termina a medianoche
+                    if ($hFin->format("H:i:s") == "00:00:00") {
+                        $hFin->modify('+1 day');
                     }
-
-                    foreach ($horas as $i => $hora) {
-
-                        $timestamp = $hora->getTimestamp();
-
-                        $reservasActivas = $this->get_reserva_activa_fecha_hora($timestamp);
-
-                        $horario[$index][$i]['valida'] = $this->check_reserva_valida($timestamp);
-                        $horario[$index][$i]['siguiente_reserva_lista_espera'] = $this->siguiente_reserva_lista_espera($timestamp);
-
-                        $horario[$index][$i]['reservado'] = $reservasActivas ? true : false;
-                        $horario[$index][$i]['string'] = $hora->format('H:i') . ' - ' . $hora->copy()->addMinutes($secuencia)->format('H:i');
+    
+                    $hInicio = new \DateTime($intervalo['hinicio']);
+                    $interval = $hFin->getTimestamp() > $hInicio->getTimestamp() 
+                        ? $hFin->diff($hInicio) 
+                        : new \DateTime(date('H:i', $hFin->getTimestamp() - $hInicio->getTimestamp()));
+    
+                    $dif = !is_a($interval, 'DateTime') 
+                        ? $interval->format("%h") * 60 
+                        : $interval->format('H') * 60;
+                    $dif += !is_a($interval, 'DateTime') 
+                        ? $interval->format("%i") 
+                        : $interval->format('i');
+                    $dif = $dif / $intervalo['secuencia'];
+    
+                    $hora = new \DateTime($fecha->format('d-m-Y') . ' ' . $intervalo['hinicio']);
+    
+                    for ($i = 0; $i < $dif + 1; $i++) {
+                        $string_hora = $hora->format('H:i') . ' - ' . $hora->modify("+{$intervalo['secuencia']} minutes")->format('H:i');
+                        $timestamp = \Carbon\Carbon::parse($hora->format('d-m-Y H:i:s'))->subMinutes($intervalo['secuencia'])->timestamp;
+    
+                        $fechas_activas = $this->get_reserva_activa_fecha_hora($timestamp);
+    
+                        $horario[$index][$i]['reservado'] = $fechas_activas ? true : false;
+                        $horario[$index][$i]['string'] = $string_hora;
                         $horario[$index][$i]['height'] = str_replace(',', '.', $intervalo['secuencia'] / 10);
+                        $horario[$index][$i]['width'] = str_replace(',', '.', ($intervalo['secuencia'] * 40) / 60);
+    
+                        // Calcular la posición de la hora
+                        $suma_hora = 0;
+                        for ($y = 7; $y < intval(explode(":", date('H:i', $timestamp))[0]); $y++) {
+                            $suma_hora += 40;
+                        }
+                        $hora_coord = $suma_hora + (explode(":", date('H:i', $timestamp))[1] * 2 / 3);
+                        $horario[$index][$i]['hora'] = str_replace(',', '.', $hora_coord);
+    
                         $horario[$index][$i]['tramos'] = 1;
                         $horario[$index][$i]['timestamp'] = $timestamp;
-                        $horario[$index][$i]['num_res'] = count($reservasActivas);
-                        $horario[$index][$i]['reunion'] = $this->id_instalacion == 2 ? ($reservasActivas[0] ?? null)  : null;
-
+                        $horario[$index][$i]['num_res'] = $fechas_activas->count();
+                        $horario[$index][$i]['valida'] = $this->check_reserva_valida($timestamp);
+    
+                        // Determinar el estado del intervalo
+                        $horario[$index][$i]['estado'] = 'ok';
+    
+                        if (!$this->check_reserva_valida($timestamp)) {
+                            $horario[$index][$i]['estado'] = 'reservado';
+    
+                            if ($this->check_desactivado($timestamp)) {
+                                $horario[$index][$i]['estado'] = 'desactivado';
+                            }
+    
+                            if ($this->checkantelacion($timestamp)) {
+                                $horario[$index][$i]['estado'] = 'desactivado';
+                            }
+    
+                            if ($this->checkpasada($timestamp)) {
+                                $horario[$index][$i]['estado'] = 'desactivado';
+                            }
+                        }
+    
+                        // Finalizar el bucle si se alcanza el final del intervalo
                         if ($hora->format('H:i') == $intervalo['hfin']) {
                             break;
                         }
@@ -312,6 +354,7 @@ class Pista extends Model
                 }
             }
         }
+    
         return $horario;
     }
 
@@ -354,6 +397,26 @@ class Pista extends Model
             }
         }
         return $horario;
+    }
+
+    public function checkantelacion($timestamp){
+
+        if(strtotime(date('Y-m-d', $timestamp)) < strtotime(date('Y-m-d') . " +{$this->max_dias_antelacion} days")){
+
+            return false;
+        }
+        return true;
+    }
+
+    public function checkpasada($timestamp){
+        if(
+        new \DateTime(date('d-m-Y H:i', strtotime("+{$this->atenlacion_reserva} hours"))) < new \DateTime(date('d-m-Y H:i', strtotime(date('d-m-Y H:i', $timestamp) . " +{$this->get_minutos_given_timestamp($timestamp)} minutes" )))
+        ){
+            return false;
+        }
+
+        return true;
+
     }
 
     public function get_minutos_given_timestamp($timestamp)

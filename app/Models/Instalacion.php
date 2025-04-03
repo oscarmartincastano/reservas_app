@@ -22,6 +22,7 @@ class Instalacion extends Model
         'tlfno',
         'html_normas',
         'slug',
+        'tipo_calendario'
     ];
 
     protected $appends = ['user_admin', 'users_sin_validar'];

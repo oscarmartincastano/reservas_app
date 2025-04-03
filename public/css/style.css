@@ -166,7 +166,7 @@ a.btn-reservar.reservado {
     border-style: solid;
     white-space: nowrap;
     cursor: default !important;
-    background: #eee !important;
+    background: #eee;
     border-color: #ddd !important;
     color: #aaa !important;
     display: flex;

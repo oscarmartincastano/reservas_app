@@ -78,6 +78,14 @@
                                     @endforeach
                                 </div>
                             </div>
+                            {{-- Hacer un radio button para elegir el tipo de calendario el 1 y el 2 --}}
+                            <div class="form-group mb-4">
+                                <label for="tipo_calendario">Tipo de calendario</label>
+                                <select class="form-control form-control-lg" name="tipo_calendario" id="tipo_calendario">
+                                    <option value="0" @if ($instalacion->tipo_calendario == 0) selected @endif>Calendario 1</option>
+                                    <option value="1" @if ($instalacion->tipo_calendario == 1) selected @endif>Calendario 2</option>
+                                </select>
+                            </div>
                             <input type="submit" value="Editar" class="btn btn-primary btn-lg m-b-10 mt-3 mt-2">
                         </form>
                     </div>
