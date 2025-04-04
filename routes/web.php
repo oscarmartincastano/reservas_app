@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\InstalacionController;
 use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 
@@ -239,6 +240,7 @@ Route::group(['prefix' => '{slug_instalacion}', 'middleware' => 'check_instalaci
 
     Route::group(['prefix' => '{deporte}'], function () {
         Route::get('/', 'UserController@pistas');
+        Route::get('/{fecha}','UserController@fecha');
         Route::group(['prefix' => '{id_pista}'], function () {
             Route::get('/', 'UserController@pistas');
             Route::group(['middleware' => 'auth_instalacion'], function () {

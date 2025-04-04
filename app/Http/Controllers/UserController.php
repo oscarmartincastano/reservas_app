@@ -29,6 +29,59 @@ class UserController extends Controller
         return redirect("{$instalacion->slug}/{$instalacion->pistas->first()->tipo}");
     }
 
+    public function fecha($slug_instalacion, $deporte, $fecha, Request $request)
+{
+    try {
+        // Obtén la instalación
+        $instalacion = Instalacion::where('slug', $slug_instalacion)->first();
+
+        if (!$instalacion) {
+            throw new \Exception('Instalación no encontrada');
+        }
+
+        // Obtén las pistas activas para el deporte especificado
+        $pistas = Pista::where([
+            ['tipo', $deporte],
+            ['id_instalacion', $instalacion->id],
+            ['active', 1]
+        ])->get();
+
+        if ($pistas->isEmpty()) {
+            throw new \Exception('No se encontraron pistas para el deporte especificado');
+        }
+
+        // Obtén el horario de las pistas
+        $horario = $pistas->map(function ($pista) use ($fecha) {
+            return $pista->horario_con_reservas_por_dia($fecha);
+        });
+
+        // Incluye los IDs de las pistas en la respuesta
+        $pistasData = $pistas->map(function ($pista) {
+            return [
+                'id' => $pista->id,
+                'nombre' => $pista->nombre,
+                'tipo' => $pista->tipo,
+            ];
+        });
+
+        // Devuelve la respuesta JSON
+        $data = [
+            'slug_instalacion' => $slug_instalacion,
+            'deporte' => $deporte,
+            'fecha' => $fecha,
+            'horario' => $horario,
+            'pistas' => $pistasData, // Incluye los datos de las pistas
+            'mensaje' => 'Fecha recibida correctamente',
+        ];
+
+        return response()->json($data);
+    } catch (\Exception $e) {
+        // Registra el error en los logs
+        \Log::error('Error en el método fecha: ' . $e->getMessage());
+        return response()->json(['error' => 'Ocurrió un error en el servidor: ' . $e->getMessage()], 500);
+    }
+}
+
     public function pistas(Request $request)
     {
         $instalacion = Instalacion::where('slug', $request->slug_instalacion)->first();
@@ -83,9 +136,7 @@ class UserController extends Controller
 
         $valid_period = new \DatePeriod(new DateTime(), \DateInterval::createFromDateString('1 day'), $date_for_valid);
         $period = new \DatePeriod($current_date, \DateInterval::createFromDateString('1 day'), $plus_date);
-
         $horarios_final = $pista_selected->horarios_final($period);
-
         return view('pista.pista', compact('period', 'valid_period', 'pistas', 'pista_selected', 'instalacion', 'horarios_final'));
     }
 

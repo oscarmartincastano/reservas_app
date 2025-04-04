@@ -267,18 +267,26 @@
                     data-tipo-reserva="1">
                     <div class="filtros p-0 d-flex">
                         <div>
+                            @php
+                            $aTipos=[];
+                            foreach ($instalacion->pistas as $key => $value) {
+                                if(!in_array($value->tipo, $aTipos)) {
+                                    $aTipos[] = $value->tipo;
+                                }
+                            }
+                            @endphp
                             <select class="w-100 form-control select2 select-pista">
-                                @foreach ($instalacion->pistas as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                @foreach ($aTipos as $item)
+                                    <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="position-relative">
                             <div class="div-hoy">Hoy</div>
                             <div class="div-alt-select-fecha">
-                                <input type="text" class="form-control" id="alt-select-fecha" readonly="readonly">
+                                <input type="date" class="form-control" id="alt-select-fecha" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                             </div>
-                            <input type="text" class="form-control select-fecha" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}" readonly="readonly">
+                            <input type="text" class="form-control select-fecha" id="fecha-seleccionada">
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -339,7 +347,10 @@
                                                     <div class="celda" style="width: 40px; height: 40px; line-height: 40px;">
                                                     </div>
                                                 @endfor
-                                                @foreach ($pista->horario_con_reservas_por_dia(date('Y-m-d')) as $item)
+                                                @php
+                                                $fechaSeleccionada = request()->input('dia', date('Y-m-d'));
+                                                @endphp
+                                                @foreach ($pista->horario_con_reservas_por_dia(date($fechaSelecconada ?? date('Y-m-d'))) as $item)
                                                     @foreach ($item as $intervalo)
 
                                                         <div data-left="{{ $intervalo['hora'] }}"
@@ -453,54 +464,164 @@
         }
         actualizarNombresDias();
         window.addEventListener('resize', actualizarNombresDias);
-    });
 
-    $(document).ready(function () {
-    // Inicializar el selector de fechas
-    const $datepicker = $('.select-fecha');
-
-    $datepicker.datepicker({
-        dateFormat: 'yy-mm-dd', // Formato de la fecha
-        altField: '#alt-select-fecha', // Campo alternativo para mostrar la fecha en otro formato
-        altFormat: 'dd/mm/yy', // Formato alternativo
-        minDate: new Date(), // No permitir fechas anteriores a hoy
-        showButtonPanel: true, // Mostrar botones adicionales
-    });
-
-    // Mostrar el selector de fechas al hacer clic en "Hoy" o el campo alternativo
-    $('.div-hoy, #alt-select-fecha').click(function (e) {
-        e.preventDefault();
-        $datepicker.datepicker('show');
-    });
-
-    // Manejar el cambio de fecha
-    $datepicker.change(function () {
-        const fechaSeleccionada = $(this).val();
-        console.log('Fecha seleccionada:', fechaSeleccionada);
-
-        // Realizar una acción, como recargar los horarios
-        $('.loader-horario').show();
-        $.ajax({
-            url: `/{{ request()->slug_instalacion }}/pistas-por-deporte/${$('.select-pista').val()}/${fechaSeleccionada}`,
-            success: function (data) {
-                console.log('Horarios actualizados:', data);
-                // Actualizar la vista con los nuevos horarios
-                $('.loader-horario').hide();
-            },
-            error: function (error) {
-                console.error('Error al cargar los horarios:', error);
-                $('.loader-horario').hide();
-            },
-        });
-    });
-
-    // Evitar que el campo sea editable manualmente
-    $datepicker.on('keydown', function (e) {
-        e.preventDefault();
-    });
+        const fechaInput = document.getElementById('alt-select-fecha');
+    if (!fechaInput) {
+        console.error('El campo con ID "fecha-seleccionada" no existe en el DOM.');
+        return;
+    }
+    fechaInput.addEventListener('click', function () {
+    console.log('Evento "click" detectado.');
 });
+    fechaInput.addEventListener('change', function () {
+        console.log('Evento "change" detectado.');
+        const fechaSeleccionada = this.value; // Obtener el valor seleccionado
+        const fechaActual = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
 
-document.addEventListener("DOMContentLoaded", function () {
+        // Si la fecha seleccionada coincide con la fecha actual, mostrar "Hoy"
+        const divHoy = document.querySelector('.div-hoy');
+        if (fechaSeleccionada === fechaActual) {
+            divHoy.textContent = 'Hoy';
+        } else {
+            divHoy.textContent = fechaSeleccionada; // Mostrar la fecha seleccionada
+        }
+
+        // Enviar la fecha seleccionada a la URL mediante AJAX
+        enviarFechaAJAX(fechaSeleccionada);
+    });
+    // Función para enviar la fecha mediante AJAX
+    function enviarFechaAJAX(fecha) {
+        const baseUrl = document.getElementById('url_instalacion').textContent; // Obtén la URL base
+    const url = `${baseUrl}${fecha}`; // Construye la URL completa
+
+    // Muestra el spinner
+    document.querySelector('.loader-horario').style.display = 'block';
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Indicar que es una solicitud AJAX
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.statusText}`);
+                }
+                return response.json(); // Parsear la respuesta como JSON
+            })
+            .then(data => {
+                console.log('Respuesta del servidor:', data); // Manejar la respuesta del servidor
+                // Aquí puedes actualizar dinámicamente la página con los datos recibidos
+                 // Oculta el spinner
+            document.querySelector('.loader-horario').style.display = 'none';
+                // Llama a la función para actualizar la interfaz
+            actualizarHorario(data.horario, data.pistas);
+            })
+            .catch(error => {
+                console.error('Error al enviar la fecha:', error);
+                 // Oculta el spinner
+            document.querySelector('.loader-horario').style.display = 'none';
+            });
+    }
+
+    function actualizarHorario(horario, pistas) {
+    const horarioContainer = document.querySelector('.horas-tramos-pistas');
+
+    // Limpia el contenido actual del contenedor
+    horarioContainer.innerHTML = '';
+
+    console.log('Horario recibido:', horario);
+    console.log('Pistas recibidas:', pistas);
+
+    // Verifica si el array `horario` tiene datos
+    if (!Array.isArray(horario) || horario.length === 0 || !Array.isArray(pistas) || pistas.length === 0) {
+        console.warn('El array horario o pistas está vacío o no tiene la estructura esperada.');
+        horarioContainer.innerHTML = '<div class="alert alert-warning">No hay horarios disponibles.</div>';
+        return;
+    }
+
+    // Itera sobre las pistas y sus horarios
+    horario.forEach((pistaHorario, pistaIndex) => {
+        if (!Array.isArray(pistaHorario) || pistaHorario.length === 0) {
+            console.warn(`El elemento pistaHorario no es un array válido:`, pistaHorario);
+            return; // Salta esta iteración si no es un array válido
+        }
+
+        const slotsPista = document.createElement('div');
+        slotsPista.classList.add('slots-pista');
+
+        const slotsHoras = document.createElement('div');
+        slotsHoras.classList.add('slots-horas');
+
+        // Itera sobre los intervalos de tiempo en `pistaHorario`
+        pistaHorario.forEach(intervalos => {
+            intervalos.forEach(intervalo => {
+                const slot = document.createElement('div');
+            slot.classList.add('slot', 'celda', 'slot-reserva');
+            slot.setAttribute('data-left', intervalo.hora);
+            slot.setAttribute('data-width', intervalo.width);
+            slot.style.left = `${intervalo.hora}px`;
+            slot.style.width = `${intervalo.width}px`;
+            slot.style.height = '40px';
+            slot.style.position = 'absolute';
+            slot.style.zIndex = '20';
+
+            const innerDiv = document.createElement('div');
+
+            // Agregar clases según el estado del intervalo
+            if (!intervalo.valida) {
+                switch (intervalo.estado) {
+                    case 'reservado':
+                        innerDiv.classList.add('btn-reservado');
+                        break;
+                    case 'desactivado':
+                        innerDiv.classList.add('btn-no-disponible');
+                        break;
+                }
+            }
+
+            const link = document.createElement('a');
+            if (!intervalo.valida) {
+                link.href = '#';
+                link.classList.add('d-block', 'h-100');
+            } else {
+                link.href = `/${pistas[pistaIndex].slug_instalacion}/${pistas[pistaIndex].tipo}/${pistas[pistaIndex].id}/${intervalo.timestamp}`;
+                link.setAttribute('data-toggle', 'tooltip');
+                link.setAttribute('data-html', 'true');
+                link.setAttribute('data-placement', 'top');
+                link.title = `${pistas[pistaIndex].nombre} ${intervalo.string}`;
+                link.classList.add('d-block', 'h-100');
+            }
+            const span = document.createElement('span');
+            span.classList.add('show-responsive');
+            if (!intervalo.valida) {
+                switch (intervalo.estado) {
+                    case 'reservado':
+                        span.textContent = 'RESERVADA';
+                        break;
+                    case 'desactivado':
+                        span.textContent = 'NO DISPONIBLE';
+                        break;
+                }
+            } else {
+                span.textContent = intervalo.string;
+            }
+
+            link.appendChild(span);
+            innerDiv.appendChild(link);
+            slot.appendChild(innerDiv);
+            slotsHoras.appendChild(slot);
+        });
+
+        slotsPista.appendChild(slotsHoras);
+        horarioContainer.appendChild(slotsPista);
+    });
+            });
+
+    // Inicializa los tooltips después de agregar los elementos dinámicamente
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
     function ajustarPosicion() {
         const anchoPantalla = window.innerWidth;
 
