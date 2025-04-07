@@ -630,8 +630,7 @@
 
     .select-fecha:focus::before {}
 
-    .select-fecha::before,
-    .div-alt-select-fecha::before {
+    .select-fecha::before{
         content: "";
         border-color: #0d6efd transparent transparent transparent;
         border-style: solid;

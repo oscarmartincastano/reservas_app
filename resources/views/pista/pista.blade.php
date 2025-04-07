@@ -225,9 +225,9 @@
 
                                         </div>
                                         @foreach ($mini_horario as $intervalo)
-                                            <div @if ($intervalo['height'] < 17) style="height: @if (request()->slug_instalacion != 'bancordoba'){{ $intervalo['height'] / 2 }}rem @else 2.5rem @endif "
+                                            <div @if ($intervalo['height'] < 17) style="height: @if (request()->slug_instalacion != 'bancordoba'){{ max($intervalo['height'] / 2, 1.75) }}rem @else 2.5rem @endif "
 @else
-    style="height:{{ $intervalo['height'] / 4 }}rem"     @endif>
+    style="height:{{ max($intervalo['height'] / 4, 1) }}rem"@endif>
                                                 <a @if (!$intervalo['valida']) @if ($intervalo['siguiente_reserva_lista_espera'])
                                                         href="/{{ request()->slug_instalacion }}/{{ request()->deporte }}/{{ $pista_selected->id }}/{{ $intervalo['timestamp'] }}"
                                                         class="btn-reservar btn-reservar-suplente" style="background: #ff9800"
@@ -466,12 +466,14 @@
         window.addEventListener('resize', actualizarNombresDias);
 
         const fechaInput = document.getElementById('alt-select-fecha');
+        const fechaSeleccionadaInput = document.getElementById('fecha-seleccionada');
     if (!fechaInput) {
         console.error('El campo con ID "fecha-seleccionada" no existe en el DOM.');
         return;
     }
     fechaInput.addEventListener('click', function () {
     console.log('Evento "click" detectado.');
+    fechaInput.focus();
 });
     fechaInput.addEventListener('change', function () {
         console.log('Evento "change" detectado.');
