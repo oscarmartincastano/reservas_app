@@ -150,13 +150,40 @@
                     </ul>
                 </li>
 
-                <li class="{{ request()->is(request()->slug_instalacion . '/admin/patrocinadores') ? 'active' : '' }}">
-                    <a
-                        href="
-                {{ route('sponsors.index', ['slug_instalacion' => request()->slug_instalacion]) }}
-                ">Patrocinadores</a>
-                    <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
-                </li>
+                @php
+        config([
+        'database.connections.dynamic_superadmin' => [
+            'driver' => 'mysql',
+            'host' => env('DB_SUPERADMIN_HOST', '127.0.0.1'),
+            'port' => env('DB_SUPERADMIN_PORT', '3306'),
+            'database' => env('DB_SUPERADMIN_DATABASE', 'superadmin'),
+            'username' => env('DB_SUPERADMIN_USERNAME', 'forge'),
+            'password' => env('DB_SUPERADMIN_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+    ]);
+
+    $slug = str_replace('https://gestioninstalacion.es/', '', request()->slug_instalacion);
+
+    // Cambiar la conexión a 'superadmin'
+    $ver_sponsor = DB::connection('superadmin')
+        ->table('superadmin')
+        ->where('url', 'https://gestioninstalacion.es/' . $slug)
+        ->first();
+        @endphp
+        @if($ver_sponsor->ver_sponsor == 1)
+            <li class="{{ request()->is(request()->slug_instalacion . '/admin/patrocinadores') ? 'active' : '' }}">
+                <a
+                    href="
+            {{ route('sponsors.index', ['slug_instalacion' => request()->slug_instalacion]) }}
+            ">Patrocinadores</a>
+                <span class="icon-thumbnail"><i data-feather="airplay"></i></span>
+            </li>   
+        @endif
             @endif
 
             <li>

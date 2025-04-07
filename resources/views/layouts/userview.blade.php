@@ -294,8 +294,36 @@
     <footer class="footer">
 
         @php
-            $instalacion = \App\Models\Instalacion::where('slug', request()->slug_instalacion)->first();
-            $sponsors = $instalacion->sponsors;
+        config([
+        'database.connections.dynamic_superadmin' => [
+            'driver' => 'mysql',
+            'host' => env('DB_SUPERADMIN_HOST', '127.0.0.1'),
+            'port' => env('DB_SUPERADMIN_PORT', '3306'),
+            'database' => env('DB_SUPERADMIN_DATABASE', 'superadmin'),
+            'username' => env('DB_SUPERADMIN_USERNAME', 'forge'),
+            'password' => env('DB_SUPERADMIN_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+    ]);
+
+    $slug = str_replace('https://gestioninstalacion.es/', '', request()->slug_instalacion);
+
+    // Cambiar la conexión a 'superadmin'
+    $ver_sponsor = DB::connection('superadmin')
+        ->table('superadmin')
+        ->where('url', 'https://gestioninstalacion.es/' . $slug)
+        ->first();
+
+    if ($ver_sponsor && $ver_sponsor->ver_sponsor == 1) {
+        $instalacion = \App\Models\Instalacion::where('slug', request()->slug_instalacion)->first();
+        $sponsors = $instalacion->sponsors;
+    } else {
+        $sponsors = null;
+    }
         @endphp
         @isset($sponsors)
             @include('sponsors', ['sponsors' => $sponsors])
